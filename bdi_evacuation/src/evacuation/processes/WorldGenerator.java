@@ -1,5 +1,7 @@
-package evacuation;
+package evacuation.processes;
 
+import evacuation.factories.AbstractAgentFactory;
+import evacuation.factories.AgentType;
 import jadex.bridge.service.types.clock.IClockService;
 import jadex.commons.SimplePropertyObject;
 import jadex.extension.envsupport.environment.IEnvironmentSpace;
@@ -12,17 +14,19 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ForestProcess extends SimplePropertyObject implements ISpaceProcess
+public class WorldGenerator extends SimplePropertyObject implements ISpaceProcess
 {
     @Override
     public void start(IClockService arg0, IEnvironmentSpace arg1)
 	{
-        Space2D space = (Space2D)arg1;
+        Space2D space = (Space2D) arg1;
 
+		// Get width and height of the space:
 		IVector2 areaSize = space.getAreaSize();
+		int spaceWidth = areaSize.getXAsInteger();
 		int spaceHeight = areaSize.getYAsInteger();
-        int spaceWidth = areaSize.getXAsInteger();
 
+		// Create a map from a file:
 		char[][] map = new char[spaceHeight][spaceWidth];
 		readMap(map, spaceWidth, spaceHeight);
 		drawMap(space, map);
@@ -64,29 +68,26 @@ public class ForestProcess extends SimplePropertyObject implements ISpaceProcess
 		{
 			for(int j = 0; j < map[i].length; j++)
 			{
-				char terrainTypeChar = map[i][j];
-				int terrainTypeInt;
-				switch (terrainTypeChar)
+				switch (map[i][j])
 				{
 					case ' ':
 						continue;
 
 					case 'X':
-						terrainTypeInt = 1;
+						drawTerrainSquare(space, j, i, 1);
 						break;
 
-					default:
-						continue;
+					case 'W':
+						AbstractAgentFactory.createAgent(AgentType.Wanderer, space, j, i);
+						break;
 				}
-
-				drawTerrainSquare(space, j, i, terrainTypeInt);
 			}
 		}
 	}
 
 	private void drawTerrainSquare(Space2D space, int x, int y, int terrainType)
 	{
-		Map properties = new HashMap();
+		Map<String, Object> properties = new HashMap<>();
 		properties.put("position", new Vector2Int(x, y));
 		properties.put("type", terrainType);
 

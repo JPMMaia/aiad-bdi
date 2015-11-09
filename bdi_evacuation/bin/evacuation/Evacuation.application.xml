@@ -60,6 +60,7 @@
                 <env:objecttype name="wanderer">
                     <env:property name="position" class="IVector2"/>
                     <env:property name="speed" class="Double"/>
+					<env:property name="space" class="Space2D"/>
                 </env:objecttype>
 
                 <!-- Exit door -->
@@ -83,7 +84,7 @@
 				</env:processtype>-->
 
                 <!-- Create Forest process -->
-                <env:processtype name="create_forest" class="ForestProcess"/>
+                <env:processtype name="create_world" class="processes.WorldGenerator"/>
 
 			</env:processtypes>
 
@@ -93,7 +94,9 @@
                 <!--<env:avatarmapping componenttype="Collector" objecttype="collector"/>-->
 
                 <!-- Map Wanderer component to wanderer object type -->
-                <env:avatarmapping componenttype="Wanderer" objecttype="wanderer"/>
+                <env:avatarmapping componenttype="Wanderer" objecttype="wanderer" createavatar="false" createcomponent="true"/>
+
+
 
             </env:avatarmappings>
 			
@@ -244,8 +247,8 @@
 							<env:property name="tickrate">15</env:property>
 						</env:process>-->
 
-                        <!-- Create Forest process -->
-                        <env:process type="create_forest"/>
+                        <!-- Create World process -->
+                        <env:process type="create_world"/>
 
 					</env:processes>
 
@@ -295,7 +298,6 @@
             <!-- Components -->
 			<components>
 				<!--<component type="Collector"/>-->
-				<component type="Wanderer"/>
 			</components>
 
 		</configuration>

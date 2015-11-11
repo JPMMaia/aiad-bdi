@@ -1,4 +1,4 @@
-package evacuation;
+package evacuation.actions;
 import jadex.commons.SimplePropertyObject;
 import jadex.extension.envsupport.environment.IEnvironmentSpace;
 import jadex.extension.envsupport.environment.ISpaceAction;

@@ -38,17 +38,11 @@
 			<!-- Object types -->
 			<env:objecttypes>
 
-                <!-- Collector -->
-                <!--<env:objecttype name="collector">
-					<env:property name="rotation" dynamic="true">
-						$object.lastmove==null || $object.lastmove.equals("right")? null:
-						$object.lastmove.equals("left")? new Vector3Double(Math.PI,0,Math.PI):
-						$object.lastmove.equals("up")? new Vector3Double(0,0,Math.PI*3/2):
-						new Vector3Double(0,0,Math.PI/2)
-					</env:property>
-					<env:property name="vision_range">0</env:property>
-					<env:property name="position" event="true"/>
-				</env:objecttype>-->
+                <!-- Incident -->
+				<env:objecttype name="incident">
+					<env:property name="position" class="IVector2"/>
+					<env:property name="type" class="String"/>
+				</env:objecttype>
 
                 <!-- Terrain -->
 				<env:objecttype name="terrain">
@@ -73,17 +67,10 @@
 			<!-- Process types -->
 			<env:processtypes>
 
-                <!--<env:processtype name="create" class="DefaultObjectCreationProcess">
-					<env:property name="tickrate">0</env:property>
-					<env:property name="type">"exit_door"</env:property>
-					<env:property name="properties" dynamic="true">
-						jadex.commons.SUtil.createHashMap(
-							new String[]{Space2D.PROPERTY_POSITION},
-							new Object[]{((Space2D)$space).getRandomPosition(Vector2Int.ZERO)})
-					</env:property>
-				</env:processtype>-->
+                <!-- Create Incident  -->
+				<env:processtype name="create_incident" class="processes.IncidentProcess"/>
 
-                <!-- Create Forest process -->
+                <!-- Create World process -->
                 <env:processtype name="create_world" class="processes.WorldGenerator"/>
 
 			</env:processtypes>
@@ -91,12 +78,8 @@
             <!-- Declaration of the relationships between agents and their avatar objects in the space. -->
             <env:avatarmappings>
 
-                <!--<env:avatarmapping componenttype="Collector" objecttype="collector"/>-->
-
                 <!-- Map Wanderer component to wanderer object type -->
                 <env:avatarmapping componenttype="Wanderer" objecttype="wanderer" createavatar="false" createcomponent="true"/>
-
-
 
             </env:avatarmappings>
 			
@@ -118,7 +101,7 @@
 				<env:perceptgenerator name="visiongen" class="DefaultVisionGenerator">
 					<env:property name="maxrange">0</env:property>
 					<env:property name="range_property">"vision_range"</env:property>
-					<!-- percept types are declared with associated action types: 
+					<!-- percept types are declared with associated action types:
 						percepttype, actiontype1, actiontype2, ... -->
 					<env:property name="percepttypes">
 						new Object[]
@@ -145,7 +128,7 @@
 			<!-- Actions that can be performed in the environment. -->
 			<env:actiontypes>
 
-                <env:actiontype name="go" class="GoAction" >
+                <env:actiontype name="go" class="actions.GoAction" >
 					<env:property name="object_id" class="Object"/>
 					<env:property name="direction" class="String"/>
 				</env:actiontype>
@@ -196,6 +179,21 @@
                         <env:texturedrectangle layer="2" imagepath="images/wanderer.png"/>
                     </env:drawable>
 
+                    <!-- Incident avatar -->
+                    <env:drawable objecttype="incident" height="1.0" width="1.0">
+
+                        <!-- Flames -->
+                        <env:texturedrectangle layer="1" imagepath="images/flames.png">
+                            <env:drawcondition>$object.type.equals(0)</env:drawcondition>
+                        </env:texturedrectangle>
+
+                        <!-- Water -->
+                        <env:texturedrectangle layer="1" imagepath="images/water.png">
+                            <env:drawcondition>$object.type.equals(1)</env:drawcondition>
+                        </env:texturedrectangle>
+
+                    </env:drawable>
+
                     <!-- Background image -->
                     <env:prelayers>
                         <env:tiledlayer width="0.25" height="0.25" imagepath="images/terrain_1.png" />
@@ -208,24 +206,17 @@
 
 				</env:perspective>
 			</env:perspectives>
-			
-			<!-- A space executor defines the space execution policy (e.g. roundbased vs. continuous). -->
-			<!--<env:spaceexecutor class="RoundBasedExecutor">
-				<env:property name="space">$space</env:property>
-			</env:spaceexecutor>-->
 
             <env:spaceexecutor class="DeltaTimeExecutor">
                 <env:property name="space">$space</env:property>
                 <env:property name="tick">true</env:property>
             </env:spaceexecutor>
+
 		</env:envspacetype>
 	</extensiontypes>
 	
 	<!-- Agent types of the application. -->
 	<componenttypes>
-
-        <!-- Person agent type -->
-        <!--<componenttype name="Collector" filename="evacuation/Person.agent.xml"/>-->
 
         <!-- Wanderer agent type -->
         <componenttype name="Wanderer" filename="evacuation\agents\WandererBDI.class"/>
@@ -243,9 +234,8 @@
                     <!-- Processes -->
 					<env:processes>
 
-						<!--<env:process type="create">
-							<env:property name="tickrate">15</env:property>
-						</env:process>-->
+                        <!-- Create Incident process -->
+                        <env:process type="create_incident"/>
 
                         <!-- Create World process -->
                         <env:process type="create_world"/>
@@ -255,49 +245,16 @@
                     <!-- Observers -->
 					<env:observers>
 
-                        <!-- World -->
-						<!--<env:observer name="world" dataview="view_all" perspective="abstract">
-							<env:plugin name="evaluation" class="EvaluationPlugin">
-								<env:property name="component_0">((AbstractChartDataConsumer)$space.getDataConsumer("burned_chart")).getChartPanel()</env:property>
-							</env:plugin>
-						</env:observer>-->
-
                         <!-- Simple grid watcher -->
                         <env:observer name="Simple Grid Watcher" dataview="view_all" perspective="icons"/>
 						
 					</env:observers>
-
-                    <!-- Data Providers -->
-					<!--<env:dataproviders>
-					    <env:dataprovider name="exit_door_burned">
-					        <env:source name="$burner" objecttype="burner"/>
-					        <env:data name="time">$time</env:data>
-					        <env:data name="burned_amount">$burner.burned</env:data>
-					    </env:dataprovider>
-					</env:dataproviders>-->
-
-                    <!-- Data Consumers -->
-					<!--<env:dataconsumers>
-					    <env:dataconsumer name="burned_chart" class="XYChartDataConsumer">
-					        <env:property name="dataprovider">"exit_door_burned"</env:property>
-					        <env:property name="title">"Garbage Burned"</env:property>
-					        <env:property name="labelx">"Time"</env:property>
-					        <env:property name="labely">"Garbage"</env:property>
-					        <env:property name="maxitemcount">100</env:property>
-					        <env:property name="legend">false</env:property>
-
-					        <env:property name="seriesname">"Garbage"</env:property>
-					        <env:property name="valuex">"time"</env:property>
-					        <env:property name="valuey">"burned_amount"</env:property>
-					    </env:dataconsumer>
-					</env:dataconsumers>-->
 					
 				</env:envspace>
 			</extensions>
 
             <!-- Components -->
 			<components>
-				<!--<component type="Collector"/>-->
 			</components>
 
 		</configuration>

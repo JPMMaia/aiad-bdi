@@ -1,4 +1,4 @@
-package evacuation;
+package evacuation.plans;
 import jadex.bdi.runtime.IGoal;
 import jadex.bdi.runtime.Plan;
 import jadex.extension.envsupport.environment.space2d.Space2D;

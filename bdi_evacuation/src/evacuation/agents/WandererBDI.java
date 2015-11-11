@@ -115,7 +115,7 @@ public class WandererBDI
     /****************************
      PLANS
      ***************************/
-/*
+
     @Plan(trigger=@Trigger(goals=MaintainSafetyGoal.class))
     public class MaintainSafetyPlan {
 
@@ -173,13 +173,19 @@ public class WandererBDI
     @Plan(trigger=@Trigger(goals=HelpOthersGoal.class))
     public class HelpOthersPlan {
         //helpOthersPlan - loose time and improve others condition
+        @PlanBody
+        protected void HelpOthersPlanBody() {
+        }
     }
 
     @Plan(trigger=@Trigger(goals=PushOthersGoal.class))
     public class PushOthersPlan {
         //pushOthersPlan - other condition gets worse and if = 0 they die
+        @PlanBody
+        protected void PushOthersPlanBody() {
+        }
     }
-*/
+
     /****************************
      BODY
      ***************************/
@@ -202,7 +208,7 @@ public class WandererBDI
 
         //sera que funciona?
         while(true){
-            System.out.println(space.getSpaceObjectsByType("incident"));
+            System.out.println("antes de incidente");
 
             if(space.getSpaceObjectsByType("incident") != null)
                 break;
@@ -211,8 +217,7 @@ public class WandererBDI
             System.out.println("sem incidente");
         }
 
-        System.out.println("incidente");
-
+        System.out.println("depois de incidente");
         //agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
         riskPerception = 90;
     }

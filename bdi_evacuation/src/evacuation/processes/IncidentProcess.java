@@ -15,7 +15,10 @@ import java.util.Random;
 
 public class IncidentProcess extends SimplePropertyObject implements ISpaceProcess {
 
-	private static final int waitTime = 10000;
+	private static final long waitTime = 10000;
+	private static long startTime = 0;
+
+
 	private static ArrayList<Position> directions;
 	private Space2D space;
 	int spaceHeight;
@@ -41,9 +44,8 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 		directions.add(new Position(1,0));
 		directions.add(new Position(0,-1));
 		directions.add(new Position(0,1));
-        
-        //wait time TODO
-		//this.wait(timeout); does not work :(
+
+		startTime = arg0.getTime();
 		lastPosition = new Position(r.nextInt(spaceWidth), r.nextInt(spaceHeight));
     }
 
@@ -55,14 +57,15 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
     @Override
     public void execute(IClockService iClockService, IEnvironmentSpace iEnvironmentSpace) {
     	
-    	System.out.println((iClockService.getTime() - iClockService.getStarttime()));
+    	System.out.println((iClockService.getTime() - startTime));
     	
-    	if((iClockService.getTime() - iClockService.getStarttime()) > waitTime){ 
+    	if((iClockService.getTime() - startTime) > waitTime){
 	    	Map<String, Object> properties = new HashMap<>();
 	    	Position position = getNewFirePosition();
 	        properties.put("position", new Vector2Int(position.x, position.y));
 	        properties.put("type", incidentType); //fire type
 	        space.createSpaceObject("incident", properties, null);
+			System.out.println("criei incidente");
     	}
     }
 

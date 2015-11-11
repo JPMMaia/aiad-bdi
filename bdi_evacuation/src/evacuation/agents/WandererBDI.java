@@ -196,29 +196,33 @@ public class WandererBDI
 
     @AgentBody
     public void body(){
-        System.out.println("aqui");
-        ISpaceObject[] arvoresNoEspaco = space.getSpaceObjectsByType("terrain");
 
-        Random r = new Random();
-
-        int spaceHeight = space.getAreaSize().getXAsInteger();
-        int spaceWidth = space.getAreaSize().getYAsInteger();
-
-        myself.setProperty("position", new Vector2Int(r.nextInt(spaceWidth), r.nextInt(spaceHeight)));
+        //System.out.println("sem incidente");
+        //System.out.println(space.getSpaceObjectsByType("incident"));
 
         //sera que funciona?
         while(true){
+
+            //System.out.println(space.getSpaceObjectsByType("incident"));
             System.out.println("antes de incidente");
 
-            if(space.getSpaceObjectsByType("incident") != null)
+            ISpaceObject[] o = space.getSpaceObjectsByType("incident");
+
+            if(o.length != 0) {
                 break;
+            }
+
+            agent.waitForDelay(3000);
 
             //declare here the first goal TODO
             System.out.println("sem incidente");
         }
 
-        System.out.println("depois de incidente");
-        //agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
-        riskPerception = 90;
+        System.out.println("com incidente");
+
+        /*System.out.println("depois de incidente");
+        agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
+        riskPerception = 90;*/
+
     }
 }

@@ -234,11 +234,11 @@
                     <!-- Processes -->
 					<env:processes>
 
-                        <!-- Create Incident process -->
-                        <env:process type="create_incident"/>
-
                         <!-- Create World process -->
                         <env:process type="create_world"/>
+
+						<!-- Create Incident process -->
+						<env:process type="create_incident"/>
 
 					</env:processes>
 

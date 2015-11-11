@@ -7,29 +7,62 @@
 	<selectedNode>
 		<p0:NodePath __ID="1" entry="0">
 			<path>
-				<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="2" __len="1">
+				<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="2" __len="4">
 					<entries>
-						<p1:String __ID="3">Evacuation.application.xml</p1:String>
+						<p1:String __ID="3">production</p1:String>
+						<p1:String __ID="4">bdi_evacuation</p1:String>
+						<p1:String __ID="5">evacuation</p1:String>
+						<p1:String __ID="6">Evacuation.application.xml</p1:String>
 					</entries>
 				</p1:String__1>
 			</path>
 		</p0:NodePath>
 	</selectedNode>
 	<expandedNodes>
-		<p0:NodePath__1 __ID="4" __len="1">
+		<p0:NodePath__1 __ID="7" __len="4">
 			<entries>
-				<p0:NodePath __ID="5" entry="0">
+				<p0:NodePath __ID="8" entry="0">
 					<path>
-						<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="6" __len="0"></p1:String__1>
+						<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="9" __len="0"></p1:String__1>
+					</path>
+				</p0:NodePath>
+				<p0:NodePath __ID="10" entry="0">
+					<path>
+						<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="11" __len="2">
+							<entries>
+								<p1:String __ID="12">production</p1:String>
+								<p1:String __ID="13">bdi_evacuation</p1:String>
+							</entries>
+						</p1:String__1>
+					</path>
+				</p0:NodePath>
+				<p0:NodePath __ID="14" entry="0">
+					<path>
+						<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="15" __len="1">
+							<entries>
+								<p1:String __ID="16">production</p1:String>
+							</entries>
+						</p1:String__1>
+					</path>
+				</p0:NodePath>
+				<p0:NodePath __ID="17" entry="0">
+					<path>
+						<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="18" __len="3">
+							<entries>
+								<p1:String __ID="19">production</p1:String>
+								<p1:String __ID="20">bdi_evacuation</p1:String>
+								<p1:String __ID="21">evacuation</p1:String>
+							</entries>
+						</p1:String__1>
 					</path>
 				</p0:NodePath>
 			</entries>
 		</p0:NodePath__1>
 	</expandedNodes>
 	<rootPathEntries>
-		<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="7" __len="1">
+		<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="22" __len="1">
 			<entries>
-				<p1:String __ID="8">out\production\bdi_evacuation\evacuation</p1:String>
+				<p1:String __ID="23">out</p1:String>
 			</entries>
 		</p1:String__1>
 	</rootPathEntries>
@@ -45,7 +78,7 @@
 		</p0:properties>
 		<p0:properties __ID="10" type="spanel">
 			<p0:property __ID="11" type="model">out\production\bdi_evacuation\evacuation\Evacuation.application.xml</p0:property>
-			<p0:property __ID="12" type="ridurl">file:out/production/bdi_evacuation/evacuation</p0:property>
+			<p0:property __ID="12" type="ridurl">file:out</p0:property>
 			<p0:property __ID="13" type="globalrid"></p0:property>
 			<p0:property __ID="14" type="config">Default</p0:property>
 			<p0:property __ID="15" type="startsuspended">false</p0:property>
@@ -55,12 +88,12 @@
 		</p0:properties>
 	</p0:properties>
 	<p0:properties __ID="19" type="chat">
-		<p0:property __ID="20" type="nickname">user_1fb</p0:property>
+		<p0:property __ID="20" type="nickname">user_547</p0:property>
 	</p0:properties>
 	<p0:properties __ID="21" type="awa">
 		<p0:property __ID="22" type="fast">false</p0:property>
-		<p0:property __ID="23" type="autocreate">true</p0:property>
-		<p0:property __ID="24" type="autodelete">true</p0:property>
+		<p0:property __ID="23" type="autocreate">false</p0:property>
+		<p0:property __ID="24" type="autodelete">false</p0:property>
 	</p0:properties>
 	<p0:properties __ID="25" type="simulationservice">
 		<p0:property __ID="26" type="executing">true</p0:property>
@@ -68,7 +101,7 @@
 	<p0:properties __ID="27" type="securityservice">
 		<p0:property __ID="28" type="validityduration">327680</p0:property>
 		<p0:property __ID="29" type="usepass">true</p0:property>
-		<p0:property __ID="30" type="password">03804261-28d</p0:property>
+		<p0:property __ID="30" type="password">aa6e5cfd-b3e</p0:property>
 		<p0:property __ID="31" type="selected_mechanism">0</p0:property>
 		<p0:property __ID="32" type="trustedlan">false</p0:property>
 		<p0:property __ID="33" type="storepath">./keystore</p0:property>
@@ -91,7 +124,7 @@
 		<p0:properties __ID="46" type="link">
 			<p0:properties __ID="47" type="a"></p0:properties>
 			<p0:properties __ID="48" type="b">
-				<p0:property __ID="49" type="lid_url">file:out/production/bdi_evacuation/evacuation</p0:property>
+				<p0:property __ID="49" type="lid_url">file:out</p0:property>
 			</p0:properties>
 		</p0:properties>
 	</p0:properties>

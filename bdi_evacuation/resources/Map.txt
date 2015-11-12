@@ -5,8 +5,8 @@ X                  X
 X                  X
 X                  X
 X                  X
-X                  X
-X                  X
+X     W            X
+X        W         X
 X                  X
 X                  X
 X                  E

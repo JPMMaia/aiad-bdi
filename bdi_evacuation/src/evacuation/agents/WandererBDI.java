@@ -5,6 +5,7 @@ import evacuation.utils.Position;
 import jadex.bdiv3.BDIAgent;
 import jadex.bdiv3.annotation.*;
 import jadex.bdiv3.runtime.IGoal;
+import jadex.bridge.service.types.clock.IClockService;
 import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.space2d.Grid2D;
 import jadex.extension.envsupport.math.Vector2Int;
@@ -24,9 +25,10 @@ public class WandererBDI
     //ATTRIBUTES****************//
 
     Move move;
-    Position nextPosition;
+    IClockService iClockService;
 
     //BELIEFS*******************//
+
 
     @Belief
     protected Grid2D space = (Grid2D)agent.getParentAccess().getExtension("2dspace").get();
@@ -49,6 +51,9 @@ public class WandererBDI
     /*****************************
      Beliefs that trigger goals
      *****************************/
+
+    @Belief(dynamic=true)
+    Position nextPosition;
 
     @Belief(dynamic=true)
     protected boolean inPanic = (riskPerception > 90);
@@ -142,18 +147,22 @@ public class WandererBDI
     public class WanderPlan {
         @PlanBody
         protected void WanderPlanBody() {
-            //while(true){
-                Position oldPosition = move.getPosition(myself);
-                nextPosition = move.getNewPosition(oldPosition,
-                        space.getAreaSize().getXAsInteger(),
-                        space.getAreaSize().getXAsInteger()
-                );
 
-            //space.calculateDistance()
+            Position oldPosition = move.getPosition(myself);
+            nextPosition = move.getNewPosition(oldPosition,
+                    space.getAreaSize().getXAsInteger(),
+                    space.getAreaSize().getXAsInteger()
+            );
 
-                agent.dispatchTopLevelGoal(new GoGoal());
-                agent.waitForDelay(100000000);
-                agent.dispatchTopLevelGoal(new WanderGoal());
+            agent.dispatchTopLevelGoal(new GoGoal());
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                System.out.println("unable to sleep");
+            }
+
+            agent.dispatchTopLevelGoal(new WanderGoal());
 
                 //guardar pilha de goals? e depois agent.dropGoal();
             //}

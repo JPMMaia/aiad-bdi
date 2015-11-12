@@ -2,12 +2,14 @@ package evacuation.agents;
 
 import jadex.bdiv3.BDIAgent;
 import jadex.bdiv3.annotation.*;
+import jadex.bdiv3.runtime.IGoal;
 import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.space2d.Grid2D;
 import jadex.extension.envsupport.math.Vector2Int;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 
+import java.util.Collection;
 import java.util.Random;
 
 @Agent
@@ -57,6 +59,13 @@ public class WandererBDI
     /****************************
      GOALS
      ***************************/
+
+    @Goal
+    public class WanderGoal {
+
+        @GoalParameter
+        protected String goal = "WanderGoal";
+    }
 
     @Goal(excludemode= Goal.ExcludeMode.Never)
     public class MaintainSafetyGoal {
@@ -109,6 +118,7 @@ public class WandererBDI
         protected String goal = "HelpOthersGoal";
     }
 
+    /*
     @Goal
     public class PushOthersGoal {
 
@@ -116,11 +126,21 @@ public class WandererBDI
         public PushOthersGoal() {
         }
 
-    }
+    }*/
 
     /****************************
      PLANS
      ***************************/
+
+    @Plan(trigger=@Trigger(goals=WanderGoal.class))
+    public class WanderPlan {
+        @PlanBody
+        protected void WanderPlanBody() {
+            while(true){
+                //randomMove();
+            }
+        }
+    }
 
     @Plan(trigger=@Trigger(goals=MaintainSafetyGoal.class))
     public class MaintainSafetyPlan {
@@ -183,13 +203,14 @@ public class WandererBDI
         }
     }
 
+    /*
     @Plan(trigger=@Trigger(goals=PushOthersGoal.class))
     public class PushOthersPlan {
         //pushOthersPlan - other condition gets worse and if = 0 they die
         @PlanBody
         protected void PushOthersPlanBody() {
         }
-    }
+    }*/
 
     /****************************
      BODY
@@ -202,12 +223,12 @@ public class WandererBDI
     @AgentBody
     public void body(){
 
-        //System.out.println("sem incidente");
-        //System.out.println(space.getSpaceObjectsByType("incident"));
-        //sera que funciona?
-
         agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
-        while(true){
+        agent.dispatchTopLevelGoal(new WanderGoal());
+
+        Collection<IGoal> goals = agent.getGoals();
+
+        /*while(true){
 
             //System.out.println(space.getSpaceObjectsByType("incident"));
             //System.out.println("antes de incidente");
@@ -226,7 +247,7 @@ public class WandererBDI
 
         //System.out.println("depois de incidente");
 
-        riskPerception = 90;
+        riskPerception = 90;*/
 
     }
 }

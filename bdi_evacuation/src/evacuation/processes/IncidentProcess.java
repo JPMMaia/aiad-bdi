@@ -1,5 +1,6 @@
 package evacuation.processes;
 
+import evacuation.utils.Move;
 import evacuation.utils.Position;
 import jadex.bridge.service.types.clock.IClockService;
 import jadex.commons.SimplePropertyObject;
@@ -20,36 +21,31 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 	//OTHER VARIABLES FOR CALCULATIONS OF NEW INCIDENTS
 	private int desiredNumIncidentPositions; //for the calculations
 	HashSet<String> incidentPositions; //set with incident positions (for efficiency)
-	private static ArrayList<Position> directions;
 	Position lastPosition;
 
 	//SPACE VARIABLES FOR CALCULATIONS
 	private Space2D space;
 	int spaceHeight;
 	int spaceWidth;
-	Random r;
 
 	int incidentType;
+
+	Move move;
 
     @Override
     public void start(IClockService arg0, IEnvironmentSpace arg1) {
 
-		//variables initializations
+		//variables initialization
         space = (Space2D)arg1;
         spaceHeight = space.getAreaSize().getXAsInteger();
         spaceWidth = space.getAreaSize().getYAsInteger();
-        r = new Random();
+
+		move = new Move();
 
 		startTime = arg0.getTime();
-		lastPosition = new Position(r.nextInt(spaceWidth), r.nextInt(spaceHeight)); //pick a random valid position
+		lastPosition = move.getRandomPosition(spaceWidth, spaceHeight);
 		desiredNumIncidentPositions = 1;
 		incidentPositions = new HashSet<>();
-
-        directions = new ArrayList<>();
-		directions.add(new Position(-1,0));
-		directions.add(new Position(1,0));
-		directions.add(new Position(0,-1));
-		directions.add(new Position(0,1));
 
 		incidentType = 0; //r.nextInt(2); //0 - fire ; 1 - water;
 	}
@@ -68,19 +64,20 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 
     	if(currentTime > initialWaitingTime){
 			if(currentTime > (incidentProgressTimer * desiredNumIncidentPositions)) {
-				creteIncident();
+				createIncident();
 				desiredNumIncidentPositions++;
 			}
     	}
     }
 
-	private void creteIncident() {
-		Position position = getNewIncidentPosition();
-		if(savedIncidentPosition(position)){
+	private void createIncident() {
+		Position newPosition = move.getNewIncidentPosition(lastPosition,spaceWidth,spaceHeight);
+		if(savedIncidentPosition(newPosition)){
 			Map<String, Object> properties = new HashMap<>();
-			properties.put("position", new Vector2Int(position.x, position.y));
+			properties.put("position", new Vector2Int(newPosition.x, newPosition.y));
 			properties.put("type", incidentType); //fire type
 			space.createSpaceObject("incident", properties, null);
+			lastPosition = newPosition;
 		}
 	}
 
@@ -88,17 +85,4 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 		return incidentPositions.add(position.x + "." + position.y); // returns false if the object already exists
 	}
 
-	private Position getNewIncidentPosition() {
-		Position direction = directions.get(r.nextInt(4));
-		Position newPosition = new Position(lastPosition.x + direction.x, lastPosition.y + direction.y);
-		if(isBetweenLimits(newPosition)){
-			lastPosition = newPosition;
-			return newPosition;
-		}
-		return lastPosition;
-	}
-
-	private boolean isBetweenLimits(Position newPosition) {
-		return (newPosition.x < spaceHeight && newPosition.x >= 0 && newPosition.y < spaceWidth && newPosition.y >= 0);
-	}
 }

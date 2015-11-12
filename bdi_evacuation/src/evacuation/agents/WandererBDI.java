@@ -25,6 +25,7 @@ public class WandererBDI
     //ATTRIBUTES****************//
 
     Move move;
+    private boolean isWander = true;
 
     //BELIEFS*******************//
 
@@ -69,6 +70,7 @@ public class WandererBDI
 
     @Belief
     protected boolean isDown = false;
+
 
     /****************************
      GOALS
@@ -169,7 +171,8 @@ public class WandererBDI
                     space.getAreaSize().getXAsInteger()
             );
 
-            agent.dispatchTopLevelGoal(new WanderGoal());
+            if(isWander)
+                agent.dispatchTopLevelGoal(new WanderGoal());
         }
     }
 
@@ -193,6 +196,7 @@ public class WandererBDI
         @PlanBody
         protected void EvaluateIncidentRiskPlanBody() {
             if(isIncident) {
+                isWander = false;
                 System.out.println("DANGER!");
                 System.out.println("isIncident - " + isIncident);
                 evaluateRisk();
@@ -241,7 +245,7 @@ public class WandererBDI
             //ask the world if there is any door available
             //if no empty door available riskPerception += 5
 
-            nextPosition = findNewDangerPosition();
+            nextPosition = findNewPositionWhenIncident();
             evaluateRisk();
             //if I didn't succeed in go -> riskPerception++
         }
@@ -284,12 +288,12 @@ public class WandererBDI
     }
 
     private void evaluateRisk() {
-        //TO DO
+        //TODO
         riskPerception =  90;
     }
 
-    private Position findNewDangerPosition() {
-        //TO DO
+    private Position findNewPositionWhenIncident() {
+        //TODO
         return new Position(nextPosition.x + 1, nextPosition.y);
     }
 }

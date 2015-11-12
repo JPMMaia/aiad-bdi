@@ -25,7 +25,6 @@ public class WandererBDI
     //ATTRIBUTES****************//
 
     Move move;
-    IClockService iClockService;
 
     //BELIEFS*******************//
 
@@ -45,12 +44,16 @@ public class WandererBDI
     @Belief
     protected int condition = 100; //range [0-100]
 
-    @Belief
-    protected int riskPerception = 0; //range [0-100] //TODO metodo que faz update a percepcao de risco consoante o ambiente
 
     /*****************************
      Beliefs that trigger goals
      *****************************/
+
+    @Belief(updaterate=500)
+    protected boolean incident = (space.getSpaceObjectsByType("incident").length != 0);
+
+    @Belief
+    protected int riskPerception = 0; //range [0-100] //TODO metodo que faz update a percepcao de risco consoante o ambiente
 
     @Belief(dynamic=true)
     Position nextPosition;
@@ -78,13 +81,6 @@ public class WandererBDI
         protected String goal = "WanderGoal";
     }
 
-    @Goal
-    public class GoGoal {
-
-        @GoalParameter
-        protected String goal = "GoGoal";
-    }
-
     @Goal(excludemode= Goal.ExcludeMode.Never)
     public class MaintainSafetyGoal {
 
@@ -100,6 +96,8 @@ public class WandererBDI
             return riskPerception <= 10;
         }
     }
+
+    /*
 
     @Goal
     public class IncreaseDistanceFromDangerGoal {
@@ -129,7 +127,6 @@ public class WandererBDI
         protected String goal = "HelpOthersGoal";
     }
 
-    /*
     @Goal
     public class PushOthersGoal {
 
@@ -154,8 +151,6 @@ public class WandererBDI
                     space.getAreaSize().getXAsInteger()
             );
 
-            agent.dispatchTopLevelGoal(new GoGoal());
-
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -163,19 +158,32 @@ public class WandererBDI
             }
 
             agent.dispatchTopLevelGoal(new WanderGoal());
-
-                //guardar pilha de goals? e depois agent.dropGoal();
-            //}
         }
     }
 
-    @Plan(trigger=@Trigger(goals=GoGoal.class))
+    @Plan(trigger=@Trigger(factchangeds="nextPosition"))
     public class GoPlan {
         @PlanBody
         protected void GoPlanBody() {
             myself.setProperty("position", new Vector2Int(nextPosition.x, nextPosition.y));
 
         }
+    }
+
+    /*
+
+    @Goal
+    public class ABeliefBasedGoal {
+
+        @GoalContextCondition(beliefs="s")
+        public boolean checkCondition() {
+            return false;
+        }
+
+        @GoalCreationCondition(beliefs="s")
+        public ABeliefBasedGoal() {
+        }
+
     }
 
     @Plan(trigger=@Trigger(goals=MaintainSafetyGoal.class))
@@ -239,7 +247,6 @@ public class WandererBDI
         }
     }
 
-    /*
     @Plan(trigger=@Trigger(goals=PushOthersGoal.class))
     public class PushOthersPlan {
         //pushOthersPlan - other condition gets worse and if = 0 they die
@@ -260,7 +267,7 @@ public class WandererBDI
     public void body(){
 
         move = new Move();
-        nextPosition = new Position();
+        //nextPosition = new Position();
 
         //agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
         agent.dispatchTopLevelGoal(new WanderGoal());

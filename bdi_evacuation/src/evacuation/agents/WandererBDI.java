@@ -140,7 +140,7 @@ public class WandererBDI
             System.out.println("IncreaseDistanceFromDangerPlanBody");
             riskPerception--;
             System.out.println(riskPerception);
-            
+
             if(indoor){
                 agent.dispatchTopLevelGoal(new FindExitGoal());
             }

@@ -176,8 +176,13 @@
 
                     <!-- Wanderer avatar -->
                     <env:drawable objecttype="wanderer" height="1.0" width="1.0">
-                        <env:texturedrectangle layer="2" imagepath="images/wanderer.png"/>
+                        <env:texturedrectangle layer="1" imagepath="images/wanderer.png"/>
                     </env:drawable>
+
+					<!-- Door avatar -->
+					<env:drawable objecttype="exit_door" height="1.0" width="1.0">
+						<env:texturedrectangle layer="1" imagepath="images/terrain_4.png"/>
+					</env:drawable>
 
                     <!-- Incident avatar -->
                     <env:drawable objecttype="incident" height="1.0" width="1.0">

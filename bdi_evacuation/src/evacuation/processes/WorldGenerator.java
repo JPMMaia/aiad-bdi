@@ -78,7 +78,7 @@ public class WorldGenerator extends SimplePropertyObject implements ISpaceProces
 						break;
 
 					case 'E':
-						drawTerrainSquare(space, j, i, 2);
+						drawExitDoor(space, j, i);
 						break;
 
 					case 'W':
@@ -87,6 +87,12 @@ public class WorldGenerator extends SimplePropertyObject implements ISpaceProces
 				}
 			}
 		}
+	}
+
+	private void drawExitDoor(Space2D space, int x, int y) {
+		Map<String, Object> properties = new HashMap<>();
+		properties.put("position", new Vector2Int(x, y));
+		space.createSpaceObject("exit_door", properties, null);
 	}
 
 	private void drawTerrainSquare(Space2D space, int x, int y, int terrainType)

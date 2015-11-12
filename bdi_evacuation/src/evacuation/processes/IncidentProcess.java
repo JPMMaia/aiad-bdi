@@ -71,7 +71,7 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
     }
 
 	private void createIncident() {
-		Position newPosition = move.getNewIncidentPosition(lastPosition,spaceWidth,spaceHeight);
+		Position newPosition = move.getNewPosition(lastPosition,spaceWidth,spaceHeight);
 		if(savedIncidentPosition(newPosition)){
 			Map<String, Object> properties = new HashMap<>();
 			properties.put("position", new Vector2Int(newPosition.x, newPosition.y));

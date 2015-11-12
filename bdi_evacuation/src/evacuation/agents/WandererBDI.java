@@ -1,5 +1,7 @@
 package evacuation.agents;
 
+import evacuation.utils.Move;
+import evacuation.utils.Position;
 import jadex.bdiv3.BDIAgent;
 import jadex.bdiv3.annotation.*;
 import jadex.bdiv3.runtime.IGoal;
@@ -18,9 +20,13 @@ public class WandererBDI
     @Agent
     protected BDIAgent agent;
 
-    /****************************
-     BELIEFS
-     ***************************/
+
+    //ATTRIBUTES****************//
+
+    Move move;
+    Position nextPosition;
+
+    //BELIEFS*******************//
 
     @Belief
     protected Grid2D space = (Grid2D)agent.getParentAccess().getExtension("2dspace").get();
@@ -67,6 +73,13 @@ public class WandererBDI
         protected String goal = "WanderGoal";
     }
 
+    @Goal
+    public class GoGoal {
+
+        @GoalParameter
+        protected String goal = "GoGoal";
+    }
+
     @Goal(excludemode= Goal.ExcludeMode.Never)
     public class MaintainSafetyGoal {
 
@@ -95,13 +108,6 @@ public class WandererBDI
 
         @GoalParameter
         protected String goal = "FindExitGoal";
-    }
-
-    @Goal
-    public class GoGoal {
-
-        @GoalParameter
-        protected String goal = "GoGoal";
     }
 
     @Goal
@@ -136,9 +142,30 @@ public class WandererBDI
     public class WanderPlan {
         @PlanBody
         protected void WanderPlanBody() {
-            while(true){
-                //randomMove();
-            }
+            //while(true){
+                Position oldPosition = move.getPosition(myself);
+                nextPosition = move.getNewPosition(oldPosition,
+                        space.getAreaSize().getXAsInteger(),
+                        space.getAreaSize().getXAsInteger()
+                );
+
+            //space.calculateDistance()
+
+                agent.dispatchTopLevelGoal(new GoGoal());
+                agent.waitForDelay(100000000);
+                agent.dispatchTopLevelGoal(new WanderGoal());
+
+                //guardar pilha de goals? e depois agent.dropGoal();
+            //}
+        }
+    }
+
+    @Plan(trigger=@Trigger(goals=GoGoal.class))
+    public class GoPlan {
+        @PlanBody
+        protected void GoPlanBody() {
+            myself.setProperty("position", new Vector2Int(nextPosition.x, nextPosition.y));
+
         }
     }
 
@@ -223,7 +250,10 @@ public class WandererBDI
     @AgentBody
     public void body(){
 
-        agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
+        move = new Move();
+        nextPosition = new Position();
+
+        //agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
         agent.dispatchTopLevelGoal(new WanderGoal());
 
         Collection<IGoal> goals = agent.getGoals();

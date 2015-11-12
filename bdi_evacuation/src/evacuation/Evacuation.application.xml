@@ -66,12 +66,12 @@
 			
 			<!-- Process types -->
 			<env:processtypes>
+				<!-- Create World process -->
+				<env:processtype name="create_world" class="processes.WorldGenerator"/>
 
-                <!-- Create Incident  -->
+				<!-- Create Incident  -->
 				<env:processtype name="create_incident" class="processes.IncidentProcess"/>
 
-                <!-- Create World process -->
-                <env:processtype name="create_world" class="processes.WorldGenerator"/>
 
 			</env:processtypes>
 

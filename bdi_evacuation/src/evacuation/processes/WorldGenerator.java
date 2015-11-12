@@ -77,6 +77,10 @@ public class WorldGenerator extends SimplePropertyObject implements ISpaceProces
 						drawTerrainSquare(space, j, i, 1);
 						break;
 
+					case 'E':
+						drawTerrainSquare(space, j, i, 2);
+						break;
+
 					case 'W':
 						AbstractAgentFactory.createAgent(AgentType.Wanderer, space, j, i);
 						break;

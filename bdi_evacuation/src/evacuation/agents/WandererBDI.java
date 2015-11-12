@@ -62,9 +62,15 @@ public class WandererBDI
     public class MaintainSafetyGoal {
 
         @GoalMaintainCondition(beliefs="riskPerception")
-        protected boolean mantain() {
+        protected boolean maintain() {
             System.out.println("mantain riskPerception");
-            return riskPerception <=10;
+            return riskPerception <= 10;
+        }
+
+        @GoalTargetCondition(beliefs="riskPerception")
+        protected boolean target() {
+            System.out.println("target riskPerception");
+            return riskPerception <= 10;
         }
     }
 
@@ -131,20 +137,19 @@ public class WandererBDI
 
         @PlanBody
         protected void IncreaseDistanceFromDangerPlanBody() {
+            System.out.println("IncreaseDistanceFromDangerPlanBody");
+            riskPerception--;
+            System.out.println(riskPerception);
+            
+            if(indoor){
+                agent.dispatchTopLevelGoal(new FindExitGoal());
+            }
+            else{
+                //agent.dispatchTopLevelGoal(goGoal()); check danger position and run to the opposite way
+            }
 
-            while(riskPerception > 10){
-
-                System.out.println("IncreaseDistanceFromDangerPlanBody");
-                if(indoor){
-                    agent.dispatchTopLevelGoal(new FindExitGoal());
-                }
-                else{
-                    //agent.dispatchTopLevelGoal(goGoal()); check danger position and run to the opposite way
-                }
-
-                if(riskPerception > 90){
-                    isTrapped = true;
-                }
+            if(riskPerception > 90){
+                isTrapped = true;
             }
         }
     }
@@ -199,12 +204,13 @@ public class WandererBDI
 
         //System.out.println("sem incidente");
         //System.out.println(space.getSpaceObjectsByType("incident"));
-
         //sera que funciona?
+
+        agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
         while(true){
 
             //System.out.println(space.getSpaceObjectsByType("incident"));
-            System.out.println("antes de incidente");
+            //System.out.println("antes de incidente");
 
             ISpaceObject[] o = space.getSpaceObjectsByType("incident");
 
@@ -215,14 +221,12 @@ public class WandererBDI
             agent.waitForDelay(3000);
 
             //declare here the first goal TODO
-            System.out.println("sem incidente");
+            // System.out.println("sem incidente");
         }
 
-        System.out.println("com incidente");
+        //System.out.println("depois de incidente");
 
-        /*System.out.println("depois de incidente");
-        agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
-        riskPerception = 90;*/
+        riskPerception = 90;
 
     }
 }

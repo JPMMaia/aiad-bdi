@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class IncidentProcess extends SimplePropertyObject implements ISpaceProcess {
 
-	private static final long waitTime = 10000;
+	private static final long waitTime = 2000;
 	private static long startTime = 0;
 
 
@@ -65,7 +65,7 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 	        properties.put("position", new Vector2Int(position.x, position.y));
 	        properties.put("type", incidentType); //fire type
 	        space.createSpaceObject("incident", properties, null);
-			System.out.println("criei incidente");
+			//System.out.println("criei incidente");
     	}
     }
 

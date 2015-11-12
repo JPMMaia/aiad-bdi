@@ -1,4 +1,4 @@
-XXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXEXXXX
 X                  X
 X            W     X
 X                  X
@@ -9,7 +9,7 @@ X                  X
 X                  X
 X                  X
 X                  X
-X                  X
+X                  E
 X                  X
 X                  X
 X                  X

@@ -5,13 +5,13 @@ X                  X
 X                  X
 X                  X
 X                  X
-X     W            X
-X        W         X
+X                  X
+X        W      w  X
 X                  X
 X                  X
 X                  E
 X                  X
-X                  X
+X     W            X
 X                  X
 X                  X
 X                  X

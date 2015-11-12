@@ -49,11 +49,11 @@ public class WandererBDI
      Beliefs that trigger goals
      *****************************/
 
-    @Belief(updaterate=500)
-    protected boolean incident = (space.getSpaceObjectsByType("incident").length != 0);
+    @Belief(updaterate=100)
+    protected boolean isIncident = (space.getSpaceObjectsByType("incident").length != 0);
 
     @Belief
-    protected int riskPerception = 0; //range [0-100] //TODO metodo que faz update a percepcao de risco consoante o ambiente
+    protected int riskPerception = 0;
 
     @Belief(dynamic=true)
     Position nextPosition;
@@ -81,6 +81,7 @@ public class WandererBDI
         protected String goal = "WanderGoal";
     }
 
+
     @Goal(excludemode= Goal.ExcludeMode.Never)
     public class MaintainSafetyGoal {
 
@@ -97,8 +98,6 @@ public class WandererBDI
         }
     }
 
-    /*
-
     @Goal
     public class IncreaseDistanceFromDangerGoal {
 
@@ -113,6 +112,7 @@ public class WandererBDI
         protected String goal = "FindExitGoal";
     }
 
+    /*
     @Goal
     public class FollowOthersGoal {
 
@@ -134,43 +134,7 @@ public class WandererBDI
         public PushOthersGoal() {
         }
 
-    }*/
-
-    /****************************
-     PLANS
-     ***************************/
-
-    @Plan(trigger=@Trigger(goals=WanderGoal.class))
-    public class WanderPlan {
-        @PlanBody
-        protected void WanderPlanBody() {
-
-            Position oldPosition = move.getPosition(myself);
-            nextPosition = move.getNewPosition(oldPosition,
-                    space.getAreaSize().getXAsInteger(),
-                    space.getAreaSize().getXAsInteger()
-            );
-
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                System.out.println("unable to sleep");
-            }
-
-            agent.dispatchTopLevelGoal(new WanderGoal());
-        }
     }
-
-    @Plan(trigger=@Trigger(factchangeds="nextPosition"))
-    public class GoPlan {
-        @PlanBody
-        protected void GoPlanBody() {
-            myself.setProperty("position", new Vector2Int(nextPosition.x, nextPosition.y));
-
-        }
-    }
-
-    /*
 
     @Goal
     public class ABeliefBasedGoal {
@@ -184,6 +148,56 @@ public class WandererBDI
         public ABeliefBasedGoal() {
         }
 
+    }
+
+    */
+
+    /****************************
+     PLANS
+     ***************************/
+
+    @Plan(trigger=@Trigger(goals=WanderGoal.class))
+    public class WanderPlan {
+        @PlanBody
+        protected void WanderPlanBody() {
+
+            System.out.println("WanderPlanBody");
+
+            Position oldPosition = move.getPosition(myself);
+            nextPosition = move.getNewPosition(oldPosition,
+                    space.getAreaSize().getXAsInteger(),
+                    space.getAreaSize().getXAsInteger()
+            );
+
+            agent.dispatchTopLevelGoal(new WanderGoal());
+        }
+    }
+
+    @Plan(trigger=@Trigger(factchangeds="nextPosition"))
+    public class GoPlan {
+        @PlanBody
+        protected void GoPlanBody() {
+            myself.setProperty("position", new Vector2Int(nextPosition.x, nextPosition.y));
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                System.out.println("unable to sleep");
+            }
+        }
+    }
+
+    @Plan(trigger=@Trigger(factchangeds="isIncident"))
+    public class EvaluateIncidentRiskPlan {
+
+        @PlanBody
+        protected void EvaluateIncidentRiskPlanBody() {
+            if(isIncident) {
+                System.out.println("DANGER!");
+                System.out.println("isIncident - " + isIncident);
+                evaluateRisk();
+            }
+        }
     }
 
     @Plan(trigger=@Trigger(goals=MaintainSafetyGoal.class))
@@ -202,18 +216,11 @@ public class WandererBDI
         @PlanBody
         protected void IncreaseDistanceFromDangerPlanBody() {
             System.out.println("IncreaseDistanceFromDangerPlanBody");
-            riskPerception--;
-            System.out.println(riskPerception);
-
             if(indoor){
                 agent.dispatchTopLevelGoal(new FindExitGoal());
             }
             else{
                 //agent.dispatchTopLevelGoal(goGoal()); check danger position and run to the opposite way
-            }
-
-            if(riskPerception > 90){
-                isTrapped = true;
             }
         }
     }
@@ -234,10 +241,13 @@ public class WandererBDI
             //ask the world if there is any door available
             //if no empty door available riskPerception += 5
 
-            agent.dispatchTopLevelGoal(new GoGoal());
+            nextPosition = findNewDangerPosition();
+            evaluateRisk();
             //if I didn't succeed in go -> riskPerception++
         }
     }
+
+    /*
 
     @Plan(trigger=@Trigger(goals=HelpOthersGoal.class))
     public class HelpOthersPlan {
@@ -267,33 +277,19 @@ public class WandererBDI
     public void body(){
 
         move = new Move();
-        //nextPosition = new Position();
+        isIncident = false;
 
-        //agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
+        agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
         agent.dispatchTopLevelGoal(new WanderGoal());
+    }
 
-        Collection<IGoal> goals = agent.getGoals();
+    private void evaluateRisk() {
+        //TO DO
+        riskPerception =  90;
+    }
 
-        /*while(true){
-
-            //System.out.println(space.getSpaceObjectsByType("incident"));
-            //System.out.println("antes de incidente");
-
-            ISpaceObject[] o = space.getSpaceObjectsByType("incident");
-
-            if(o.length != 0) {
-                break;
-            }
-
-            agent.waitForDelay(3000);
-
-            //declare here the first goal TODO
-            // System.out.println("sem incidente");
-        }
-
-        //System.out.println("depois de incidente");
-
-        riskPerception = 90;*/
-
+    private Position findNewDangerPosition() {
+        //TO DO
+        return new Position(nextPosition.x + 1, nextPosition.y);
     }
 }

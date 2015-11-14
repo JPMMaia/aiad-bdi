@@ -2,6 +2,7 @@ package evacuation.processes;
 
 import evacuation.factories.AbstractAgentFactory;
 import evacuation.factories.AgentType;
+import evacuation.utils.Types;
 import jadex.bridge.service.types.clock.IClockService;
 import jadex.commons.SimplePropertyObject;
 import jadex.extension.envsupport.environment.IEnvironmentSpace;
@@ -92,7 +93,7 @@ public class WorldGenerator extends SimplePropertyObject implements ISpaceProces
 	private void drawExitDoor(Space2D space, int x, int y) {
 		Map<String, Object> properties = new HashMap<>();
 		properties.put("position", new Vector2Int(x, y));
-		space.createSpaceObject("exit_door", properties, null);
+		space.createSpaceObject(Types.DOOR, properties, null);
 	}
 
 	private void drawTerrainSquare(Space2D space, int x, int y, int terrainType)
@@ -101,6 +102,6 @@ public class WorldGenerator extends SimplePropertyObject implements ISpaceProces
 		properties.put("position", new Vector2Int(x, y));
 		properties.put("type", terrainType);
 
-		space.createSpaceObject("terrain", properties, null);
+		space.createSpaceObject(Types.TERRAIN, properties, null);
 	}
 }

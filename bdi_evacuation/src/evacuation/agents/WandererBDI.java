@@ -2,6 +2,7 @@ package evacuation.agents;
 
 import evacuation.utils.Move;
 import evacuation.utils.Position;
+import evacuation.utils.Types;
 import jadex.bdiv3.BDIAgent;
 import jadex.bdiv3.annotation.*;
 import jadex.bdiv3.runtime.IGoal;
@@ -51,7 +52,7 @@ public class WandererBDI
      *****************************/
 
     @Belief(updaterate=100)
-    protected boolean isIncident = (space.getSpaceObjectsByType("incident").length != 0);
+    protected boolean isIncident = (space.getSpaceObjectsByType(Types.INCIDENT).length != 0);
 
     @Belief
     protected int riskPerception = 0;
@@ -294,7 +295,11 @@ public class WandererBDI
     }
 
     private Position findNewPositionWhenIncident() {
-        //TODO
+        //TODO improve
+
+        //find one door in same division -> improve
+        space.getSpaceObjectsByType(Types.DOOR);
+
         //space.getShortestDirection()
         Position p = new Position(nextPosition.x + 1, nextPosition.y);
         if(move.isBetweenLimits(p, space.getAreaSize().getXAsInteger(), space.getAreaSize().getYAsInteger()))

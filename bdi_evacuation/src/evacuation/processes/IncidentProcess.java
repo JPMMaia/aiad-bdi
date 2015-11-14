@@ -2,6 +2,7 @@ package evacuation.processes;
 
 import evacuation.utils.Move;
 import evacuation.utils.Position;
+import evacuation.utils.Types;
 import jadex.bridge.service.types.clock.IClockService;
 import jadex.commons.SimplePropertyObject;
 import jadex.extension.envsupport.environment.IEnvironmentSpace;
@@ -58,9 +59,7 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
     @Override
     public void execute(IClockService iClockService, IEnvironmentSpace iEnvironmentSpace) {
 
-		//DEBUG
-    	//System.out.println((iClockService.getTime() - startTime));
-    	long currentTime = iClockService.getTime() - startTime;
+		long currentTime = iClockService.getTime() - startTime;
 
     	if(currentTime > initialWaitingTime){
 			if(currentTime > (incidentProgressTimer * desiredNumIncidentPositions)) {
@@ -76,7 +75,7 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 			Map<String, Object> properties = new HashMap<>();
 			properties.put("position", new Vector2Int(newPosition.x, newPosition.y));
 			properties.put("type", incidentType); //fire type
-			space.createSpaceObject("incident", properties, null);
+			space.createSpaceObject(Types.INCIDENT, properties, null);
 			lastPosition = newPosition;
 		}
 	}

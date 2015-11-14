@@ -1,19 +1,19 @@
 XXXXXXXXXXXXXXXEXXXX
-X                  X
-X            W     X
-X                  X
+X               W  X
 X                  X
 X                  X
 X                  X
 X                  X
-X        W      w  X
 X                  X
 X                  X
+X                  X
+X                  X
+X          W       X
 X                  E
 X                  X
-X     W            X
 X                  X
 X                  X
+X     WW           X
 X                  X
 X                  X
 X                  X

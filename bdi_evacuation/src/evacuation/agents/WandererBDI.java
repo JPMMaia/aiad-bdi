@@ -168,7 +168,7 @@ public class WandererBDI
             Position oldPosition = move.getPosition(myself);
             nextPosition = move.getNewPosition(oldPosition,
                     space.getAreaSize().getXAsInteger(),
-                    space.getAreaSize().getXAsInteger()
+                    space.getAreaSize().getYAsInteger()
             );
 
             if(isWander)
@@ -180,6 +180,7 @@ public class WandererBDI
     public class GoPlan {
         @PlanBody
         protected void GoPlanBody() {
+            System.out.println("Position - (" + nextPosition.x + ", " + nextPosition.y + ")");
             myself.setProperty("position", new Vector2Int(nextPosition.x, nextPosition.y));
 
             try {
@@ -294,6 +295,11 @@ public class WandererBDI
 
     private Position findNewPositionWhenIncident() {
         //TODO
-        return new Position(nextPosition.x + 1, nextPosition.y);
+        //space.getShortestDirection()
+        Position p = new Position(nextPosition.x + 1, nextPosition.y);
+        if(move.isBetweenLimits(p, space.getAreaSize().getXAsInteger(), space.getAreaSize().getYAsInteger()))
+            return p;
+
+        return nextPosition;
     }
 }

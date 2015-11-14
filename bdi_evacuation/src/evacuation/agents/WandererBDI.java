@@ -2,13 +2,17 @@ package evacuation.agents;
 
 import evacuation.utils.Move;
 import evacuation.utils.Position;
-import evacuation.utils.Types;
+import evacuation.utils.TypesProperties;
+import evacuation.utils.TypesObjects;
 import jadex.bdiv3.BDIAgent;
 import jadex.bdiv3.annotation.*;
 import jadex.bdiv3.runtime.IGoal;
 import jadex.bridge.service.types.clock.IClockService;
 import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.space2d.Grid2D;
+import jadex.extension.envsupport.math.IVector1;
+import jadex.extension.envsupport.math.IVector2;
+import jadex.extension.envsupport.math.Vector2Double;
 import jadex.extension.envsupport.math.Vector2Int;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
@@ -52,7 +56,7 @@ public class WandererBDI
      *****************************/
 
     @Belief(updaterate=100)
-    protected boolean isIncident = (space.getSpaceObjectsByType(Types.INCIDENT).length != 0);
+    protected boolean isIncident = (space.getSpaceObjectsByType(TypesObjects.INCIDENT).length != 0);
 
     @Belief
     protected int riskPerception = 0;
@@ -90,13 +94,13 @@ public class WandererBDI
 
         @GoalMaintainCondition(beliefs="riskPerception")
         protected boolean maintain() {
-            System.out.println("mantain riskPerception");
+            //System.out.println("mantain riskPerception");
             return riskPerception <= 10;
         }
 
         @GoalTargetCondition(beliefs="riskPerception")
         protected boolean target() {
-            System.out.println("target riskPerception");
+            //System.out.println("target riskPerception");
             return riskPerception <= 10;
         }
     }
@@ -164,13 +168,10 @@ public class WandererBDI
         @PlanBody
         protected void WanderPlanBody() {
 
-            System.out.println("WanderPlanBody");
+            //System.out.println("WanderPlanBody");
 
             Position oldPosition = move.getPosition(myself);
-            nextPosition = move.getNewPosition(oldPosition,
-                    space.getAreaSize().getXAsInteger(),
-                    space.getAreaSize().getYAsInteger()
-            );
+            nextPosition = move.getNewPosition(oldPosition);
 
             if(isWander)
                 agent.dispatchTopLevelGoal(new WanderGoal());
@@ -181,7 +182,7 @@ public class WandererBDI
     public class GoPlan {
         @PlanBody
         protected void GoPlanBody() {
-            System.out.println("Position - (" + nextPosition.x + ", " + nextPosition.y + ")");
+            //System.out.println("Position - (" + nextPosition.x + ", " + nextPosition.y + ")");
             myself.setProperty("position", new Vector2Int(nextPosition.x, nextPosition.y));
 
             try {
@@ -200,7 +201,7 @@ public class WandererBDI
             if(isIncident) {
                 isWander = false;
                 System.out.println("DANGER!");
-                System.out.println("isIncident - " + isIncident);
+                //System.out.println("isIncident - " + isIncident);
                 evaluateRisk();
             }
         }
@@ -211,7 +212,7 @@ public class WandererBDI
 
         @PlanBody
         protected void MaintainSafetyPlanBody() {
-            System.out.println("MaintainSafetyPlanBody");
+            //System.out.println("MaintainSafetyPlanBody");
             agent.dispatchTopLevelGoal(new IncreaseDistanceFromDangerGoal());
         }
     }
@@ -221,7 +222,7 @@ public class WandererBDI
 
         @PlanBody
         protected void IncreaseDistanceFromDangerPlanBody() {
-            System.out.println("IncreaseDistanceFromDangerPlanBody");
+            //System.out.println("IncreaseDistanceFromDangerPlanBody");
             if(indoor){
                 agent.dispatchTopLevelGoal(new FindExitGoal());
             }
@@ -236,7 +237,7 @@ public class WandererBDI
 
         @PlanBody
         protected void FindExitPlanBody() {
-            System.out.println("FindExitPlan");
+           // System.out.println("FindExitPlan");
 
             //getExitPlan
             //1 - herding - if there are others and if they can conduct to exit - follow goal
@@ -282,7 +283,7 @@ public class WandererBDI
     @AgentBody
     public void body(){
 
-        move = new Move();
+        move = new Move( space.getAreaSize().getXAsInteger(), space.getAreaSize().getYAsInteger());
         isIncident = false;
 
         agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
@@ -297,14 +298,49 @@ public class WandererBDI
     private Position findNewPositionWhenIncident() {
         //TODO improve
 
-        //find one door in same division -> improve
-        space.getSpaceObjectsByType(Types.DOOR);
+        //find one door in same division -> improve TODO
+        ISpaceObject[] doors = space.getSpaceObjectsByType(TypesObjects.DOOR);
+        ISpaceObject door = pickClosestDoor(doors);
 
-        //space.getShortestDirection()
-        Position p = new Position(nextPosition.x + 1, nextPosition.y);
-        if(move.isBetweenLimits(p, space.getAreaSize().getXAsInteger(), space.getAreaSize().getYAsInteger()))
-            return p;
+        //get path for the door
+        if(door != null){
+            //space.getShortestDirection()
+            Position doorPosition = move.convertToPosition(door.getProperty(TypesProperties.POSITION));
+            Position oldPosition = new Position(nextPosition.x, nextPosition.y);
 
+            if(Math.abs(doorPosition.x - oldPosition.x) > Math.abs(doorPosition.y - oldPosition.y)) { //move in x
+                if(doorPosition.x < oldPosition.x)
+                    return new Position(nextPosition.x-1, nextPosition.y);
+                else if(doorPosition.x > oldPosition.x)
+                    return new Position(nextPosition.x+1, nextPosition.y);
+            }
+            else { //move in y
+                if(doorPosition.y < oldPosition.y)
+                    return new Position(nextPosition.x, nextPosition.y-1);
+                else if(doorPosition.y > oldPosition.y)
+                    return new Position(nextPosition.x, nextPosition.y+1);
+            }
+        }
         return nextPosition;
+}
+
+    private ISpaceObject pickClosestDoor(ISpaceObject[] doors) {
+
+        Vector2Double currentPosition = new Vector2Double(nextPosition.x,nextPosition.y);
+
+        if(doors.length != 0){
+            int pos = 0;
+            IVector1 distance = space.getDistance(currentPosition, (IVector2) doors[pos].getProperty(TypesProperties.POSITION));
+
+            for(int i = 0; i < doors.length; i++){
+                IVector1 newDistance = space.getDistance(currentPosition, (IVector2) doors[i].getProperty(TypesProperties.POSITION));
+                if(distance.greater(newDistance)){
+                    pos = i;
+                    distance = newDistance;
+                }
+            }
+            return doors[pos];
+        }
+        return null;
     }
 }

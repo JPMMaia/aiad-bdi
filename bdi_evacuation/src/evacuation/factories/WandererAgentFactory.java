@@ -1,6 +1,6 @@
 package evacuation.factories;
 
-import evacuation.utils.Types;
+import evacuation.utils.TypesObjects;
 import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.space2d.Space2D;
 import jadex.extension.envsupport.math.Vector2Int;
@@ -29,6 +29,6 @@ public class WandererAgentFactory extends AbstractAgentFactory
 		Map<String, Object> agentArguments = new HashMap<>(1);
 		agentArguments.put("position", new Vector2Int(positionX, positionY));
 
-		return super.createAgent(space, Types.WANDERER, agentArguments);
+		return super.createAgent(space, TypesObjects.WANDERER, agentArguments);
 	}
 }

@@ -16,8 +16,10 @@ public class Move {
 
     private ArrayList<Position> directions;
     private Random r;
+    int spaceWidth;
+    int spaceHeight;
 
-    public Move(){
+    public Move(int spaceWidth, int spaceHeight){
         r = new Random();
 
         directions = new ArrayList<>();
@@ -25,22 +27,25 @@ public class Move {
         directions.add(new Position(1,0));
         directions.add(new Position(0,-1));
         directions.add(new Position(0,1));
+
+        this.spaceWidth = spaceWidth;
+        this.spaceHeight = spaceHeight;
     }
 
-    public Position getNewPosition(Position lastPosition, int spaceWidth, int spaceHeight) {
+    public Position getNewPosition(Position lastPosition) {
         Position direction = directions.get(r.nextInt(4));
         Position newPosition = new Position(lastPosition.x + direction.x, lastPosition.y + direction.y);
-        if(isBetweenLimits(newPosition, spaceWidth, spaceHeight)){
+        if(isBetweenLimits(newPosition)){
             return newPosition;
         }
         return lastPosition;
     }
 
-    public Position getRandomPosition(int spaceWidth, int spaceHeight) {
+    public Position getRandomPosition() {
         return new Position(r.nextInt(spaceWidth), r.nextInt(spaceHeight));
     }
 
-    public boolean isBetweenLimits(Position newPosition, int spaceWidth, int spaceHeight) {
+    public boolean isBetweenLimits(Position newPosition) {
         return (newPosition.x < spaceHeight && newPosition.x >= 0 && newPosition.y < spaceWidth && newPosition.y >= 0);
     }
 
@@ -49,18 +54,18 @@ public class Move {
         return convertToPosition(lastPosition);
     }
 
-    private Position convertToPosition(Object lastPosition) {
+    public Position convertToPosition(Object objPosition) {
         try {
-            Vector2Int lastPosInt = (Vector2Int) lastPosition;
+            Vector2Int lastPosInt = (Vector2Int) objPosition;
             return new Position(lastPosInt.getXAsInteger(), lastPosInt.getYAsInteger());
         } catch (Exception e){
-            System.out.print("Unable to cast to int");
+            System.out.println("Unable to cast to int");
         }
         try {
-            Vector2Double lastPosDouble = (Vector2Double) lastPosition;
+            Vector2Double lastPosDouble = (Vector2Double) objPosition;
             return new Position(lastPosDouble.getXAsInteger(), lastPosDouble.getYAsInteger());
         } catch (Exception e){
-            System.out.print("Unable to cast to double");
+            System.out.println("Unable to cast to double");
         }
 
         return new Position();

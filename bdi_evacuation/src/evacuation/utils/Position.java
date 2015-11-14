@@ -1,5 +1,8 @@
 package evacuation.utils;
 
+import jadex.extension.envsupport.math.IVector1;
+import jadex.extension.envsupport.math.Vector2Double;
+
 public class Position {
 	public int x;
 	public int y;

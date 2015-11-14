@@ -2,7 +2,7 @@ package evacuation.processes;
 
 import evacuation.utils.Move;
 import evacuation.utils.Position;
-import evacuation.utils.Types;
+import evacuation.utils.TypesObjects;
 import jadex.bridge.service.types.clock.IClockService;
 import jadex.commons.SimplePropertyObject;
 import jadex.extension.envsupport.environment.IEnvironmentSpace;
@@ -26,8 +26,6 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 
 	//SPACE VARIABLES FOR CALCULATIONS
 	private Space2D space;
-	int spaceHeight;
-	int spaceWidth;
 
 	int incidentType;
 
@@ -38,13 +36,13 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 
 		//variables initialization
         space = (Space2D)arg1;
-        spaceHeight = space.getAreaSize().getXAsInteger();
-        spaceWidth = space.getAreaSize().getYAsInteger();
+        //spaceHeight = space.getAreaSize().getXAsInteger();
+        //spaceWidth = space.getAreaSize().getYAsInteger();
 
-		move = new Move();
+		move = new Move(space.getAreaSize().getXAsInteger(),space.getAreaSize().getYAsInteger());
 
 		startTime = arg0.getTime();
-		lastPosition = move.getRandomPosition(spaceWidth, spaceHeight);
+		lastPosition = move.getRandomPosition();
 		desiredNumIncidentPositions = 1;
 		incidentPositions = new HashSet<>();
 
@@ -70,12 +68,12 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
     }
 
 	private void createIncident() {
-		Position newPosition = move.getNewPosition(lastPosition,spaceWidth,spaceHeight);
+		Position newPosition = move.getNewPosition(lastPosition);
 		if(savedIncidentPosition(newPosition)){
 			Map<String, Object> properties = new HashMap<>();
 			properties.put("position", new Vector2Int(newPosition.x, newPosition.y));
 			properties.put("type", incidentType); //fire type
-			space.createSpaceObject(Types.INCIDENT, properties, null);
+			space.createSpaceObject(TypesObjects.INCIDENT, properties, null);
 			lastPosition = newPosition;
 		}
 	}

@@ -227,28 +227,7 @@ public class EvacuationAgentBDI {
 
         @PlanBody
         protected void FindExitPlanBody() {
-
             nextPosition = findExit();
-
-            /*
-            if(agentType == 0) {
-                //1 - active - look for the fastest empty path - the search strategy is able to come back
-                nextPosition = findNewPositionWhenIncident();
-            }
-            else if(agentType == 1){
-                //2 - conservative - look for a known empty path - greedy
-                nextPosition = findNewPositionWhenIncident();
-            }
-            else if(agentType == 2){
-
-                //3 - herding - if there are others and if they can conduct to exit - follow goal
-                //            - else find exit
-
-                //find agents in a certain perimeter
-
-
-            }
-            */
         }
     }
 
@@ -397,3 +376,12 @@ public class EvacuationAgentBDI {
         riskPerception =  90;
     }
 }
+
+//deals with being hurt by the environment - condition decreases if distance from danger < value
+// condition decreases if is being pushed
+// condition = 0 -> is dead -> the others can pass by
+
+
+//TODO
+//ask the world if there is any door available
+//if no empty door available riskPerception += 5

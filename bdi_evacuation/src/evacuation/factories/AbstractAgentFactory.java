@@ -14,6 +14,10 @@ public abstract class AbstractAgentFactory
 			case Wanderer:
 				return WandererAgentFactory.getInstance().createAgent(space, positionX, positionY);
 
+			case Herding:
+				return HerdingAgentFactory.getInstance().createAgent(space, positionX, positionY);
+
+
 			default:
 				return null;
 		}

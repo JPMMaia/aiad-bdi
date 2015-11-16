@@ -21,6 +21,11 @@ public class WalkerBDI {
 
     Move move;
 
+    //ATTRIBUTES********************************************
+
+    @Belief
+    protected int velocity = 50; //range [0-100]
+
     @Agent
     protected BDIAgent agent;
 

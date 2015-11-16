@@ -15,7 +15,7 @@ import java.util.*;
 public class IncidentProcess extends SimplePropertyObject implements ISpaceProcess {
 
 	//TIMERS FOR THE INCIDENT
-	private static final long initialWaitingTime = 5000;
+	private static final long initialWaitingTime = 2000;
 	private static long startTime = 0; //get from the jadex clock
 	private static long incidentProgressTimer = 3000; //interval between the generation of new incident objects
 
@@ -36,8 +36,6 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 
 		//variables initialization
         space = (Space2D)arg1;
-        //spaceHeight = space.getAreaSize().getXAsInteger();
-        //spaceWidth = space.getAreaSize().getYAsInteger();
 
 		move = new Move(space.getAreaSize().getXAsInteger(),space.getAreaSize().getYAsInteger());
 

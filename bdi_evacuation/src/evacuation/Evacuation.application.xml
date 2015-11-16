@@ -57,6 +57,20 @@
 					<env:property name="space" class="Space2D"/>
                 </env:objecttype>
 
+				<!-- Herding -->
+				<env:objecttype name="herding">
+					<env:property name="position" class="IVector2"/>
+					<env:property name="speed" class="Double"/>
+					<env:property name="space" class="Space2D"/>
+				</env:objecttype>
+
+				<!-- Conservative -->
+				<env:objecttype name="conservative">
+					<env:property name="position" class="IVector2"/>
+					<env:property name="speed" class="Double"/>
+					<env:property name="space" class="Space2D"/>
+				</env:objecttype>
+
                 <!-- Exit door -->
                 <env:objecttype name="exit_door">
                     <env:property name="position" event="true"/>
@@ -81,7 +95,14 @@
                 <!-- Map Wanderer component to wanderer object type -->
                 <env:avatarmapping componenttype="Wanderer" objecttype="wanderer" createavatar="false" createcomponent="true"/>
 
-            </env:avatarmappings>
+				<!-- Map herding component to herding object type -->
+				<env:avatarmapping componenttype="Herding" objecttype="herding" createavatar="false" createcomponent="true"/>
+
+				<!-- Map Conservative component to conservative object type -->
+				<env:avatarmapping componenttype="Conservative" objecttype="conservative" createavatar="false" createcomponent="true"/>
+
+
+			</env:avatarmappings>
 			
 			<!-- Data views for defining cut outs of the world objects. -->
 			<env:dataviews>
@@ -179,6 +200,16 @@
                         <env:texturedrectangle layer="2" imagepath="images/wanderer.png"/>
                     </env:drawable>
 
+					<!-- Herding avatar -->
+					<env:drawable objecttype="herding" height="1.0" width="1.0">
+						<env:texturedrectangle layer="2" imagepath="images/wanderer2.png"/>
+					</env:drawable>
+
+					<!-- Conservative avatar -->
+					<env:drawable objecttype="conservative" height="1.0" width="1.0">
+						<env:texturedrectangle layer="2" imagepath="images/wanderer3.png"/>
+					</env:drawable>
+
 					<!-- Door avatar -->
 					<env:drawable objecttype="exit_door" height="1.0" width="1.0">
 						<env:texturedrectangle layer="1" imagepath="images/terrain_4.png"/>
@@ -225,6 +256,8 @@
 
         <!-- Wanderer agent type -->
         <componenttype name="Wanderer" filename="evacuation\agents\WandererBDI.class"/>
+		<componenttype name="Herding" filename="evacuation\agents\HerdingBDI.class"/>
+		<componenttype name="Conservative" filename="evacuation\agents\ConservativeBDI.class"/>
 
 	</componenttypes>
 	

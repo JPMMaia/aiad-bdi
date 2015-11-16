@@ -82,8 +82,16 @@ public class WorldGenerator extends SimplePropertyObject implements ISpaceProces
 						drawExitDoor(space, j, i);
 						break;
 
-					case 'W':
+					case 'A':
 						AbstractAgentFactory.createAgent(AgentType.Wanderer, space, j, i);
+						break;
+
+					case 'H':
+						AbstractAgentFactory.createAgent(AgentType.Herding, space, j, i);
+						break;
+
+					case 'C':
+						AbstractAgentFactory.createAgent(AgentType.Conservative, space, j, i);
 						break;
 				}
 			}

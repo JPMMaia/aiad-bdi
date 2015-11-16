@@ -17,6 +17,8 @@ public abstract class AbstractAgentFactory
 			case Herding:
 				return HerdingAgentFactory.getInstance().createAgent(space, positionX, positionY);
 
+			case Conservative:
+				return ConservativeAgentFactory.getInstance().createAgent(space, positionX, positionY);
 
 			default:
 				return null;

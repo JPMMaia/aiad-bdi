@@ -23,7 +23,7 @@
 	<entries>
 		<entry __ID="1">
 			<key>
-				<p1:String xmlns:p1="typeinfo:java.lang" __ID="2">Awareness Settings.console.height</p1:String>
+				<p1:String xmlns:p1="typeinfo:java.lang" __ID="2">Component Viewer.console.height</p1:String>
 			</key>
 			<value>
 				<p1:Double xmlns:p1="typeinfo:java.lang" __ID="3" content="1.0"></p1:Double>
@@ -31,7 +31,7 @@
 		</entry>
 		<entry __ID="4">
 			<key>
-				<p1:String xmlns:p1="typeinfo:java.lang" __ID="5">Component Viewer.console.height</p1:String>
+				<p1:String xmlns:p1="typeinfo:java.lang" __ID="5">Awareness Settings.console.height</p1:String>
 			</key>
 			<value>
 				<p1:Double xmlns:p1="typeinfo:java.lang" __ID="6" content="1.0"></p1:Double>
@@ -62,8 +62,8 @@
 	<p0:properties __ID="24" type="window">
 		<p0:property __ID="25" type="width">819</p0:property>
 		<p0:property __ID="26" type="height">650</p0:property>
-		<p0:property __ID="27" type="x">-1436</p0:property>
-		<p0:property __ID="28" type="y">-86</p0:property>
+		<p0:property __ID="27" type="x">0</p0:property>
+		<p0:property __ID="28" type="y">0</p0:property>
 		<p0:property __ID="29" type="extendedState">0</p0:property>
 		<p0:property __ID="30" type="jccexit">ask</p0:property>
 		<p0:property __ID="31" type="saveonexit">true</p0:property>

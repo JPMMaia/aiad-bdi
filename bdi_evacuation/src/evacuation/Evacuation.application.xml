@@ -57,6 +57,20 @@
 					<env:property name="space" class="Space2D"/>
                 </env:objecttype>
 
+				<!-- Herding -->
+				<env:objecttype name="herding">
+					<env:property name="position" class="IVector2"/>
+					<env:property name="speed" class="Double"/>
+					<env:property name="space" class="Space2D"/>
+				</env:objecttype>
+
+				<!-- Conservative -->
+				<env:objecttype name="conservative">
+					<env:property name="position" class="IVector2"/>
+					<env:property name="speed" class="Double"/>
+					<env:property name="space" class="Space2D"/>
+				</env:objecttype>
+
                 <!-- Exit door -->
                 <env:objecttype name="exit_door">
                     <env:property name="position" event="true"/>
@@ -66,12 +80,12 @@
 			
 			<!-- Process types -->
 			<env:processtypes>
+				<!-- Create World process -->
+				<env:processtype name="create_world" class="processes.WorldGenerator"/>
 
-                <!-- Create Incident  -->
+				<!-- Create Incident  -->
 				<env:processtype name="create_incident" class="processes.IncidentProcess"/>
 
-                <!-- Create World process -->
-                <env:processtype name="create_world" class="processes.WorldGenerator"/>
 
 			</env:processtypes>
 
@@ -81,7 +95,14 @@
                 <!-- Map Wanderer component to wanderer object type -->
                 <env:avatarmapping componenttype="Wanderer" objecttype="wanderer" createavatar="false" createcomponent="true"/>
 
-            </env:avatarmappings>
+				<!-- Map herding component to herding object type -->
+				<env:avatarmapping componenttype="Herding" objecttype="herding" createavatar="false" createcomponent="true"/>
+
+				<!-- Map Conservative component to conservative object type -->
+				<env:avatarmapping componenttype="Conservative" objecttype="conservative" createavatar="false" createcomponent="true"/>
+
+
+			</env:avatarmappings>
 			
 			<!-- Data views for defining cut outs of the world objects. -->
 			<env:dataviews>
@@ -140,19 +161,19 @@
 				<env:perspective name="icons" class="Perspective2D" objectplacement="center">
 
                     <!-- Collector avatar -->
-                    <env:drawable objecttype="collector" width="1.0" height="1.0" rotation="rotation">
+           <!--         <env:drawable objecttype="collector" width="1.0" height="1.0" rotation="rotation">
 						<env:property name="vision_size" dynamic="true">new Vector2Double($object.vision_range*2+1)</env:property>
-						<env:texturedrectangle layer="2" x="0" y="-0.1" width="0.8" height="0.8" imagepath="evacuation/images/collector.png" />
+						<env:texturedrectangle layer="0" x="0" y="-0.1" width="0.8" height="0.8" imagepath="evacuation/images/collector.png" />
 						<env:texturedrectangle layer="3" width="0.5" height="0.5" x="0.3" y="-0.3" imagepath="evacuation/images/garbage.png">
 							<env:drawcondition>$object.exit_door!=null</env:drawcondition> 
 						</env:texturedrectangle>
 						<env:rectangle layer="-1" size="vision_size" color="#ffff007f" />
-					</env:drawable>
+					</env:drawable> -->
 
                     <!-- Exit door avatar -->
-                    <env:drawable objecttype="exit_door" width="0.7" height="0.7">
+                <!--    <env:drawable objecttype="exit_door" width="0.7" height="0.7">
 						<env:texturedrectangle layer="0" imagepath="evacuation/images/garbage.png" />
-					</env:drawable>
+					</env:drawable> -->
 
                     <!-- Terrain avatar -->
                     <env:drawable objecttype="terrain" height="1.0" width="1.0">
@@ -179,11 +200,26 @@
                         <env:texturedrectangle layer="2" imagepath="images/wanderer.png"/>
                     </env:drawable>
 
+					<!-- Herding avatar -->
+					<env:drawable objecttype="herding" height="1.0" width="1.0">
+						<env:texturedrectangle layer="2" imagepath="images/wanderer2.png"/>
+					</env:drawable>
+
+					<!-- Conservative avatar -->
+					<env:drawable objecttype="conservative" height="1.0" width="1.0">
+						<env:texturedrectangle layer="2" imagepath="images/wanderer3.png"/>
+					</env:drawable>
+
+					<!-- Door avatar -->
+					<env:drawable objecttype="exit_door" height="1.0" width="1.0">
+						<env:texturedrectangle layer="1" imagepath="images/terrain_4.png"/>
+					</env:drawable>
+
                     <!-- Incident avatar -->
                     <env:drawable objecttype="incident" height="1.0" width="1.0">
 
                         <!-- Flames -->
-                        <env:texturedrectangle layer="1" imagepath="images/flames.png">
+                        <env:texturedrectangle layer="3" imagepath="images/flames.png">
                             <env:drawcondition>$object.type.equals(0)</env:drawcondition>
                         </env:texturedrectangle>
 
@@ -220,6 +256,8 @@
 
         <!-- Wanderer agent type -->
         <componenttype name="Wanderer" filename="evacuation\agents\WandererBDI.class"/>
+		<componenttype name="Herding" filename="evacuation\agents\HerdingBDI.class"/>
+		<componenttype name="Conservative" filename="evacuation\agents\ConservativeBDI.class"/>
 
 	</componenttypes>
 	
@@ -234,11 +272,11 @@
                     <!-- Processes -->
 					<env:processes>
 
-                        <!-- Create Incident process -->
-                        <env:process type="create_incident"/>
-
                         <!-- Create World process -->
                         <env:process type="create_world"/>
+
+						<!-- Create Incident process -->
+						<env:process type="create_incident"/>
 
 					</env:processes>
 

@@ -2,6 +2,7 @@ package evacuation.processes;
 
 import evacuation.factories.AbstractAgentFactory;
 import evacuation.factories.AgentType;
+import evacuation.utils.TypesObjects;
 import jadex.bridge.service.types.clock.IClockService;
 import jadex.commons.SimplePropertyObject;
 import jadex.extension.envsupport.environment.IEnvironmentSpace;
@@ -77,12 +78,30 @@ public class WorldGenerator extends SimplePropertyObject implements ISpaceProces
 						drawTerrainSquare(space, j, i, 1);
 						break;
 
-					case 'W':
+					case 'E':
+						drawExitDoor(space, j, i);
+						break;
+
+					case 'A':
 						AbstractAgentFactory.createAgent(AgentType.Wanderer, space, j, i);
+						break;
+
+					case 'H':
+						AbstractAgentFactory.createAgent(AgentType.Herding, space, j, i);
+						break;
+
+					case 'C':
+						AbstractAgentFactory.createAgent(AgentType.Conservative, space, j, i);
 						break;
 				}
 			}
 		}
+	}
+
+	private void drawExitDoor(Space2D space, int x, int y) {
+		Map<String, Object> properties = new HashMap<>();
+		properties.put("position", new Vector2Int(x, y));
+		space.createSpaceObject(TypesObjects.DOOR, properties, null);
 	}
 
 	private void drawTerrainSquare(Space2D space, int x, int y, int terrainType)
@@ -91,6 +110,6 @@ public class WorldGenerator extends SimplePropertyObject implements ISpaceProces
 		properties.put("position", new Vector2Int(x, y));
 		properties.put("type", terrainType);
 
-		space.createSpaceObject("terrain", properties, null);
+		space.createSpaceObject(TypesObjects.TERRAIN, properties, null);
 	}
 }

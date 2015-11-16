@@ -8,19 +8,19 @@ import jadex.extension.envsupport.math.Vector2Int;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WandererAgentFactory extends AbstractAgentFactory
+public class ConservativeAgentFactory extends AbstractAgentFactory
 {
-	private static WandererAgentFactory mInstance;
+	private static ConservativeAgentFactory mInstance;
 
-	public static WandererAgentFactory getInstance()
+	public static ConservativeAgentFactory getInstance()
 	{
 		if(mInstance == null)
-			mInstance = new WandererAgentFactory();
+			mInstance = new ConservativeAgentFactory();
 
 		return mInstance;
 	}
 
-	private WandererAgentFactory()
+	private ConservativeAgentFactory()
 	{
 	}
 
@@ -29,6 +29,6 @@ public class WandererAgentFactory extends AbstractAgentFactory
 		Map<String, Object> agentArguments = new HashMap<>(1);
 		agentArguments.put("position", new Vector2Int(positionX, positionY));
 
-		return super.createAgent(space, TypesObjects.WANDERER, agentArguments);
+		return super.createAgent(space, TypesObjects.CONSERVATIVE, agentArguments);
 	}
 }

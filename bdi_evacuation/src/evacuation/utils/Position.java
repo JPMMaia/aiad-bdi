@@ -1,8 +1,5 @@
 package evacuation.utils;
 
-import jadex.extension.envsupport.math.IVector1;
-import jadex.extension.envsupport.math.Vector2Double;
-
 public class Position {
 	public int x;
 	public int y;
@@ -11,5 +8,28 @@ public class Position {
 	public Position(int x, int y){
 		this.x = x;
 		this.y = y;
+	}
+
+	public boolean equals(Object other)
+	{
+		if(!other.getClass().equals(Position.class))
+			return false;
+
+		Position position = (Position) other;
+		return (this.x == position.x) && (this.y == position.y);
+	}
+
+	public int distance(Position position)
+	{
+		int dx = position.x - x;
+		int dy = position.y - y;
+
+		return Math.round((float) Math.sqrt(dx * dx + dy * dy));
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Position [" + this.x + ", " + this.y + "]";
 	}
 }

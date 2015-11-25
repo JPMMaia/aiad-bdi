@@ -2,6 +2,7 @@ package evacuation.processes;
 
 import evacuation.factories.AbstractAgentFactory;
 import evacuation.factories.AgentType;
+import evacuation.utils.terrain.TerrainReader;
 import evacuation.utils.TypesObjects;
 import jadex.bridge.service.types.clock.IClockService;
 import jadex.commons.SimplePropertyObject;
@@ -11,7 +12,6 @@ import jadex.extension.envsupport.environment.space2d.Space2D;
 import jadex.extension.envsupport.math.IVector2;
 import jadex.extension.envsupport.math.Vector2Int;
 
-import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,22 +45,7 @@ public class WorldGenerator extends SimplePropertyObject implements ISpaceProces
 
 	private boolean readMap(char[][] map, int width, int height)
 	{
-		File file = new File("resources/Map.txt");
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file)))
-		{
-			for(int i = 0; i < height; i++)
-			{
-				bufferedReader.read(map[i], 0, width);
-				bufferedReader.skip(2);
-			}
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			return false;
-		}
-
-		return true;
+		return TerrainReader.readMap("resources/Map.txt", map, width, height);
 	}
 
 	private void drawMap(Space2D space, char[][] map)

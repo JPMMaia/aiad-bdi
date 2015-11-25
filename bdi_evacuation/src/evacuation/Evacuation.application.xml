@@ -57,6 +57,20 @@
 					<env:property name="space" class="Space2D"/>
                 </env:objecttype>
 
+				<!-- Wanderer -->
+				<env:objecttype name="dead_agent">
+					<env:property name="position" class="IVector2"/>
+					<env:property name="speed" class="Double"/>
+					<env:property name="space" class="Space2D"/>
+				</env:objecttype>
+
+				<!-- Wanderer -->
+				<env:objecttype name="hurt_agent">
+					<env:property name="position" class="IVector2"/>
+					<env:property name="speed" class="Double"/>
+					<env:property name="space" class="Space2D"/>
+				</env:objecttype>
+
 				<!-- Herding -->
 				<env:objecttype name="herding">
 					<env:property name="position" class="IVector2"/>
@@ -194,6 +208,16 @@
                         </env:texturedrectangle>
 
                     </env:drawable>
+
+					<!-- Wanderer avatar -->
+					<env:drawable objecttype="dead_agent" height="1.0" width="1.0">
+						<env:texturedrectangle layer="2" imagepath="images/dead_agent.png"/>
+					</env:drawable>
+
+					<!-- Wanderer avatar -->
+					<env:drawable objecttype="hurt_agent" height="1.0" width="1.0">
+						<env:texturedrectangle layer="2" imagepath="images/hurt_agent.png"/>
+					</env:drawable>
 
                     <!-- Wanderer avatar -->
                     <env:drawable objecttype="wanderer" height="1.0" width="1.0">

@@ -77,7 +77,7 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
                     newPosition = new Position(nextPosition.x, nextPosition.y+1);
             }
 
-            if(newPosition != null && noCollisions(newPosition)) {
+            if(newPosition != null && worldMethods.noCollisions(newPosition)) {
                 return newPosition;
             }
         }
@@ -93,7 +93,7 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
         Vector2Double currentPosition = new Vector2Double(nextPosition.x,nextPosition.y);
 
         if(objects.length > 0){
-            System.out.println("objects lenght - " + objects.length);
+            //System.out.println("objects lenght - " + objects.length);
             int pos = 0;
 
             Position wantedPosition = move.convertToPosition(objects[pos].getProperty(TypesProperties.POSITION));
@@ -129,12 +129,6 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
 
     @AgentBody
     public void body(){
-
-        move = new Move( space.getAreaSize().getXAsInteger(), space.getAreaSize().getYAsInteger());
-        isIncident = false;
-
-        agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
-        agent.dispatchTopLevelGoal(new WanderGoal());
         super.body();
     }
 }

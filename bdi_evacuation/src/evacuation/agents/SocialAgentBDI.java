@@ -1,6 +1,7 @@
 package evacuation.agents;
 
 import jadex.micro.annotation.Agent;
+import jadex.micro.annotation.AgentBody;
 
 /**
  * Created by Paula on 15/11/2015.
@@ -43,6 +44,11 @@ public class SocialAgentBDI extends WalkerBDI{
         protected void PushOthersPlanBody() {
         }
     }*/
+
+    @AgentBody
+    public void body(){
+        super.body();
+    }
 }
 
 //deals with being hurt by the environment - condition decreases if distance from danger < value

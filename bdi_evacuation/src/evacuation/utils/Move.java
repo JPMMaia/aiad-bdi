@@ -14,10 +14,12 @@ public class Move {
 
     //ver o que a space. fornece para ajudar nos algoritmos. Pelo menos o caminho mais curto ele tem
 
-    private ArrayList<Position> directions;
-    private Random r;
-    int spaceWidth;
-    int spaceHeight;
+    static private ArrayList<Position> directions;
+    static private Random r;
+    static int spaceWidth;
+    static int spaceHeight;
+    public static double maximumDistance;
+    public static double maximumIncidents;
 
     public Move(int spaceWidth, int spaceHeight){
         r = new Random();
@@ -30,6 +32,8 @@ public class Move {
 
         this.spaceWidth = spaceWidth;
         this.spaceHeight = spaceHeight;
+        this.maximumDistance = Math.sqrt(spaceHeight*spaceHeight+spaceWidth*spaceWidth);
+        this.maximumIncidents = spaceHeight*spaceWidth;
     }
 
     public Position getNewPosition(Position lastPosition) {
@@ -54,20 +58,28 @@ public class Move {
         return convertToPosition(lastPosition);
     }
 
-    public Position convertToPosition(Object objPosition) {
-        try {
-            Vector2Int lastPosInt = (Vector2Int) objPosition;
-            return new Position(lastPosInt.getXAsInteger(), lastPosInt.getYAsInteger());
-        } catch (Exception e){
-            System.out.println("Unable to cast to int");
-        }
+    public static Position convertToPosition(Object objPosition) {
+
         try {
             Vector2Double lastPosDouble = (Vector2Double) objPosition;
             return new Position(lastPosDouble.getXAsInteger(), lastPosDouble.getYAsInteger());
         } catch (Exception e){
-            System.out.println("Unable to cast to double");
+            //System.out.println("Unable to cast to double");
+        }
+        try {
+            Vector2Int lastPosInt = (Vector2Int) objPosition;
+            return new Position(lastPosInt.getXAsInteger(), lastPosInt.getYAsInteger());
+        } catch (Exception e){
+            //System.out.println("Unable to cast to int");
         }
 
         return new Position();
+    }
+
+    public static double distanceBetween(Position nextPosition, Object position) {
+        Position incident = convertToPosition(position);
+        double difX = (nextPosition.x - incident.x);
+        double difY = (nextPosition.y - incident.y);
+        return Math.sqrt(difX*difX + difY*difY);
     }
 }

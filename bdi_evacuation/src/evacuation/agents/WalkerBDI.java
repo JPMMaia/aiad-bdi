@@ -3,6 +3,7 @@ package evacuation.agents;
 import evacuation.utils.Move;
 import evacuation.utils.Position;
 import evacuation.utils.TypesObjects;
+import evacuation.utils.WorldMethods;
 import jadex.bdiv3.BDIAgent;
 import jadex.bdiv3.annotation.*;
 import jadex.extension.envsupport.environment.ISpaceObject;
@@ -12,14 +13,15 @@ import jadex.extension.envsupport.math.Vector1Double;
 import jadex.extension.envsupport.math.Vector2Double;
 import jadex.extension.envsupport.math.Vector2Int;
 import jadex.micro.annotation.Agent;
+import jadex.micro.annotation.AgentBody;
 
 import java.util.Set;
 
 @Agent
 public class WalkerBDI {
 
-
     Move move;
+    WorldMethods worldMethods;
 
     //ATTRIBUTES********************************************
 
@@ -49,6 +51,9 @@ public class WalkerBDI {
     @Belief
     protected boolean indoor = true;
 
+    @Belief
+    protected boolean emptyPathToTheExit = true; //updated by the A*
+
     //GOALS*************************************************
 
     @Goal
@@ -65,14 +70,12 @@ public class WalkerBDI {
         @PlanBody
         protected void WanderPlanBody() {
 
-            //System.out.println("WanderPlanBody");
-
             Position oldPosition = move.getPosition(myself);
             Position wantedPosition = move.getNewPosition(oldPosition);
-            if(noCollisions(wantedPosition))
+            if(worldMethods.noCollisions(wantedPosition))
                 nextPosition = wantedPosition;
 
-            if(!isIncident)
+            if(!isIncident) //modo mais eficiente se for feito de outra forma TODO
                 agent.dispatchTopLevelGoal(new WanderGoal());
         }
     }
@@ -94,21 +97,10 @@ public class WalkerBDI {
 
     // FUNCTIONS *************************************
 
-    protected boolean noCollisions(Position p) {
-        Vector2Double wantedPosition = new Vector2Double(p.x,p.y);
-        IVector1 distance = new Vector1Double(0);
-
-        Set terrainSet = space.getNearObjects(wantedPosition,distance,TypesObjects.TERRAIN);
-        Set incidentSet = space.getNearObjects(wantedPosition,distance,TypesObjects.INCIDENT);
-        Set agentSet = space.getNearObjects(wantedPosition,distance,TypesObjects.WANDERER);
-
-        if(!terrainSet.isEmpty()) //there is a wall or an obstacle
-            return false;
-        else if(!incidentSet.isEmpty()) //there are incidents in the way
-            return false;
-        else if(agentSet.size() > 1) //there are two agents in the position
-            return false;
-
-        return true;
+    @AgentBody
+    public void body(){
+        move = new Move( space.getAreaSize().getXAsInteger(), space.getAreaSize().getYAsInteger());
+        worldMethods = new WorldMethods(space);
+        isIncident = false;
     }
 }

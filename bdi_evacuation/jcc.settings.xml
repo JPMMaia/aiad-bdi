@@ -23,7 +23,7 @@
 	<entries>
 		<entry __ID="1">
 			<key>
-				<p1:String xmlns:p1="typeinfo:java.lang" __ID="2">Component Viewer.console.height</p1:String>
+				<p1:String xmlns:p1="typeinfo:java.lang" __ID="2">Awareness Settings.console.height</p1:String>
 			</key>
 			<value>
 				<p1:Double xmlns:p1="typeinfo:java.lang" __ID="3" content="1.0"></p1:Double>
@@ -31,7 +31,7 @@
 		</entry>
 		<entry __ID="4">
 			<key>
-				<p1:String xmlns:p1="typeinfo:java.lang" __ID="5">Awareness Settings.console.height</p1:String>
+				<p1:String xmlns:p1="typeinfo:java.lang" __ID="5">Component Viewer.console.height</p1:String>
 			</key>
 			<value>
 				<p1:Double xmlns:p1="typeinfo:java.lang" __ID="6" content="1.0"></p1:Double>

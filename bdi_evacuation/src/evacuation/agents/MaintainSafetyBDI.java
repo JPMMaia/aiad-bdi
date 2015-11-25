@@ -1,16 +1,55 @@
 package evacuation.agents;
 
+import evacuation.utils.Move;
+import evacuation.utils.TypesObjects;
 import jadex.bdiv3.annotation.*;
+import jadex.extension.envsupport.environment.ISpaceObject;
+import jadex.extension.envsupport.math.Vector2Int;
 import jadex.micro.annotation.Agent;
+import jadex.micro.annotation.AgentBody;
 
-/**
- * Created by Paula on 15/11/2015.
- */
+import java.util.HashMap;
+import java.util.Map;
+
 @Agent
 public class MaintainSafetyBDI extends SocialAgentBDI{
 
     @Belief
     protected int riskPerception = 0;
+
+    @Belief
+    protected int condition = 100; //range [0-100]
+
+    @Belief(dynamic=true)
+    protected boolean isDead = (condition == 0);
+
+    @Belief(dynamic=true)
+    protected boolean isHurted = (condition < 50);
+
+    @Plan(trigger=@Trigger(factchangeds="isDead"))
+    public class DeadPlan {
+        @PlanBody
+        protected void DeadPlanBody() {
+            if(isDead){
+                Map<String, Object> properties = new HashMap<>();
+                properties.put("position", new Vector2Int(nextPosition.x, nextPosition.y));
+                space.createSpaceObject(TypesObjects.DEAD_AGENT, properties, null);
+                agent.killAgent();
+            }
+        }
+    }
+
+    @Plan(trigger=@Trigger(factchangeds="isHurted"))
+    public class HurtedPlan {
+        @PlanBody
+        protected void HurtedPlanBody() {
+            if(isHurted){
+                Map<String, Object> properties = new HashMap<>();
+                properties.put("position", new Vector2Int(nextPosition.x, nextPosition.y));
+                space.createSpaceObject(TypesObjects.HURT_AGENT, properties, null);
+            }
+        }
+    }
 
     // GOALS**********************************
 
@@ -54,7 +93,7 @@ public class MaintainSafetyBDI extends SocialAgentBDI{
             if(isIncident) {
                 System.out.println("DANGER!");
                 //System.out.println("isIncident - " + isIncident);
-                evaluateRisk();
+                evaluateRiskAndCondition();
             }
         }
     }
@@ -66,7 +105,7 @@ public class MaintainSafetyBDI extends SocialAgentBDI{
         protected void MaintainSafetyPlanBody() {
             //System.out.println("MaintainSafetyPlanBody");
             agent.dispatchTopLevelGoal(new IncreaseDistanceFromDangerGoal());
-            evaluateRisk();
+            evaluateRiskAndCondition();
         }
     }
 
@@ -87,8 +126,66 @@ public class MaintainSafetyBDI extends SocialAgentBDI{
 
     //FUNCTIONS FOR THE RISK CALCULATIONS************************
 
-    protected void evaluateRisk() {
-        //TODO
-        riskPerception =  90;
+    protected void evaluateRiskAndCondition() {
+
+        //incident distance
+        ISpaceObject[] incidentsArray = incidentObjects();
+
+        int valueForRiskPerception = updateRiskPerceptionAndCondition(incidentsArray);
+
+        //escaping possibility
+        if(!emptyPathToTheExit){
+            if(valueForRiskPerception < 90)
+                valueForRiskPerception = 90;
+        }
+
+        System.out.println("riskPerception = " + valueForRiskPerception);
+        System.out.println("condition = " + condition);
+        riskPerception = valueForRiskPerception;
+    }
+
+    private int updateRiskPerceptionAndCondition(ISpaceObject[] incidentsArray) {
+
+        int valueForCondition = 0;
+        int valueForRiskPerception;
+
+        //calculate condition from each instance
+        double minDistance = Move.maximumDistance;
+
+        for (ISpaceObject incident : incidentsArray){
+
+            double distance = Move.distanceBetween(nextPosition, incident.getProperty("position"));
+
+            if(distance == 0)
+                valueForCondition += 20;
+            else if(distance <= Math.sqrt(2))
+                valueForCondition += 10;
+            else if(distance <= Math.sqrt(8))
+                valueForCondition += 5;
+
+            minDistance = Math.min(minDistance,distance);
+        }
+
+        if(minDistance == 0) {
+            valueForRiskPerception = 100;
+        }
+        else if(minDistance <= Math.sqrt(2))
+            valueForRiskPerception = 90;
+        else
+            valueForRiskPerception = 50;
+
+        condition = Math.max(condition - valueForCondition, 0);
+        return valueForRiskPerception;
+    }
+
+    private ISpaceObject[] incidentObjects() {
+
+        //get all the incident objects
+        return space.getSpaceObjectsByType(TypesObjects.INCIDENT);
+    }
+
+    @AgentBody
+    public void body(){
+        super.body();
     }
 }

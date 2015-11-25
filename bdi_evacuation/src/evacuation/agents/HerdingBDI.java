@@ -15,7 +15,7 @@ public class HerdingBDI extends EscapingAgentBDI {
 
     //CONSTANTS***************************
 
-    protected static final int DISTANCE_TO_HERDING = 10;
+    protected static final int DISTANCE_TO_HERDING = 4;
 
     //BELIEFS*****************************
 
@@ -94,5 +94,7 @@ public class HerdingBDI extends EscapingAgentBDI {
     public void body(){
         targets = new HashSet<>();
         super.body();
+        agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
+        agent.dispatchTopLevelGoal(new WanderGoal());
     }
 }

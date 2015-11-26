@@ -1,5 +1,6 @@
 package evacuation.agents;
 
+import jadex.bdiv3.annotation.*;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 
@@ -9,7 +10,7 @@ import jadex.micro.annotation.AgentBody;
 @Agent
 public class SocialAgentBDI extends WalkerBDI{
 
-    /*
+
 
     @Goal
     public class HelpOthersGoal { //altruisticamente ajudando os outros. //triggered by others call warning (env)
@@ -21,14 +22,11 @@ public class SocialAgentBDI extends WalkerBDI{
     @Goal
     public class PushOthersGoal {
 
-        @GoalCreationCondition(beliefs="inPanic") //empurrar os outros triggered by riskPerception > 90 && isTrapped == true
-        public PushOthersGoal() {
-        }
+        @GoalParameter
+        protected String goal = "PushOthersGoal";
 
     }
-*/
 
- /*
     @Plan(trigger=@Trigger(goals=HelpOthersGoal.class))
     public class HelpOthersPlan {
         //helpOthersPlan - loose time and improve others condition
@@ -43,7 +41,7 @@ public class SocialAgentBDI extends WalkerBDI{
         @PlanBody
         protected void PushOthersPlanBody() {
         }
-    }*/
+    }
 
     @AgentBody
     public void body(){

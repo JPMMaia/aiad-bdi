@@ -21,8 +21,6 @@ public class WandererBDI extends EscapingAgentBDI {
     @AgentBody
     public void body(){
         super.body();
-        agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
-        agent.dispatchTopLevelGoal(new WanderGoal());
     }
 
 }

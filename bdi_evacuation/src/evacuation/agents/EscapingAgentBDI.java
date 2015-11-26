@@ -15,20 +15,6 @@ import java.util.HashSet;
 @Agent
 public class EscapingAgentBDI extends MaintainSafetyBDI{
 
-    //BELIEFS ********************************
-
-    @Belief(dynamic=true)
-    protected boolean inPanic = (riskPerception > 90);
-
-    @Belief
-    protected boolean isTrapped = false;
-
-    @Belief
-    protected boolean isBeingPushed = false;
-
-    @Belief
-    protected boolean isDown = false;
-
 
     //PLANS******************************
 

@@ -10,5 +10,5 @@ public class TypesObjects {
     public static String HERDING = "herding";
     public static String CONSERVATIVE = "conservative";
     public static String DEAD_AGENT = "dead_agent";
-    public static String HURT_AGENT = "dead_agent";
+    public static String HURT_AGENT = "hurt_agent";
 }

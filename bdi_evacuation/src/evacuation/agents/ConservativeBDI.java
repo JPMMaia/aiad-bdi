@@ -11,7 +11,7 @@ public class ConservativeBDI extends EscapingAgentBDI {
     protected Position findExit() {
 
         //2 - conservative - look for a known empty path - greedy
-        return nextPosition;
+        return currentPosition;
     }
 
     @AgentBody

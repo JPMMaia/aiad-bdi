@@ -34,6 +34,9 @@ public class WalkerBDI {
     @Belief(dynamic=true)
     Position nextPosition;
 
+    @Belief(dynamic=true)
+    Position currentPosition;
+
     @Belief
     protected boolean samePosition = false;
 
@@ -76,6 +79,7 @@ public class WalkerBDI {
         protected void GoPlanBody() {
 
             myself.setProperty("position", new Vector2Int(nextPosition.x, nextPosition.y));
+            currentPosition = nextPosition;
 
             try {
                 Thread.sleep(500);

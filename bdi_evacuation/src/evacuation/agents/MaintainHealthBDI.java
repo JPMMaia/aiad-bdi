@@ -44,7 +44,7 @@ public class MaintainHealthBDI extends SocialAgentBDI{
         protected void DeadPlanBody() {
             if(isDead){
                 Map<String, Object> properties = new HashMap<>();
-                properties.put("position", new Vector2Int(nextPosition.x, nextPosition.y));
+                properties.put("position", new Vector2Int(currentPosition.x, currentPosition.y));
                 space.createSpaceObject(TypesObjects.DEAD_AGENT, properties, null);
                 if(hurtObject != null)
                     space.destroySpaceObject(hurtObject.getId());
@@ -61,7 +61,7 @@ public class MaintainHealthBDI extends SocialAgentBDI{
             if(isHurt){
                 if(hurtObject == null) {
                     Map<String, Object> properties = new HashMap<>();
-                    properties.put("position", new Vector2Int(nextPosition.x, nextPosition.y));
+                    properties.put("position", new Vector2Int(currentPosition.x, currentPosition.y));
                     hurtObject = space.createSpaceObject(TypesObjects.HURT_AGENT, properties, null);
                 }
             }
@@ -92,7 +92,7 @@ public class MaintainHealthBDI extends SocialAgentBDI{
 
         for (ISpaceObject incident : incidentsArray){
 
-            double distance = Move.distanceBetween(nextPosition, incident.getProperty("position"));
+            double distance = Move.distanceBetween(currentPosition, incident.getProperty("position"));
 
             if(distance == 0)
                 valueForCondition += 10;

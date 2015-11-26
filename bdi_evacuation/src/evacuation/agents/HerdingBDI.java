@@ -45,7 +45,7 @@ public class HerdingBDI extends EscapingAgentBDI {
 
         int distance = DISTANCE_TO_HERDING;
         String[] types = {TypesObjects.WANDERER};
-        Vector2Double wantedPosition = new Vector2Double(nextPosition.x, nextPosition.y);
+        Vector2Double wantedPosition = new Vector2Double(currentPosition.x, currentPosition.y);
 
         //choose a target
         Set agentsSet = space.getNearGridObjects(wantedPosition, distance, types);
@@ -66,7 +66,7 @@ public class HerdingBDI extends EscapingAgentBDI {
                 targets.add(agent.getId());
         }
         else {
-            position = nextPosition;
+            position = currentPosition;
             samePosition = true;
         }
 

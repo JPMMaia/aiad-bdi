@@ -78,7 +78,7 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
             else{
                 res = evaluateRiskAndCondition();
                 if(condition > 50 && inPanic) {
-                    if (worldMethods.someoneInMyCell(nextPosition)) {
+                    if (worldMethods.someoneInMyCell(currentPosition)) {
                         System.out.println("someone in my cell");
                         agent.dispatchTopLevelGoal(new PushOthersGoal());
                     }
@@ -86,7 +86,7 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
                         agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
 
                 }
-                else if(condition > 50 && worldMethods.someoneNeedsHelp(nextPosition)){
+                else if(condition > 50 && worldMethods.someoneNeedsHelp(currentPosition)){
                     System.out.println("someone needs help");
                     agent.dispatchTopLevelGoal(new HelpOthersGoal());
                 }
@@ -118,7 +118,7 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
 
         for (ISpaceObject incident : incidentsArray){
 
-            double distance = Move.distanceBetween(nextPosition, incident.getProperty("position"));
+            double distance = Move.distanceBetween(currentPosition, incident.getProperty("position"));
             minDistance = Math.min(minDistance,distance);
         }
 

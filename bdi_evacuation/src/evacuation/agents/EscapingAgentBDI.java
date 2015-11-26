@@ -48,20 +48,20 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
         if(object != null){
             //space.getShortestDirection()
             Position destinyPosition = move.convertToPosition(object.getProperty(TypesProperties.POSITION));
-            Position oldPosition = new Position(nextPosition.x, nextPosition.y);
+            Position oldPosition = new Position(currentPosition.x, currentPosition.y);
             Position newPosition = null;
 
             if(Math.abs(destinyPosition.x - oldPosition.x) > Math.abs(destinyPosition.y - oldPosition.y)) { //move in x
                 if(destinyPosition.x < oldPosition.x)
-                    newPosition = new Position(nextPosition.x-1, nextPosition.y);
+                    newPosition = new Position(currentPosition.x-1, currentPosition.y);
                 else if(destinyPosition.x > oldPosition.x)
-                    newPosition = new Position(nextPosition.x+1, nextPosition.y);
+                    newPosition = new Position(currentPosition.x+1, currentPosition.y);
             }
             else { //move in y
                 if(destinyPosition.y < oldPosition.y)
-                    newPosition = new Position(nextPosition.x, nextPosition.y-1);
+                    newPosition = new Position(currentPosition.x, currentPosition.y-1);
                 else if(destinyPosition.y > oldPosition.y)
-                    newPosition = new Position(nextPosition.x, nextPosition.y+1);
+                    newPosition = new Position(currentPosition.x, currentPosition.y+1);
             }
 
             if(newPosition != null && worldMethods.noCollisions(newPosition)) {
@@ -70,14 +70,14 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
         }
 
         samePosition = true;
-        return nextPosition;
+        return currentPosition;
     }
 
     protected ISpaceObject pickClosestObject(ISpaceObject[] objects, HashSet<Object> targets) {
 
         objects = getTheDoorsInSameDivision(objects);
 
-        Vector2Double currentPosition = new Vector2Double(nextPosition.x,nextPosition.y);
+        Vector2Double currentPositionV2D = new Vector2Double(currentPosition.x,currentPosition.y);
 
         if(objects.length > 0){
             //System.out.println("objects lenght - " + objects.length);
@@ -85,10 +85,10 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
 
             Position wantedPosition = move.convertToPosition(objects[pos].getProperty(TypesProperties.POSITION));
 
-            IVector1 distance = space.getDistance(currentPosition, new Vector2Double(wantedPosition.x,wantedPosition.y));
+            IVector1 distance = space.getDistance(currentPositionV2D, new Vector2Double(wantedPosition.x,wantedPosition.y));
 
             for(int i = 1; i < objects.length; i++){
-                IVector1 newDistance = space.getDistance(currentPosition, (IVector2) objects[i].getProperty(TypesProperties.POSITION));
+                IVector1 newDistance = space.getDistance(currentPositionV2D, (IVector2) objects[i].getProperty(TypesProperties.POSITION));
 
                 if(targets != null)
                     if(targets.contains(objects[i]))

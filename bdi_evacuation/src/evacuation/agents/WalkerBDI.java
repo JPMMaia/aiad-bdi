@@ -84,7 +84,7 @@ public class WalkerBDI {
     public class GoPlan {
         @PlanBody
         protected void GoPlanBody() {
-            //System.out.println("Position - (" + nextPosition.x + ", " + nextPosition.y + ")");
+            System.out.println("Position - (" + nextPosition.x + ", " + nextPosition.y + ")");
             myself.setProperty("position", new Vector2Int(nextPosition.x, nextPosition.y));
 
             try {

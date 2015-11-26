@@ -24,32 +24,8 @@ public class MaintainSafetyBDI extends SocialAgentBDI{
     protected boolean isDead = (condition == 0);
 
     @Belief(dynamic=true)
-    protected boolean isHurted = (condition < 50);
+    protected boolean isHurted = (condition < 100);
 
-    @Plan(trigger=@Trigger(factchangeds="isDead"))
-    public class DeadPlan {
-        @PlanBody
-        protected void DeadPlanBody() {
-            if(isDead){
-                Map<String, Object> properties = new HashMap<>();
-                properties.put("position", new Vector2Int(nextPosition.x, nextPosition.y));
-                space.createSpaceObject(TypesObjects.DEAD_AGENT, properties, null);
-                agent.killAgent();
-            }
-        }
-    }
-
-    @Plan(trigger=@Trigger(factchangeds="isHurted"))
-    public class HurtedPlan {
-        @PlanBody
-        protected void HurtedPlanBody() {
-            if(isHurted){
-                Map<String, Object> properties = new HashMap<>();
-                properties.put("position", new Vector2Int(nextPosition.x, nextPosition.y));
-                space.createSpaceObject(TypesObjects.HURT_AGENT, properties, null);
-            }
-        }
-    }
 
     // GOALS**********************************
 
@@ -103,7 +79,7 @@ public class MaintainSafetyBDI extends SocialAgentBDI{
 
         @PlanBody
         protected void MaintainSafetyPlanBody() {
-            //System.out.println("MaintainSafetyPlanBody");
+            //tem.out.println("MaintainSafetyPlanBody");
             agent.dispatchTopLevelGoal(new IncreaseDistanceFromDangerGoal());
             evaluateRiskAndCondition();
         }
@@ -124,10 +100,36 @@ public class MaintainSafetyBDI extends SocialAgentBDI{
         }
     }
 
+    @Plan(trigger=@Trigger(factchangeds="isDead"))
+    public class DeadPlan {
+        @PlanBody
+        protected void DeadPlanBody() {
+            if(isDead){
+                Map<String, Object> properties = new HashMap<>();
+                properties.put("position", new Vector2Int(nextPosition.x, nextPosition.y));
+                space.createSpaceObject(TypesObjects.DEAD_AGENT, properties, null);
+                agent.killAgent();
+            }
+        }
+    }
+
+    @Plan(trigger=@Trigger(factchangeds="isHurted"))
+    public class HurtedPlan {
+        @PlanBody
+        protected void HurtedPlanBody() {
+            if(isHurted){
+                Map<String, Object> properties = new HashMap<>();
+                properties.put("position", new Vector2Int(nextPosition.x, nextPosition.y));
+                space.createSpaceObject(TypesObjects.HURT_AGENT, properties, null);
+            }
+        }
+    }
+
     //FUNCTIONS FOR THE RISK CALCULATIONS************************
 
     protected void evaluateRiskAndCondition() {
 
+        //System.out.println("avaliação do risco");
         //incident distance
         ISpaceObject[] incidentsArray = incidentObjects();
 
@@ -139,8 +141,13 @@ public class MaintainSafetyBDI extends SocialAgentBDI{
                 valueForRiskPerception = 90;
         }
 
-        System.out.println("riskPerception = " + valueForRiskPerception);
+        //System.out.println("riskPerception = " + valueForRiskPerception);
         System.out.println("condition = " + condition);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         riskPerception = valueForRiskPerception;
     }
 
@@ -157,11 +164,11 @@ public class MaintainSafetyBDI extends SocialAgentBDI{
             double distance = Move.distanceBetween(nextPosition, incident.getProperty("position"));
 
             if(distance == 0)
-                valueForCondition += 20;
-            else if(distance <= Math.sqrt(2))
-                valueForCondition += 10;
-            else if(distance <= Math.sqrt(8))
                 valueForCondition += 5;
+            else if(distance <= Math.sqrt(2))
+                valueForCondition += 2;
+            else if(distance <= Math.sqrt(8))
+                valueForCondition += 1;
 
             minDistance = Math.min(minDistance,distance);
         }
@@ -180,7 +187,6 @@ public class MaintainSafetyBDI extends SocialAgentBDI{
 
     private ISpaceObject[] incidentObjects() {
 
-        //get all the incident objects
         return space.getSpaceObjectsByType(TypesObjects.INCIDENT);
     }
 

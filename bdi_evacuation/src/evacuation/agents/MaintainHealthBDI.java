@@ -38,6 +38,26 @@ public class MaintainHealthBDI extends SocialAgentBDI{
 
     // PLANS**********************************
 
+    @Plan(trigger=@Trigger(goals=MaintainHealthGoal.class))
+    public class MaintainSafetyPlan {
+
+        @PlanBody
+        protected void MaintainSafetyPlanBody() {
+
+            //if there is a cure object in the world
+            ISpaceObject cureObject = worldMethods.getCureObject(currentPosition);
+
+            //grab the object
+            if(cureObject != null){
+                //increase helth
+                condition += 20;
+
+                //delete object
+                space.destroySpaceObject(cureObject.getId());
+            }
+        }
+    }
+
     @Plan(trigger=@Trigger(factchangeds="isDead"))
     public class DeadPlan {
         @PlanBody
@@ -84,7 +104,7 @@ public class MaintainHealthBDI extends SocialAgentBDI{
 
     public void evaluateCondition() {
 
-        ISpaceObject[] incidentsArray = worldMethods.incidentObjects();
+        ISpaceObject[] incidentsArray = worldMethods.getIncidentObjects();
 
         int valueForCondition = 0;
 

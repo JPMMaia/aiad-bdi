@@ -86,12 +86,15 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
                         agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
 
                 }
-                else if(condition > 50 && worldMethods.someoneNeedsHelp(currentPosition)){
+                else if(condition > 50 && worldMethods.someoneNeedsHelp(currentPosition, DISTANCE_TO_HELP)){
                     System.out.println("someone needs help");
                     agent.dispatchTopLevelGoal(new HelpOthersGoal());
                 }
                 else if(condition > 50)
                     agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
+                else{ //condition <= 50
+                    agent.dispatchTopLevelGoal(new MaintainHealthGoal());
+                }
             }
         }
 
@@ -111,7 +114,7 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
         int valueForRiskPerception;
 
         //incident distance
-        ISpaceObject[] incidentsArray = worldMethods.incidentObjects();
+        ISpaceObject[] incidentsArray = worldMethods.getIncidentObjects();
 
         //calculate condition from each instance
         double minDistance = Move.maximumDistance;

@@ -71,6 +71,13 @@
 					<env:property name="space" class="Space2D"/>
 				</env:objecttype>
 
+				<!-- Wanderer -->
+				<env:objecttype name="cure_agent">
+					<env:property name="position" class="IVector2"/>
+					<env:property name="speed" class="Double"/>
+					<env:property name="space" class="Space2D"/>
+				</env:objecttype>
+
 				<!-- Herding -->
 				<env:objecttype name="herding">
 					<env:property name="position" class="IVector2"/>
@@ -219,6 +226,11 @@
 						<env:texturedrectangle layer="2" imagepath="images/hurt_agent.png"/>
 					</env:drawable>
 
+					<!-- Wanderer avatar -->
+					<env:drawable objecttype="cure_agent" height="1.0" width="1.0">
+						<env:texturedrectangle layer="3" imagepath="images/cure_agent.png"/>
+					</env:drawable>
+
                     <!-- Wanderer avatar -->
                     <env:drawable objecttype="wanderer" height="1.0" width="1.0">
                         <env:texturedrectangle layer="2" imagepath="images/wanderer.png"/>
@@ -243,7 +255,7 @@
                     <env:drawable objecttype="incident" height="1.0" width="1.0">
 
                         <!-- Flames -->
-                        <env:texturedrectangle layer="3" imagepath="images/flames.png">
+                        <env:texturedrectangle layer="4" imagepath="images/flames.png">
                             <env:drawcondition>$object.type.equals(0)</env:drawcondition>
                         </env:texturedrectangle>
 
@@ -251,6 +263,11 @@
                         <env:texturedrectangle layer="1" imagepath="images/water.png">
                             <env:drawcondition>$object.type.equals(1)</env:drawcondition>
                         </env:texturedrectangle>
+
+						<!-- Terrorism -->
+						<env:texturedrectangle layer="1" imagepath="images/terrorist.png">
+							<env:drawcondition>$object.type.equals(2)</env:drawcondition>
+						</env:texturedrectangle>
 
                     </env:drawable>
 

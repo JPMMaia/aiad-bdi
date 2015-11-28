@@ -2,7 +2,6 @@ package evacuation.agents;
 
 import evacuation.utils.Move;
 import evacuation.utils.Position;
-import evacuation.utils.TypesObjects;
 import evacuation.utils.WorldMethods;
 import jadex.bdiv3.BDIAgent;
 import jadex.bdiv3.annotation.*;
@@ -12,14 +11,9 @@ import jadex.extension.envsupport.math.Vector2Int;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 
-import java.util.Set;
-
 @Agent
 public class WalkerBDI {
-
-    @Belief
-    protected int velocity = 50; //range [0-100]
-
+    
     @Agent
     protected BDIAgent agent;
 
@@ -37,8 +31,8 @@ public class WalkerBDI {
     @Belief(dynamic=true)
     Position currentPosition;
 
-    @Belief
-    protected boolean samePosition = false;
+    //@Belief
+    //protected boolean samePosition = false;
 
     @Belief
     protected boolean indoor = true;
@@ -68,7 +62,7 @@ public class WalkerBDI {
         protected void WanderPlanBody() {
             Position oldPosition = move.getPosition(myself);
             Position wantedPosition = move.getNewPosition(oldPosition);
-            if(worldMethods.noCollisions(wantedPosition))
+            if(worldMethods.noCollisionsInPosition(wantedPosition))
                 nextPosition = wantedPosition;
         }
     }

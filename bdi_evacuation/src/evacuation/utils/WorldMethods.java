@@ -1,18 +1,18 @@
 package evacuation.utils;
 
 import jadex.extension.envsupport.environment.ISpaceObject;
+import jadex.extension.envsupport.environment.SpaceObject;
 import jadex.extension.envsupport.environment.space2d.Grid2D;
 import jadex.extension.envsupport.math.IVector1;
+import jadex.extension.envsupport.math.IVector2;
 import jadex.extension.envsupport.math.Vector1Double;
 import jadex.extension.envsupport.math.Vector2Double;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public class WorldMethods {
-
-    //CONSTANTS***************************
-
-    protected static final int DISTANCE_TO_HELP = 4;
 
     protected Grid2D space;
 
@@ -20,11 +20,11 @@ public class WorldMethods {
         this.space = space;
     }
 
-    public boolean noCollisions(Position p) {
+    //COLLISIONS QUERIES
+
+    public boolean noCollisionsInPosition(Position p) {
         Vector2Double wantedPosition = new Vector2Double(p.x,p.y);
         IVector1 distance = new Vector1Double(0);
-
-        //space.getSpaceObjectsByGridPosition(wantedPosition,type);
 
         Set terrainSet = space.getNearObjects(wantedPosition,distance,TypesObjects.TERRAIN);
         Set incidentSet = space.getNearObjects(wantedPosition,distance,TypesObjects.INCIDENT);
@@ -50,13 +50,87 @@ public class WorldMethods {
         return true;
     }
 
+    // INCIDENT QUERIES
+
     public boolean isIncident() {
         return (space.getSpaceObjectsByType(TypesObjects.INCIDENT).length != 0);
     }
 
-    public ISpaceObject[] incidentObjects() {
+    public ISpaceObject[] getIncidentObjects() {
         return space.getSpaceObjectsByType(TypesObjects.INCIDENT);
     }
+
+    // FIND PATH QUERIES
+
+    public Position findPathToObject(ISpaceObject object, Position currentPosition) {
+        if(object != null){
+            //space.getShortestDirection()
+            Position destinyPosition = Position.convertToPosition(object.getProperty(TypesProperties.POSITION));
+            Position oldPosition = new Position(currentPosition.x, currentPosition.y);
+            Position newPosition = null;
+
+            if(Math.abs(destinyPosition.x - oldPosition.x) > Math.abs(destinyPosition.y - oldPosition.y)) { //move in x
+                if(destinyPosition.x < oldPosition.x)
+                    newPosition = new Position(currentPosition.x-1, currentPosition.y);
+                else if(destinyPosition.x > oldPosition.x)
+                    newPosition = new Position(currentPosition.x+1, currentPosition.y);
+            }
+            else { //move in y
+                if(destinyPosition.y < oldPosition.y)
+                    newPosition = new Position(currentPosition.x, currentPosition.y-1);
+                else if(destinyPosition.y > oldPosition.y)
+                    newPosition = new Position(currentPosition.x, currentPosition.y+1);
+            }
+
+            if(newPosition != null && noCollisionsInPosition(newPosition)) {
+                return newPosition;
+            }
+        }
+
+        //samePosition = true;
+        return currentPosition;
+    }
+
+    public ISpaceObject pickClosestObject(ISpaceObject[] objects, HashSet<Object> targets, Position currentPosition) {
+
+        if(objects.length > 0){
+            //System.out.println("objects lenght - " + objects.length);
+            int pos = 0;
+
+            Position wantedPosition = Position.convertToPosition(objects[pos].getProperty(TypesProperties.POSITION));
+
+            IVector1 distance = getDistanceBetweenTwoPositions(currentPosition, wantedPosition);
+            Vector2Double currentPositionV2D = new Vector2Double(currentPosition.x, currentPosition.y);
+
+            for(int i = 1; i < objects.length; i++){
+                IVector1 newDistance = space.getDistance(currentPositionV2D, (IVector2) objects[i].getProperty(TypesProperties.POSITION));
+
+                if(targets != null)
+                    if(targets.contains(objects[i]))
+                        continue;
+
+                if(distance.greater(newDistance)){
+                    pos = i;
+                    distance = newDistance;
+                }
+            }
+            return objects[pos];
+        }
+        return null;
+    }
+
+    public IVector1 getDistanceBetweenTwoPositions(Position p1, Position p2){
+        Vector2Double p1v2d = new Vector2Double(p1.x,p1.y);
+        Vector2Double p2v2d = new Vector2Double(p2.x,p2.y);
+
+        return space.getDistance(p1v2d, p2v2d);
+    }
+
+    public IVector1 getDistanceBetweenTwoIVector2(IVector2 p1, IVector2 p2){
+        return space.getDistance(p1, p2);
+    }
+
+    //SOCIAL AGENT QUERIES
 
     public boolean someoneInMyCell(Position p) {
 
@@ -77,13 +151,33 @@ public class WorldMethods {
         return false;
     }
 
-    public boolean someoneNeedsHelp(Position actualPosition) {
-        int distance = DISTANCE_TO_HELP;
+    public boolean someoneNeedsHelp(Position actualPosition, int distance) {
         String[] types = {TypesObjects.HURT_AGENT};
         Vector2Double wantedPosition = new Vector2Double(actualPosition.x, actualPosition.y);
 
         Set agentsSet = space.getNearGridObjects(wantedPosition, distance, types);
 
         return !agentsSet.isEmpty();
+    }
+
+    //GET CURE OBJECT IN THE SAME POSITION
+
+    public ISpaceObject getCureObject(Position currentPosition) {
+
+        Vector2Double wantedPosition = new Vector2Double(currentPosition.x,currentPosition.y);
+        IVector1 distance = new Vector1Double(0);
+
+        Set cureSet = space.getNearObjects(wantedPosition,distance,TypesObjects.CURE_AGENT);
+
+        if(cureSet == null || cureSet.isEmpty())
+            return null;
+
+        for (Iterator<ISpaceObject> it = cureSet.iterator(); it.hasNext(); ) {
+            ISpaceObject obj;
+            obj = it.next();
+            return obj;
+        }
+
+        return null;
     }
 }

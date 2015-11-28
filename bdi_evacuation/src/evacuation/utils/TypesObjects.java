@@ -11,4 +11,5 @@ public class TypesObjects {
     public static String CONSERVATIVE = "conservative";
     public static String DEAD_AGENT = "dead_agent";
     public static String HURT_AGENT = "hurt_agent";
+    public static String CURE_AGENT = "cure_agent";
 }

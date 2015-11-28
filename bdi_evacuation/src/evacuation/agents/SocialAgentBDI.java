@@ -1,16 +1,25 @@
 package evacuation.agents;
 
+import evacuation.utils.Position;
+import evacuation.utils.TypesObjects;
+import evacuation.utils.TypesProperties;
 import jadex.bdiv3.annotation.*;
+import jadex.extension.envsupport.environment.ISpaceObject;
+import jadex.extension.envsupport.math.IVector1;
+import jadex.extension.envsupport.math.IVector2;
+import jadex.extension.envsupport.math.Vector2Int;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 
-/**
- * Created by Paula on 15/11/2015.
- */
+import java.util.HashMap;
+import java.util.Map;
+
 @Agent
 public class SocialAgentBDI extends WalkerBDI{
 
+    //CONSTANTS***************************
 
+    protected static final int DISTANCE_TO_HELP = 10;
 
     @Goal
     public class HelpOthersGoal { //altruisticamente ajudando os outros. //triggered by others call warning (env)
@@ -24,7 +33,6 @@ public class SocialAgentBDI extends WalkerBDI{
 
         @GoalParameter
         protected String goal = "PushOthersGoal";
-
     }
 
     @Plan(trigger=@Trigger(goals=HelpOthersGoal.class))
@@ -32,6 +40,29 @@ public class SocialAgentBDI extends WalkerBDI{
         //helpOthersPlan - loose time and improve others condition
         @PlanBody
         protected void HelpOthersPlanBody() {
+
+            //find the nearest other
+            ISpaceObject[] hurtAgents = space.getSpaceObjectsByType(TypesObjects.HURT_AGENT);
+            ISpaceObject hurtAgent;
+
+            if(hurtAgents != null && hurtAgents.length > 0) {
+                hurtAgent = worldMethods.pickClosestObject(hurtAgents, null, currentPosition);
+
+                //go to an adjacent cell
+                //-calculate distance from hurtAgent
+                Position targetPosition = Position.convertToPosition(hurtAgent.getProperty(TypesProperties.POSITION));
+                IVector1 distanceIV = worldMethods.getDistanceBetweenTwoPositions(currentPosition, targetPosition);
+                double distance = distanceIV.getAsDouble();
+
+                if (distance <= 1) {//if it is near you cure
+                    System.out.println("cure"); //create cure object
+                    Map<String, Object> properties = new HashMap<>();
+                    properties.put("position", new Vector2Int(targetPosition.x, targetPosition.y));
+                    space.createSpaceObject(TypesObjects.CURE_AGENT, properties, null);
+                }
+                else //go to the hurt
+                    nextPosition = worldMethods.findPathToObject(hurtAgent, currentPosition);
+            }
         }
     }
 
@@ -40,6 +71,10 @@ public class SocialAgentBDI extends WalkerBDI{
         //pushOthersPlan - other condition gets worse and if = 0 they die
         @PlanBody
         protected void PushOthersPlanBody() {
+            //if there is someone in the same cell as me
+            //create a push object
+
+            //-> find a place where the being pushed is used
         }
     }
 
@@ -48,13 +83,3 @@ public class SocialAgentBDI extends WalkerBDI{
         super.body();
     }
 }
-
-//deals with being hurt by the environment - condition decreases if distance from danger < value
-// condition decreases if is being pushed
-// condition = 0 -> is dead -> the others can pass by
-
-
-//TODO
-//ask the world if there is any door available
-//if no empty door available riskPerception += 5
-

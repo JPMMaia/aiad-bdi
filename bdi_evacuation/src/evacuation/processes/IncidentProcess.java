@@ -49,7 +49,7 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 		desiredNumIncidentPositions = 1;
 		incidentPositions = new HashSet<>();
 
-		incidentType = 1;//r.nextInt(3); //0 - fire ; 1 - water; 2 - terrorist
+		incidentType = 2;//r.nextInt(3); //0 - fire ; 1 - water; 2 - terrorist
 	}
 
     @Override
@@ -118,7 +118,6 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 			ArrayList<Position> newOpenObjects = new ArrayList<>();
 
 			for (Position element : openObjects) {
-				System.out.println("open objects size - " + openObjects.size());
 				for(Position direction : move.directions){
 					Position wantedPosition = new Position(element.x + direction.x, element.y + direction.y);
 					if(move.isBetweenLimits(wantedPosition) && noWallsInPosition(wantedPosition) && !openObjects.contains(wantedPosition)) {
@@ -131,8 +130,6 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 
 			openObjects = newOpenObjects;
 		}
-
-		System.out.println("num of incidents - " + incidentPositions.size());
 	}
 
 	private void createTerrorist() {

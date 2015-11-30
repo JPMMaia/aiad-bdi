@@ -50,10 +50,12 @@ public class MaintainHealthBDI extends SocialAgentBDI{
             //grab the object
             if(cureObject != null){
                 //increase helth
+
                 condition += 20;
 
                 //delete object
-                space.destroySpaceObject(cureObject.getId());
+                if(!space.destroyAndVerifySpaceObject(cureObject.getId()))
+                    System.out.println("The cure object do not exist anymore.");
             }
         }
     }

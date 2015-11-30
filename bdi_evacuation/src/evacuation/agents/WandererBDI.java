@@ -1,6 +1,7 @@
 package evacuation.agents;
 
 import evacuation.utils.Position;
+import jadex.extension.envsupport.math.IVector1;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 

@@ -19,11 +19,15 @@ public class WalkerBDI {
 
     //BELIEFS **********************************************
 
+    //Space
+
     @Belief
     protected Grid2D space = (Grid2D)agent.getParentAccess().getExtension("2dspace").get();
 
     @Belief
     protected ISpaceObject myself = space.getAvatar(agent.getComponentDescription(), agent.getModel().getFullName());
+
+    //Position
 
     @Belief(dynamic=true)
     Position nextPosition;
@@ -31,8 +35,15 @@ public class WalkerBDI {
     @Belief(dynamic=true)
     Position currentPosition;
 
-    //@Belief
-    //protected boolean samePosition = false;
+    //Speed
+
+    @Belief
+    Double speed;
+
+    @Belief
+    int millis = 500;
+
+    //Other
 
     @Belief
     protected boolean indoor = true;
@@ -76,7 +87,7 @@ public class WalkerBDI {
             currentPosition = nextPosition;
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(millis);
             } catch (InterruptedException e) {
                 System.out.println("unable to sleep");
             }

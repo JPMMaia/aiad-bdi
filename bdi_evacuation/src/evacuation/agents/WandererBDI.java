@@ -23,6 +23,5 @@ public class WandererBDI extends EscapingAgentBDI {
     public void body(){
         super.body();
     }
-
 }
 

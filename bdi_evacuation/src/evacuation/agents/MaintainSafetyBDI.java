@@ -69,6 +69,7 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
     private int evaluateAgentSituation() {
 
         int res = 0;
+        boolean helping = false;
 
         if(agent.getGoals().isEmpty()) {
             if (!worldMethods.isIncident()) {
@@ -89,11 +90,16 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
                 else if(condition > 50 && worldMethods.someoneNeedsHelp(currentPosition, DISTANCE_TO_HELP)){
                     System.out.println("someone needs help");
                     agent.dispatchTopLevelGoal(new HelpOthersGoal());
+                    helping = true;
                 }
                 else if(condition > 50)
                     agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
                 else{ //condition <= 50
                     agent.dispatchTopLevelGoal(new MaintainHealthGoal());
+                }
+
+                if(!helping){
+                    deleteCures();
                 }
             }
         }

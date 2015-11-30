@@ -6,6 +6,7 @@ import evacuation.utils.WorldMethods;
 import jadex.bdiv3.BDIAgent;
 import jadex.bdiv3.annotation.*;
 import jadex.extension.envsupport.environment.ISpaceObject;
+import jadex.extension.envsupport.environment.SpaceObject;
 import jadex.extension.envsupport.environment.space2d.Grid2D;
 import jadex.extension.envsupport.math.Vector2Int;
 import jadex.micro.annotation.Agent;
@@ -34,6 +35,9 @@ public class WalkerBDI {
 
     @Belief(dynamic=true)
     Position currentPosition;
+
+    //Someone in my cell
+    SpaceObject someoneInMyCell;
 
     //Speed
 
@@ -73,8 +77,9 @@ public class WalkerBDI {
         protected void WanderPlanBody() {
             Position oldPosition = move.getPosition(myself);
             Position wantedPosition = move.getNewPosition(oldPosition);
-            if(worldMethods.noCollisionsInPosition(wantedPosition))
+            if(worldMethods.noCollisionsInPosition(wantedPosition)) {
                 nextPosition = wantedPosition;
+            }
         }
     }
 
@@ -82,9 +87,13 @@ public class WalkerBDI {
     public class GoPlan {
         @PlanBody
         protected void GoPlanBody() {
+            if(someoneInMyCell != null)
+                worldMethods.deleteSomeoneInMyCell(someoneInMyCell);
 
+            someoneInMyCell = worldMethods.makeSomeoneInMyCell(nextPosition);
             myself.setProperty("position", new Vector2Int(nextPosition.x, nextPosition.y));
             currentPosition = nextPosition;
+
 
             try {
                 Thread.sleep(millis);
@@ -98,5 +107,6 @@ public class WalkerBDI {
 
     @AgentBody
     public void body(){
+        currentPosition = new Position();
     }
 }

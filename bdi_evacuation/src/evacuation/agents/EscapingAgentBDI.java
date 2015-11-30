@@ -23,7 +23,10 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
         @PlanBody
         protected void FindExitPlanBody() {
             //System.out.println("Find exit");
-            nextPosition = findExit();
+
+            Position wantedPosition = findExit();
+            if(worldMethods.noCollisionsInPosition(wantedPosition))
+                nextPosition = wantedPosition;
         }
     }
 

@@ -71,6 +71,8 @@ public class MaintainHealthBDI extends SocialAgentBDI{
                 if(hurtObject != null)
                     space.destroySpaceObject(hurtObject.getId());
 
+                deleteCures();
+                worldMethods.deleteSomeoneInMyCell(someoneInMyCell);
                 agent.killAgent();
             }
         }

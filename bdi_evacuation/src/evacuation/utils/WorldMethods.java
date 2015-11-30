@@ -3,14 +3,9 @@ package evacuation.utils;
 import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.SpaceObject;
 import jadex.extension.envsupport.environment.space2d.Grid2D;
-import jadex.extension.envsupport.math.IVector1;
-import jadex.extension.envsupport.math.IVector2;
-import jadex.extension.envsupport.math.Vector1Double;
-import jadex.extension.envsupport.math.Vector2Double;
+import jadex.extension.envsupport.math.*;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 public class WorldMethods {
 
@@ -28,24 +23,17 @@ public class WorldMethods {
 
         Set terrainSet = space.getNearObjects(wantedPosition,distance,TypesObjects.TERRAIN);
         Set incidentSet = space.getNearObjects(wantedPosition,distance,TypesObjects.INCIDENT);
-
-        Set activeSet = space.getNearObjects(wantedPosition,distance,TypesObjects.WANDERER);
-        Set herdingSet = space.getNearObjects(wantedPosition,distance,TypesObjects.HERDING);
-        Set conservativeSet = space.getNearObjects(wantedPosition,distance,TypesObjects.CONSERVATIVE);
-
+        Set sameCellSet = space.getNearObjects(wantedPosition,distance,TypesObjects.SAME_CELL);
+        Set hurtSet = space.getNearObjects(wantedPosition,distance,TypesObjects.HURT_AGENT);
 
         if(!terrainSet.isEmpty()) //there is a wall or an obstacle
             return false;
         else if(!incidentSet.isEmpty()) //there are incidents in the way
             return false;
-        else if(activeSet.size() > 1) //there are two agents in the position
+        else if(!sameCellSet.isEmpty()) //there are two agents in the position
             return false;
-        else if(herdingSet.size() > 1) //there are two agents in the position
+        else if(!hurtSet.isEmpty()) //there are two agents in the position
             return false;
-        else if(conservativeSet.size() > 1) //there are two agents in the position
-            return false;
-
-        //System.out.println("agents number - " + agentsSet.size());
 
         return true;
     }
@@ -179,5 +167,37 @@ public class WorldMethods {
         }
 
         return null;
+    }
+
+    // NEW OBJECTS METHODS
+
+
+
+    private SpaceObject makeTwoObjectsSameCell(Position targetPosition, String type){
+        SpaceObject res;
+
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("position", new Vector2Int(targetPosition.x, targetPosition.y));
+        res = (SpaceObject) space.createSpaceObject(type, properties, null);
+
+        return res;
+    }
+
+    //ERASE OBJECTS METHODS
+
+    public SpaceObject makeSomeoneInMyCell(Position newPosition) {
+
+        //if there is another guy in the new cell, create a someone in my cell
+        if(someoneInMyCell(newPosition)){
+            return makeTwoObjectsSameCell(newPosition, TypesObjects.SAME_CELL);
+        }
+
+        return null;
+    }
+
+    public void deleteSomeoneInMyCell(SpaceObject obj) {
+        if(obj != null){
+            space.destroyAndVerifySpaceObject(obj.getId());
+        }
     }
 }

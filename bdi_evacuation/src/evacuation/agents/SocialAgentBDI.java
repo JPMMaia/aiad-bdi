@@ -5,6 +5,7 @@ import evacuation.utils.TypesObjects;
 import evacuation.utils.TypesProperties;
 import jadex.bdiv3.annotation.*;
 import jadex.extension.envsupport.environment.ISpaceObject;
+import jadex.extension.envsupport.environment.SpaceObject;
 import jadex.extension.envsupport.math.IVector1;
 import jadex.extension.envsupport.math.IVector2;
 import jadex.extension.envsupport.math.Vector2Int;
@@ -12,6 +13,7 @@ import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 @Agent
@@ -20,6 +22,9 @@ public class SocialAgentBDI extends WalkerBDI{
     //CONSTANTS***************************
 
     protected static final int DISTANCE_TO_HELP = 10;
+
+    // CURE ATTRIBUTES
+    protected HashSet<SpaceObject> cures;
 
     @Goal
     public class HelpOthersGoal { //altruisticamente ajudando os outros. //triggered by others call warning (env)
@@ -54,11 +59,12 @@ public class SocialAgentBDI extends WalkerBDI{
                 IVector1 distanceIV = worldMethods.getDistanceBetweenTwoPositions(currentPosition, targetPosition);
                 double distance = distanceIV.getAsDouble();
 
-                if (distance <= 1) {//if it is near you cure
+                if (distance <= 1) {//if it is near than cure
                     System.out.println("cure"); //create cure object
                     Map<String, Object> properties = new HashMap<>();
                     properties.put("position", new Vector2Int(targetPosition.x, targetPosition.y));
-                    space.createSpaceObject(TypesObjects.CURE_AGENT, properties, null);
+                    SpaceObject cure = (SpaceObject) space.createSpaceObject(TypesObjects.CURE_AGENT, properties, null);
+                    cures.add(cure);
                 }
                 else //go to the hurt
                     nextPosition = worldMethods.findPathToObject(hurtAgent, currentPosition);
@@ -81,5 +87,14 @@ public class SocialAgentBDI extends WalkerBDI{
     @AgentBody
     public void body(){
         super.body();
+        cures = new HashSet<>();
+    }
+
+    //cures method
+
+    void deleteCures(){
+        for(SpaceObject cure : cures){
+            space.destroyAndVerifySpaceObject(cure.getId());
+        }
     }
 }

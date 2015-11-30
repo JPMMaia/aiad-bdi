@@ -12,4 +12,5 @@ public class TypesObjects {
     public static String DEAD_AGENT = "dead_agent";
     public static String HURT_AGENT = "hurt_agent";
     public static String CURE_AGENT = "cure_agent";
+    public static String SAME_CELL = "same_cell";
 }

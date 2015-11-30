@@ -1,7 +1,7 @@
 package evacuation.utils.pathFinder;
 
 import evacuation.utils.Position;
-import evacuation.utils.terrain.Terrain;
+import evacuation.utils.terrain.ITerrain;
 
 import java.util.*;
 
@@ -11,7 +11,7 @@ public class PathFinder
 	private List<Node> mOpenList;
 	private List<Node> mClosedList;
 	private Position mDestination;
-	private Terrain mTerrain;
+	private ITerrain mTerrain;
 
 	public PathFinder()
 	{
@@ -19,7 +19,7 @@ public class PathFinder
 		mClosedList = new ArrayList<>();
 	}
 
-	public void initialize(Terrain terrain, Position start, Position destination)
+	public void initialize(ITerrain terrain, Position start, Position destination)
 	{
 		mNodeComparator = new Node.NodeComparator();
 		Node startNode = new Node(null, start, destination);
@@ -110,7 +110,7 @@ public class PathFinder
 		return solution;
 	}
 
-	public static List<Position> run(Terrain terrain, Position start, Position destination)
+	public static List<Position> run(ITerrain terrain, Position start, Position destination)
 	{
 		PathFinder finder = new PathFinder();
 		finder.initialize(terrain, start, destination);

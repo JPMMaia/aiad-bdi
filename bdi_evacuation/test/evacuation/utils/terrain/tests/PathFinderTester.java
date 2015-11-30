@@ -1,9 +1,9 @@
 package evacuation.utils.terrain.tests;
 
-import evacuation.utils.terrain.Terrain;
 import evacuation.utils.pathFinder.PathFinder;
 import evacuation.utils.Position;
-import junit.framework.Assert;
+import evacuation.utils.terrain.Terrain;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;

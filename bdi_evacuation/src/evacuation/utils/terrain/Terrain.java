@@ -1,21 +1,22 @@
 package evacuation.utils.terrain;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.List;
 
-public class Terrain
+public class Terrain implements ITerrain
 {
-	private char[][] mTerrain;
+	private Square[][] mSquares;
 	private int mWidth;
 	private int mHeight;
+	private List<Room> mRooms;
+	private List<Door> mDoors;
 
-	public Terrain(char[][] terrain, int width, int height)
+	public Terrain(Square[][] squares, int width, int height, List<Room> rooms, List<Door> doors)
 	{
-		mTerrain = terrain;
+		mSquares = squares;
 		mWidth = width;
 		mHeight = height;
+		mRooms = rooms;
+		mDoors = doors;
 	}
 
 	public boolean isObstacle(int x, int y)
@@ -23,40 +24,19 @@ public class Terrain
 		if (x < 0 || x >= mWidth || y < 0 || y >= mHeight)
 			return true;
 
-		if(getAvatar(x, y) == ' ' || getAvatar(x, y) == 0)
-			return false;
-
-		return true;
+		return getSquare(x, y).isObstacle();
 	}
 
-	public void setAvatar(int x, int y, char avatar)
+	public Square getSquare(int x, int y)
 	{
-		mTerrain[y][x] = avatar;
-	}
-	public char getAvatar(int x, int y)
-	{
-		return mTerrain[y][x];
+		return mSquares[y][x];
 	}
 
 	public static Terrain createFromFile(String filename, int width, int height)
 	{
-		char[][] terrainMap = new char[height][width];
+		TerrainBuilder builder = new TerrainBuilder();
+		builder.build(filename, width, height);
 
-		File file = new File(filename);
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file)))
-		{
-			for(int i = 0; i < height; i++)
-			{
-				bufferedReader.read(terrainMap[i], 0, width);
-				bufferedReader.skip(2);
-			}
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-
-		return new Terrain(terrainMap, width, height);
+		return builder.getResult();
 	}
 }

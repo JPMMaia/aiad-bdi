@@ -83,14 +83,16 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 		}
 	}
 
-	private void createIncidentObject(Position newPosition){
+	private boolean createIncidentObject(Position newPosition){
 		if (savedIncidentPosition(newPosition)) {
 			Map<String, Object> properties = new HashMap<>();
 			properties.put("position", new Vector2Int(newPosition.x, newPosition.y));
 			properties.put("type", incidentType); //fire type
 			space.createSpaceObject(TypesObjects.INCIDENT, properties, null);
 			lastPosition = newPosition;
+			return true;
 		}
+		return false;
 	}
 
 	private void createFire() {
@@ -116,17 +118,21 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 			ArrayList<Position> newOpenObjects = new ArrayList<>();
 
 			for (Position element : openObjects) {
+				System.out.println("open objects size - " + openObjects.size());
 				for(Position direction : move.directions){
 					Position wantedPosition = new Position(element.x + direction.x, element.y + direction.y);
 					if(move.isBetweenLimits(wantedPosition) && noWallsInPosition(wantedPosition) && !openObjects.contains(wantedPosition)) {
-						createIncidentObject(wantedPosition);
-						newOpenObjects.add(wantedPosition);
+						if(createIncidentObject(wantedPosition)) {
+							newOpenObjects.add(wantedPosition);
+						}
 					}
 				}
 			}
 
 			openObjects = newOpenObjects;
 		}
+
+		System.out.println("num of incidents - " + incidentPositions.size());
 	}
 
 	private void createTerrorist() {

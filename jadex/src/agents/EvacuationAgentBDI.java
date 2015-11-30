@@ -4,6 +4,7 @@ import jadex.bdiv3.BDIAgent;
 import jadex.bdiv3.annotation.Belief;
 import jadex.bdiv3.annotation.Goal;
 import jadex.bdiv3.annotation.Goal.ExcludeMode;
+import jadex.bdiv3.annotation.GoalCreationCondition;
 import jadex.bdiv3.annotation.GoalMaintainCondition;
 import jadex.bdiv3.annotation.GoalParameter;
 import jadex.bdiv3.annotation.Plan;
@@ -19,7 +20,7 @@ import java.util.Random;
 
 
 @Agent
-public class HerdingBDI { //herding pode usar o goal retry -> tenta encontrar outros e segui-los, se isso nao funcionar procura por si
+public class EvacuationAgentBDI { //herding pode usar o goal retry -> tenta encontrar outros e segui-los, se isso nao funcionar procura por si
 	
 	
     @Agent
@@ -53,7 +54,7 @@ public class HerdingBDI { //herding pode usar o goal retry -> tenta encontrar ou
      *****************************/
     
     @Belief(dynamic=true)
-	protected boolean notSafe = (riskPerception > 10);
+    protected boolean inPanic = (riskPerception > 90);
     
     @Belief
     protected boolean isTrapped = false;
@@ -106,8 +107,21 @@ public class HerdingBDI { //herding pode usar o goal retry -> tenta encontrar ou
     	protected String goal = "FollowOthersGoal";
 	}
     
-    //helpOthers altruisticamente ajudando os outros. //triggered by others call warning (env)
-    //pushOthers empurrar os outros triggered by riskPerception > 90 && isTrapped == true
+    @Goal
+	public class HelpOthersGoal { //altruisticamente ajudando os outros. //triggered by others call warning (env)
+    	
+    	@GoalParameter
+    	protected String goal = "HelpOthersGoal";
+	}
+   
+    @Goal
+	public class PushOthersGoal {
+ 
+		@GoalCreationCondition(beliefs="inPanic") //empurrar os outros triggered by riskPerception > 90 && isTrapped == true
+		public PushOthersGoal() {
+		}
+ 
+	}
     
     /****************************
               PLANS
@@ -128,7 +142,7 @@ public class HerdingBDI { //herding pode usar o goal retry -> tenta encontrar ou
 		@PlanBody
 		protected void IncreaseDistanceFromDangerPlanBody() {
 			
-			//while(riskPerception > 10){
+			while(riskPerception > 10){
 				
 				System.out.println("IncreaseDistanceFromDangerPlanBody");
 				if(indoor){
@@ -141,7 +155,7 @@ public class HerdingBDI { //herding pode usar o goal retry -> tenta encontrar ou
 				if(riskPerception > 90){
 					isTrapped = true;
 				}
-			//}
+			}
 		}
 	}
     
@@ -166,11 +180,15 @@ public class HerdingBDI { //herding pode usar o goal retry -> tenta encontrar ou
 		}
 	}
    
-    //helpOthersPlan - loose time and the other isDown = false
-    //pushOthersPlan - other condition gets worse
-
+    @Plan(trigger=@Trigger(goals=HelpOthersGoal.class))
+	public class HelpOthersPlan {
+    	//helpOthersPlan - loose time and improve others condition
+    }
     
-    
+    @Plan(trigger=@Trigger(goals=PushOthersGoal.class))
+	public class PushOthersPlan {
+    	//pushOthersPlan - other condition gets worse and if = 0 they die
+    }
     
     /****************************
 	           BODY

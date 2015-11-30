@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <p0:properties xmlns:p0="http://jadex.sourceforge.net/jadexconf" __ID="0">
-	<p0:properties __ID="1" type="Test Center">
-		<p0:property __ID="2" type="mainsplit_location">0.2998522895125554</p0:property>
-		<p0:property __ID="3" type="tcsplit_location">0.6986754966887417</p0:property>
+	<p0:properties __ID="1" type="Awareness Settings">
+		<p0:properties __ID="2" type="panelproperties">
+			<p0:property __ID="3" type="gui-refresh">5</p0:property>
+		</p0:properties>
 	</p0:properties>
 	<p0:properties __ID="4" type="vis">
 		<p0:property __ID="5" name="jadex.tools.starter.StarterPlugin" type="Starter">true</p0:property>
@@ -22,7 +23,7 @@
 	<entries>
 		<entry __ID="1">
 			<key>
-				<p1:String xmlns:p1="typeinfo:java.lang" __ID="2">Test Center.console.height</p1:String>
+				<p1:String xmlns:p1="typeinfo:java.lang" __ID="2">Component Viewer.console.height</p1:String>
 			</key>
 			<value>
 				<p1:Double xmlns:p1="typeinfo:java.lang" __ID="3" content="1.0"></p1:Double>
@@ -30,7 +31,7 @@
 		</entry>
 		<entry __ID="4">
 			<key>
-				<p1:String xmlns:p1="typeinfo:java.lang" __ID="5">Chat.console.height</p1:String>
+				<p1:String xmlns:p1="typeinfo:java.lang" __ID="5">Awareness Settings.console.height</p1:String>
 			</key>
 			<value>
 				<p1:Double xmlns:p1="typeinfo:java.lang" __ID="6" content="1.0"></p1:Double>
@@ -41,7 +42,7 @@
 				<p1:String xmlns:p1="typeinfo:java.lang" __ID="8">Starter.console.height</p1:String>
 			</key>
 			<value>
-				<p1:Double xmlns:p1="typeinfo:java.lang" __ID="9" content="0.9983818770226537"></p1:Double>
+				<p1:Double xmlns:p1="typeinfo:java.lang" __ID="9" content="1.0"></p1:Double>
 			</value>
 		</entry>
 	</entries>
@@ -49,8 +50,8 @@
 ]]></p0:property>
 	</p0:properties>
 	<p0:properties __ID="17" type="Starter">
-		<p0:property __ID="18" type="leftsplit_location">0.6986754966887417</p0:property>
-		<p0:property __ID="19" type="mainsplit_location">0.2983751846381093</p0:property>
+		<p0:property __ID="18" type="leftsplit_location">0.7</p0:property>
+		<p0:property __ID="19" type="mainsplit_location">0.2970922882427307</p0:property>
 	</p0:properties>
 	<p0:properties __ID="20" type="Chat">
 		<p0:properties __ID="21" type="panelproperties">
@@ -59,12 +60,12 @@
 		</p0:properties>
 	</p0:properties>
 	<p0:properties __ID="24" type="window">
-		<p0:property __ID="25" type="width">1382</p0:property>
-		<p0:property __ID="26" type="height">744</p0:property>
-		<p0:property __ID="27" type="x">-8</p0:property>
-		<p0:property __ID="28" type="y">-8</p0:property>
-		<p0:property __ID="29" type="extendedState">6</p0:property>
-		<p0:property __ID="30" type="jccexit">shutdown</p0:property>
+		<p0:property __ID="25" type="width">819</p0:property>
+		<p0:property __ID="26" type="height">650</p0:property>
+		<p0:property __ID="27" type="x">0</p0:property>
+		<p0:property __ID="28" type="y">0</p0:property>
+		<p0:property __ID="29" type="extendedState">0</p0:property>
+		<p0:property __ID="30" type="jccexit">ask</p0:property>
 		<p0:property __ID="31" type="saveonexit">true</p0:property>
 	</p0:properties>
 </p0:properties>

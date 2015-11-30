@@ -2,6 +2,8 @@ package evacuation.processes;
 
 import evacuation.factories.AbstractAgentFactory;
 import evacuation.factories.AgentType;
+import evacuation.utils.terrain.TerrainReader;
+import evacuation.utils.TypesObjects;
 import jadex.bridge.service.types.clock.IClockService;
 import jadex.commons.SimplePropertyObject;
 import jadex.extension.envsupport.environment.IEnvironmentSpace;
@@ -10,7 +12,6 @@ import jadex.extension.envsupport.environment.space2d.Space2D;
 import jadex.extension.envsupport.math.IVector2;
 import jadex.extension.envsupport.math.Vector2Int;
 
-import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,22 +45,7 @@ public class WorldGenerator extends SimplePropertyObject implements ISpaceProces
 
 	private boolean readMap(char[][] map, int width, int height)
 	{
-		File file = new File("resources/Map.txt");
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file)))
-		{
-			for(int i = 0; i < height; i++)
-			{
-				bufferedReader.read(map[i], 0, width);
-				bufferedReader.skip(2);
-			}
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			return false;
-		}
-
-		return true;
+		return TerrainReader.readMap("resources/Map.txt", map, width, height);
 	}
 
 	private void drawMap(Space2D space, char[][] map)
@@ -77,12 +63,30 @@ public class WorldGenerator extends SimplePropertyObject implements ISpaceProces
 						drawTerrainSquare(space, j, i, 1);
 						break;
 
-					case 'W':
+					case 'E':
+						drawExitDoor(space, j, i);
+						break;
+
+					case 'A':
 						AbstractAgentFactory.createAgent(AgentType.Wanderer, space, j, i);
+						break;
+
+					case 'H':
+						AbstractAgentFactory.createAgent(AgentType.Herding, space, j, i);
+						break;
+
+					case 'C':
+						AbstractAgentFactory.createAgent(AgentType.Conservative, space, j, i);
 						break;
 				}
 			}
 		}
+	}
+
+	private void drawExitDoor(Space2D space, int x, int y) {
+		Map<String, Object> properties = new HashMap<>();
+		properties.put("position", new Vector2Int(x, y));
+		space.createSpaceObject(TypesObjects.DOOR, properties, null);
 	}
 
 	private void drawTerrainSquare(Space2D space, int x, int y, int terrainType)
@@ -91,6 +95,6 @@ public class WorldGenerator extends SimplePropertyObject implements ISpaceProces
 		properties.put("position", new Vector2Int(x, y));
 		properties.put("type", terrainType);
 
-		space.createSpaceObject("terrain", properties, null);
+		space.createSpaceObject(TypesObjects.TERRAIN, properties, null);
 	}
 }

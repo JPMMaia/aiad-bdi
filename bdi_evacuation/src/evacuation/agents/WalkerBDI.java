@@ -38,10 +38,10 @@ public class WalkerBDI {
     //Speed
 
     @Belief
-    Double speed;
+    Double speed = 1.0;
 
     @Belief
-    int millis = 500;
+    int millis = ((Double) (1000/speed)).intValue();
 
     //Other
 
@@ -85,23 +85,16 @@ public class WalkerBDI {
             if(worldMethods.noCollisionsInPosition(nextPosition)){
                 if(!nextPosition.equals(currentPosition)) {
 
-                    if (worldMethods.getNumAgentInCell(currentPosition) == 2) {
-                        worldMethods.deleteSomeoneInMyCellObject(currentPosition);
-                    }
-
-                    worldMethods.makeSomeoneInMyCell(nextPosition);
-                    worldMethods.removeAgentFromOldCell(currentPosition);
-                    worldMethods.putAgentInNewCell(nextPosition);
-
+                    worldMethods.resolveTwoAgentsInSameCell(currentPosition, nextPosition);
                     myself.setProperty("position", new Vector2Int(nextPosition.x, nextPosition.y));
                     currentPosition = nextPosition;
                 }
+            }
 
-                try {
-                    Thread.sleep(millis);
-                } catch (InterruptedException e) {
-                    System.out.println("unable to sleep");
-                }
+            try {
+                Thread.sleep(millis);
+            } catch (InterruptedException e) {
+                System.out.println("unable to sleep");
             }
         }
     }
@@ -111,6 +104,7 @@ public class WalkerBDI {
     @AgentBody
     public void body(){
         currentPosition = move.getPosition(myself);
-        //worldMethods.putAgentInNewCell(currentPosition);
+        worldMethods.putAgentInNewCellMap(currentPosition);
+        speed = 1.0; //cells by second 1 -> 1000 millis ; 2 -> 500 ; 4 -> 250 millis
     }
 }

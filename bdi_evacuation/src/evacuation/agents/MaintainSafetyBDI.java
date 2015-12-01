@@ -9,6 +9,9 @@ import jadex.micro.annotation.AgentBody;
 @Agent
 public class MaintainSafetyBDI extends MaintainHealthBDI{
 
+    boolean speed_mode = true;
+    boolean patience_mode = true;
+
     @Belief(updaterate=500)
     protected int riskPerception = evaluateAgentSituation();
 
@@ -77,9 +80,9 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
                 res = riskPerception;
             }
             else{
-                res = evaluateRiskAndCondition();
-                if(condition > 50 && inPanic) {
-                    if (worldMethods.getNumAgentInCell(currentPosition) >= 1) {
+                res = evaluateRiskConditionVelocity();
+                if(condition > 50 && inPanic && patience_mode && !patient) {
+                    if (worldMethods.getNumAgentInCellMap(currentPosition) >= 1) {
                         System.out.println("someone in my cell");
                         agent.dispatchTopLevelGoal(new PushOthersGoal());
                     }
@@ -88,7 +91,6 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
 
                 }
                 else if(condition > 50 && worldMethods.someoneNeedsHelp(currentPosition, DISTANCE_TO_HELP)){
-                    System.out.println("someone needs help");
                     agent.dispatchTopLevelGoal(new HelpOthersGoal());
                     helping = true;
                 }
@@ -110,12 +112,12 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
         return res;
     }
 
-    protected int evaluateRiskAndCondition() {
+    protected int evaluateRiskConditionVelocity() {
         evaluateCondition();
-        return evaluateRisk();
+        return evaluateRiskAndVelocity();
     }
 
-    protected int evaluateRisk() {
+    protected int evaluateRiskAndVelocity() {
 
         int valueForRiskPerception;
 
@@ -145,7 +147,17 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
                 valueForRiskPerception = 90;
         }
 
+        if(speed_mode == true)
+            evaluateVelocity(valueForRiskPerception);
+
         return valueForRiskPerception;
+    }
+
+    private void evaluateVelocity(int valueForRiskPerception) {
+        //[0.25-4]
+        // condition
+        // valueForRiskPerception
+        speed = 1.0;
     }
 
     @AgentBody

@@ -1,5 +1,6 @@
 package evacuation.agents;
 
+import evacuation.utils.PersonState;
 import evacuation.utils.Position;
 import evacuation.utils.TypesObjects;
 import evacuation.utils.TypesProperties;
@@ -7,7 +8,6 @@ import jadex.bdiv3.annotation.*;
 import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.SpaceObject;
 import jadex.extension.envsupport.math.IVector1;
-import jadex.extension.envsupport.math.IVector2;
 import jadex.extension.envsupport.math.Vector2Int;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
@@ -20,11 +20,17 @@ import java.util.Map;
 public class SocialAgentBDI extends WalkerBDI{
 
     //CONSTANTS***************************
-
     protected static final int DISTANCE_TO_HELP = 10;
 
     // CURE ATTRIBUTES
     protected HashSet<SpaceObject> cures;
+
+    //PERSONALITY
+
+    PersonState personState = new PersonState();
+
+    @Belief
+    boolean patient = personState.getPatience();
 
     @Goal
     public class HelpOthersGoal { //altruisticamente ajudando os outros. //triggered by others call warning (env)
@@ -60,7 +66,7 @@ public class SocialAgentBDI extends WalkerBDI{
                 double distance = distanceIV.getAsDouble();
 
                 if (distance <= 1) {//if it is near than cure
-                    System.out.println("cure"); //create cure object
+                    //System.out.println("cure"); //create cure object
                     Map<String, Object> properties = new HashMap<>();
                     properties.put("position", new Vector2Int(targetPosition.x, targetPosition.y));
                     SpaceObject cure = (SpaceObject) space.createSpaceObject(TypesObjects.CURE_AGENT, properties, null);

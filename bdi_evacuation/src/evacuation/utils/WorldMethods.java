@@ -12,7 +12,7 @@ public class WorldMethods {
     static Map numAgentsByCell = Collections.synchronizedMap(new HashMap<String,Integer>());
 
 
-    public synchronized void putAgentInNewCell(Position currentPosition) {
+    public synchronized void putAgentInNewCellMap(Position currentPosition) {
         String key = currentPosition.x + "." + currentPosition.y;
         Integer value = 1;
 
@@ -25,9 +25,12 @@ public class WorldMethods {
         else{
             numAgentsByCell.put(key, value);
         }
+
+        if(value > 2)
+            System.out.println("value - " + value);
     }
 
-    public synchronized Integer getNumAgentInCell(Position currentPosition) {
+    public synchronized Integer getNumAgentInCellMap(Position currentPosition) {
         String key = currentPosition.x + "." + currentPosition.y;
 
         if(numAgentsByCell.containsKey(key))
@@ -36,9 +39,12 @@ public class WorldMethods {
         return 0;
     }
 
-    public synchronized void removeAgentFromOldCell(Position currentPosition) {
+    public synchronized void removeAgentFromOldCellMap(Position currentPosition) {
         String key = currentPosition.x + "." + currentPosition.y;
-        Integer value;
+        Integer value = 0;
+
+        if(value > 2)
+            System.out.println("value - " + value);
 
         if(numAgentsByCell.containsKey(key)) {
             value = (Integer) numAgentsByCell.get(key);
@@ -48,6 +54,8 @@ public class WorldMethods {
             if(value > 0)
                 numAgentsByCell.put(key, value);
         }
+        if(value > 2)
+            System.out.println("value - " + value);
     }
     ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -73,7 +81,7 @@ public class WorldMethods {
             return false;
         else if(!hurtSet.isEmpty()) //there are two agents in the position
             return false;
-        else if(getNumAgentInCell(p) >= 2)
+        else if(getNumAgentInCellMap(p) >= 2)
             return false;
 
         return true;
@@ -204,12 +212,17 @@ public class WorldMethods {
         return res;
     }
 
-    public void makeSomeoneInMyCell(Position newPosition) {
-        //if there is another guy in the new cell, create a someone in my cell
-        //if(someoneInMyCell(newPosition)){
-        String key = newPosition.x + "." + newPosition.y;
-        if(numAgentsByCell.containsKey(key) && numAgentsByCell.get(key) == 1){
-            makeTwoObjectsSameCell(newPosition, TypesObjects.SAME_CELL);
+    //TWO AGENTS SAME CELL
+
+    public void resolveTwoAgentsInSameCell(Position currentPosition, Position nextPosition) {
+        if (getNumAgentInCellMap(currentPosition) == 2) {
+            deleteSomeoneInMyCellObject(currentPosition);
+        }
+
+        removeAgentFromOldCellMap(currentPosition);
+        if(nextPosition != null) {
+            checkAndMakeSomeoneInMyCell(nextPosition);
+            putAgentInNewCellMap(nextPosition);
         }
     }
 
@@ -223,4 +236,16 @@ public class WorldMethods {
             space.destroyAndVerifySpaceObject(((SpaceObject) it).getId());
         }
     }
+
+    public void checkAndMakeSomeoneInMyCell(Position newPosition) {
+        //if there is another guy in the new cell, create a someone in my cell
+        String key = newPosition.x + "." + newPosition.y;
+        if(getNumAgentInCellMap(newPosition) == 1){
+            makeTwoObjectsSameCell(newPosition, TypesObjects.SAME_CELL);
+        }
+    }
+
+
+
+
 }

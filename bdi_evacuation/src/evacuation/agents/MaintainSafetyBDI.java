@@ -74,13 +74,14 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
         int res = 0;
         boolean helping = false;
 
+        res = evaluateRiskConditionVelocity();
+
         if(agent.getGoals().isEmpty()) {
             if (!worldMethods.isIncident()) {
                 agent.dispatchTopLevelGoal(new WanderGoal());
                 res = riskPerception;
             }
             else{
-                res = evaluateRiskConditionVelocity();
                 if(condition > 50 && inPanic && patience_mode && !patient) {
                     if (worldMethods.getNumAgentInCellMap(currentPosition) >= 1) {
                         System.out.println("someone in my cell");
@@ -138,14 +139,18 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
         }
         else if(minDistance <= Math.sqrt(2))
             valueForRiskPerception = 90;
-        else
+        else if(incidentsArray.length > 0)
             valueForRiskPerception = 50;
+        else
+            valueForRiskPerception = 0;
 
         //escaping possibility
         if(!emptyPathToTheExit){
             if(valueForRiskPerception < 90)
                 valueForRiskPerception = 90;
         }
+
+        valueForRiskPerception = personState.getRiskPerception(valueForRiskPerception);
 
         if(speed_mode == true)
             evaluateVelocity(valueForRiskPerception);
@@ -154,10 +159,8 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
     }
 
     private void evaluateVelocity(int valueForRiskPerception) {
-        //[0.25-4]
-        // condition
-        // valueForRiskPerception
-        speed = 1.0;
+        //[0.25-2]
+        speed = condition/100.0 + valueForRiskPerception*2/100.0;
     }
 
     @AgentBody

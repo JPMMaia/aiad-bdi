@@ -19,7 +19,7 @@ import java.util.*;
 public class IncidentProcess extends SimplePropertyObject implements ISpaceProcess {
 
 	//TIMERS FOR THE INCIDENT
-	private static final long initialWaitingTime = 1000;
+	private static final long initialWaitingTime = 4000;
 	private static long startTime = 0; //get from the jadex clock
 	private static long incidentProgressTimer = 2000; //interval between the generation of new incident objects
 

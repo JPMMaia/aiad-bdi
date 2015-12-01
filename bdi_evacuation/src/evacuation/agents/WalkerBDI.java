@@ -37,11 +37,11 @@ public class WalkerBDI {
 
     //Speed
 
-    @Belief
-    Double speed = 1.0;
+    @Belief(dynamic=true)
+    protected Double speed = 1.0;
 
-    @Belief
-    int millis = ((Double) (1000/speed)).intValue();
+    @Belief(dynamic=true)
+    protected int millis = getWaitTime();
 
     //Other
 
@@ -55,6 +55,11 @@ public class WalkerBDI {
 
     WorldMethods worldMethods = new WorldMethods(space);
     Move move = new Move( space.getAreaSize().getXAsInteger(), space.getAreaSize().getYAsInteger());
+
+    public int getWaitTime() {
+        int waitTime = (int)(1000.0/speed);
+        return waitTime;
+    }
 
     //GOALS*************************************************
 
@@ -92,7 +97,8 @@ public class WalkerBDI {
             }
 
             try {
-                Thread.sleep(millis);
+                System.out.println("wait - " + getWaitTime());
+                Thread.sleep(getWaitTime());
             } catch (InterruptedException e) {
                 System.out.println("unable to sleep");
             }

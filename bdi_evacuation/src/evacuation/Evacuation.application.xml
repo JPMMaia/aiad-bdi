@@ -205,7 +205,7 @@
                     <env:drawable objecttype="terrain" height="1.0" width="1.0">
 
                         <!-- Grass avatar -->
-                        <env:texturedrectangle layer="2" imagepath="images/terrain_2.png">
+                        <env:texturedrectangle layer="1" imagepath="images/terrain_2.png">
                             <env:drawcondition>$object.type.equals(0)</env:drawcondition>
                         </env:texturedrectangle>
 
@@ -223,12 +223,12 @@
 
 					<!-- Wanderer avatar -->
 					<env:drawable objecttype="dead_agent" height="1.0" width="1.0">
-						<env:texturedrectangle layer="2" imagepath="images/dead_agent.png"/>
+						<env:texturedrectangle layer="6" imagepath="images/dead_agent.png"/>
 					</env:drawable>
 
 					<!-- Wanderer avatar -->
 					<env:drawable objecttype="hurt_agent" height="1.0" width="1.0">
-						<env:texturedrectangle layer="4" imagepath="images/hurt_agent.png"/>
+						<env:texturedrectangle layer="6" imagepath="images/hurt_agent.png"/>
 					</env:drawable>
 
 					<env:drawable objecttype="same_cell" height="1.0" width="1.0">

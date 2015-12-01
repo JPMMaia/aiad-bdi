@@ -9,6 +9,48 @@ import java.util.*;
 
 public class WorldMethods {
 
+    static Map numAgentsByCell = Collections.synchronizedMap(new HashMap<String,Integer>());
+
+
+    public synchronized void putAgentInNewCell(Position currentPosition) {
+        String key = currentPosition.x + "." + currentPosition.y;
+        Integer value = 1;
+
+        if(numAgentsByCell.containsKey(key)) {
+            value = (Integer) numAgentsByCell.get(key);
+            numAgentsByCell.remove(key);
+            value++;
+            numAgentsByCell.put(key, value);
+        }
+        else{
+            numAgentsByCell.put(key, value);
+        }
+    }
+
+    public synchronized Integer getNumAgentInCell(Position currentPosition) {
+        String key = currentPosition.x + "." + currentPosition.y;
+
+        if(numAgentsByCell.containsKey(key))
+            return (Integer) numAgentsByCell.get(key);
+
+        return 0;
+    }
+
+    public synchronized void removeAgentFromOldCell(Position currentPosition) {
+        String key = currentPosition.x + "." + currentPosition.y;
+        Integer value;
+
+        if(numAgentsByCell.containsKey(key)) {
+            value = (Integer) numAgentsByCell.get(key);
+            numAgentsByCell.remove(key);
+            value--;
+
+            if(value > 0)
+                numAgentsByCell.put(key, value);
+        }
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
     protected Grid2D space;
 
     public WorldMethods(Grid2D space){
@@ -17,22 +59,21 @@ public class WorldMethods {
 
     //COLLISIONS QUERIES
 
-    public boolean noCollisionsInPosition(Position p) {
+    public synchronized boolean noCollisionsInPosition(Position p) {
         Vector2Double wantedPosition = new Vector2Double(p.x,p.y);
         IVector1 distance = new Vector1Double(0);
 
         Set terrainSet = space.getNearObjects(wantedPosition,distance,TypesObjects.TERRAIN);
         Set incidentSet = space.getNearObjects(wantedPosition,distance,TypesObjects.INCIDENT);
-        Set sameCellSet = space.getNearObjects(wantedPosition,distance,TypesObjects.SAME_CELL);
         Set hurtSet = space.getNearObjects(wantedPosition,distance,TypesObjects.HURT_AGENT);
 
         if(!terrainSet.isEmpty()) //there is a wall or an obstacle
             return false;
         else if(!incidentSet.isEmpty()) //there are incidents in the way
             return false;
-        else if(!sameCellSet.isEmpty()) //there are two agents in the position
-            return false;
         else if(!hurtSet.isEmpty()) //there are two agents in the position
+            return false;
+        else if(getNumAgentInCell(p) >= 2)
             return false;
 
         return true;
@@ -120,25 +161,6 @@ public class WorldMethods {
 
     //SOCIAL AGENT QUERIES
 
-    public boolean someoneInMyCell(Position p) {
-
-        Vector2Double wantedPosition = new Vector2Double(p.x,p.y);
-        IVector1 distance = new Vector1Double(0);
-
-        Set activeSet = space.getNearObjects(wantedPosition,distance,TypesObjects.WANDERER);
-        Set herdingSet = space.getNearObjects(wantedPosition,distance,TypesObjects.HERDING);
-        Set conservativeSet = space.getNearObjects(wantedPosition,distance,TypesObjects.CONSERVATIVE);
-
-        if(activeSet.size() > 0)
-            return true;
-        else if(herdingSet.size() > 0) //there are two agents in the position
-            return true;
-        else if(conservativeSet.size() > 0) //there are two agents in the position
-            return true;
-
-        return false;
-    }
-
     public boolean someoneNeedsHelp(Position actualPosition, int distance) {
         String[] types = {TypesObjects.HURT_AGENT};
         Vector2Double wantedPosition = new Vector2Double(actualPosition.x, actualPosition.y);
@@ -172,7 +194,6 @@ public class WorldMethods {
     // NEW OBJECTS METHODS
 
 
-
     private SpaceObject makeTwoObjectsSameCell(Position targetPosition, String type){
         SpaceObject res;
 
@@ -183,21 +204,48 @@ public class WorldMethods {
         return res;
     }
 
-    //ERASE OBJECTS METHODS
-
-    public SpaceObject makeSomeoneInMyCell(Position newPosition) {
-
+    public void makeSomeoneInMyCell(Position newPosition) {
         //if there is another guy in the new cell, create a someone in my cell
-        if(someoneInMyCell(newPosition)){
-            return makeTwoObjectsSameCell(newPosition, TypesObjects.SAME_CELL);
+        //if(someoneInMyCell(newPosition)){
+        String key = newPosition.x + "." + newPosition.y;
+        if(numAgentsByCell.containsKey(key) && numAgentsByCell.get(key) == 1){
+            makeTwoObjectsSameCell(newPosition, TypesObjects.SAME_CELL);
         }
-
-        return null;
     }
 
-    public void deleteSomeoneInMyCell(SpaceObject obj) {
-        if(obj != null){
-            space.destroyAndVerifySpaceObject(obj.getId());
+    public void deleteSomeoneInMyCellObject(Position currentPosition) {
+
+        Vector2Double wantedPosition = new Vector2Double(currentPosition.x,currentPosition.y);
+        IVector1 distance = new Vector1Double(0);
+
+        Set objectSet = space.getNearObjects(wantedPosition,distance,TypesObjects.SAME_CELL);
+        for(Object it : objectSet){
+            space.destroyAndVerifySpaceObject(((SpaceObject) it).getId());
         }
     }
 }
+
+
+
+
+
+
+ /*
+    public boolean someoneInMyCell(Position p) {
+
+        Vector2Double wantedPosition = new Vector2Double(p.x,p.y);
+        IVector1 distance = new Vector1Double(0);
+
+        Set activeSet = space.getNearObjects(wantedPosition,distance,TypesObjects.WANDERER);
+        Set herdingSet = space.getNearObjects(wantedPosition,distance,TypesObjects.HERDING);
+        Set conservativeSet = space.getNearObjects(wantedPosition,distance,TypesObjects.CONSERVATIVE);
+
+        if(activeSet.size() > 0)
+            return true;
+        else if(herdingSet.size() > 0) //there are two agents in the position
+            return true;
+        else if(conservativeSet.size() > 0) //there are two agents in the position
+            return true;
+
+        return false;
+    }*/

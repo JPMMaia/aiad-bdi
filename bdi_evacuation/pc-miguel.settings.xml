@@ -1,8 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <p0:properties xmlns:p0="http://jadex.sourceforge.net/jadexconf" __ID="0">
-	<p0:properties __ID="1" type="StarterServicePanel">
+	<p0:properties __ID="1" type="TestCenterPlugin">
 		<p0:properties __ID="2" type="mpanel">
 			<p0:property __ID="3" type="tree"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<p0:TreeProperties xmlns:p0="typeinfo:jadex.base.gui.filetree" __ID="0">
+	<expandedNodes>
+		<p0:NodePath__1 __ID="1" __len="0"></p0:NodePath__1>
+	</expandedNodes>
+	<rootPathEntries>
+		<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="2" __len="0"></p1:String__1>
+	</rootPathEntries>
+</p0:TreeProperties>
+]]></p0:property>
+			<p0:properties __ID="4" type="mic">
+				<p0:property __ID="5" type="BPMN Process">true</p0:property>
+				<p0:property __ID="6" type="Application">true</p0:property>
+				<p0:property __ID="7" type="Component">true</p0:property>
+				<p0:property __ID="8" type="Micro Agent">true</p0:property>
+			</p0:properties>
+		</p0:properties>
+		<p0:properties __ID="9" type="tcpanel">
+			<p0:property __ID="10" type="timeout">20000</p0:property>
+			<p0:property __ID="11" type="concurrency">1</p0:property>
+			<p0:property __ID="12" type="allowduplicates">false</p0:property>
+		</p0:properties>
+	</p0:properties>
+	<p0:properties __ID="13" type="StarterServicePanel">
+		<p0:properties __ID="14" type="mpanel">
+			<p0:property __ID="15" type="tree"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
 <p0:TreeProperties xmlns:p0="typeinfo:jadex.base.gui.filetree" __ID="0">
 	<selectedNode>
 		<p0:NodePath __ID="1" entry="0">
@@ -68,63 +93,63 @@
 	</rootPathEntries>
 </p0:TreeProperties>
 ]]></p0:property>
-			<p0:properties __ID="4" type="mic">
-				<p0:property __ID="5" type="BPMN Process">true</p0:property>
-				<p0:property __ID="6" type="Application">true</p0:property>
-				<p0:property __ID="7" type="Component">true</p0:property>
-				<p0:property __ID="8" type="Micro Agent">true</p0:property>
-				<p0:property __ID="9" type="BDIV3 Agent">true</p0:property>
+			<p0:properties __ID="16" type="mic">
+				<p0:property __ID="17" type="BPMN Process">true</p0:property>
+				<p0:property __ID="18" type="Application">true</p0:property>
+				<p0:property __ID="19" type="Component">true</p0:property>
+				<p0:property __ID="20" type="Micro Agent">true</p0:property>
 			</p0:properties>
 		</p0:properties>
-		<p0:properties __ID="10" type="spanel">
-			<p0:property __ID="11" type="model">out\production\bdi_evacuation\evacuation\Evacuation.application.xml</p0:property>
-			<p0:property __ID="12" type="ridurl">file:out</p0:property>
-			<p0:property __ID="13" type="globalrid"></p0:property>
-			<p0:property __ID="14" type="config">Default</p0:property>
-			<p0:property __ID="15" type="startsuspended">false</p0:property>
-			<p0:property __ID="16" type="autogenerate">false</p0:property>
-			<p0:property __ID="17" type="number">1</p0:property>
-			<p0:property __ID="18" type="name">Evacuation</p0:property>
+		<p0:properties __ID="21" type="spanel">
+			<p0:property __ID="22" type="model">out\production\bdi_evacuation\evacuation\Evacuation.application.xml</p0:property>
+			<p0:property __ID="23" type="ridurl">file:out</p0:property>
+			<p0:property __ID="24" type="globalrid"></p0:property>
+			<p0:property __ID="25" type="config">Default</p0:property>
+			<p0:property __ID="26" type="startsuspended">false</p0:property>
+			<p0:property __ID="27" type="autogenerate">false</p0:property>
+			<p0:property __ID="28" type="number">1</p0:property>
+			<p0:property __ID="29" type="name">Evacuation</p0:property>
 		</p0:properties>
 	</p0:properties>
-	<p0:properties __ID="19" type="chat">
-		<p0:property __ID="20" type="nickname">user_b5b</p0:property>
+	<p0:properties __ID="30" type="chat">
+		<p0:property __ID="31" type="nickname">Miguew</p0:property>
+		<p0:property __ID="32" type="image">iVBORw0KGgoAAAANSUhEUgAAACgAAAAaCAIAAABKLomcAAAExElEQVR42k2WTWtcZRTH76qTSLSWUKgKRRDddtOlCoK49QOIiwqFVhcF0aWIIoJfwEU3fgRxpSB5adppZpLQFlNNkFpptHbmzn2bOy9rf/f+Jod5CE+ee855zuv/nGeS0WiUpmmWZWVZshdFUbYrz3NY7OPxmF1uXdeeIXILYQ7QIaqBhcxkMoGbtwslw+EQblVVnJHnADeByj8+uMPONXbYXJ7P596ByA4RCvTZbIbG6XSatQsKGiHCxRXOyHOGxXUoHBBGAM16ADdRI4sLkNDIzgXkjFWuURbtwtFRuzhjg09sK6wxKNC5opghwYIOdzAYIJ9oHxWmwiA4R85xFi3sqnPXfROLPT7RaGk4f/nBm19/+Fak3dyyVGVlFxEjxE0taVj3DVGHpHBNBChmZOzKNNrvXWrCTIfeNWey+MQty59YbQtjfOy4qXahBJesmGrzhgAsfWeftavRePJLsXc53exkhx8LJb3nuqWMijTgMtUs1AW8zRvcql3olWtkEbRxqzH9+6fyz2/Svfcmuy8in50uJDEhMoQb4SWQBH04JSZRzR4QMyApLOUVE//l042ie2F6dGXaP59tdxbElmuZVTJtFzoTvgWnukS1SpEwS+bWDtEhuZ5VXe+uF896xc7K5O4Ls70Lpkcxl4mUgsLEwIW7ZQ4HTZSGbbDlXvfKoiN+v1qf/FDdfm58Z62+e1bcGI+uGz0r2j3RBfQaq21n13sn2tEZZ/INvRkso2f5b1eyo69Gd14bbJypu89P++te1zmBLWU5pMSMm1VNRqvooLUR4SbNVm4UVU+Kh9fLv74fH1wub6/mt1bm+y9HAEKSz0ClrSUwE/Gsdyq10z1Ep1oOp5VAS//ZLY4+L09+TLdWJ71z+a3OcONMzBwzp3k/hXSMhMRucxIZtDyhJJIDVrb7uBxW//2aHX+bH34y33+FKMudVQqcba8445zqAfhIryNPhYkRONWkmmTNRzlx1jzng8Phg6vFH5+Njz8lt8yK4nR3qoheoxQ6KHGymm3VJlFzRDn4BvjeLbdEM6cGj4unm8XxF/nDG0X/EpbKnZVxd41D3r1otrSxPE0DXAEdWUm8oyznsBTfVF+bKn8yHvbSg/ezRzeL3hsEWnfXhhudfLsz2urkh9dMjIVYTLF2TumNgVlgxxQr8dXzTY0qCkXjztPH1f13q+65yd6rWuJv1l9nPFFaK+UkN5O8eg4idToH40W3R1gNuHwSxDBsO9UsNb5tdQDOaLPZye2sf55w5/svlb3XjcyKxjxfnrV2jnX0M/xI4qeJLWQ5nVnfffQO+QQ47ExgDvxhu77/tmkkOJ2LyarrMXlEiRPX3nGWNeCKbhFcDhPf5obx7835wcV0++z80Y3p4Gc1Ys8gzLDtYFuacMVUKDxtaN8oH6tFjW0h3TdRol3tlkq46agl9IXQacV0JR6SKK0KtaJ8oneW3YjNmFXXX98ff7iIDtEeT1mkKnAbA9FiO1LEkwVKdCrmg0pVgeFlgIgLDw5Uf5Msh8h1J4Fw8TU0H85t+2rx89Z3KoCneVGgdp8HO6c+XTFkzIG2m4HaEk1PJNa6RI0aVOtU/Nb0fiTcgSBd2KvdNHrRARBxyxUiwjZ+tgpAD/8DmN8D7zXmLKYAAAAASUVORK5CYII=</p0:property>
 	</p0:properties>
-	<p0:properties __ID="21" type="awa">
-		<p0:property __ID="22" type="fast">false</p0:property>
-		<p0:property __ID="23" type="autocreate">true</p0:property>
-		<p0:property __ID="24" type="autodelete">true</p0:property>
+	<p0:properties __ID="33" type="awa">
+		<p0:property __ID="34" type="fast">false</p0:property>
+		<p0:property __ID="35" type="autocreate">true</p0:property>
+		<p0:property __ID="36" type="autodelete">true</p0:property>
 	</p0:properties>
-	<p0:properties __ID="25" type="simulationservice">
-		<p0:property __ID="26" type="executing">true</p0:property>
+	<p0:properties __ID="37" type="simulationservice">
+		<p0:property __ID="38" type="executing">true</p0:property>
 	</p0:properties>
-	<p0:properties __ID="27" type="securityservice">
-		<p0:property __ID="28" type="validityduration">327680</p0:property>
-		<p0:property __ID="29" type="usepass">true</p0:property>
-		<p0:property __ID="30" type="password">0bc4fd24-786</p0:property>
-		<p0:property __ID="31" type="selected_mechanism">0</p0:property>
-		<p0:property __ID="32" type="trustedlan">false</p0:property>
-		<p0:property __ID="33" type="storepath">./keystore</p0:property>
-		<p0:property __ID="34" type="storepass">keystore</p0:property>
-		<p0:property __ID="35" type="keypass">keystore</p0:property>
-		<p0:property __ID="36" type="selmech">0</p0:property>
-		<p0:properties __ID="37" type="DecentralizedAcquisitionMechanism">
-			<p0:property __ID="38" type="responses">1</p0:property>
+	<p0:properties __ID="39" type="securityservice">
+		<p0:property __ID="40" type="validityduration">327680</p0:property>
+		<p0:property __ID="41" type="usepass">true</p0:property>
+		<p0:property __ID="42" type="password">0bc4fd24-786</p0:property>
+		<p0:property __ID="43" type="selected_mechanism">0</p0:property>
+		<p0:property __ID="44" type="trustedlan">false</p0:property>
+		<p0:property __ID="45" type="storepath">./keystore</p0:property>
+		<p0:property __ID="46" type="storepass">keystore</p0:property>
+		<p0:property __ID="47" type="keypass">keystore</p0:property>
+		<p0:property __ID="48" type="selmech">0</p0:property>
+		<p0:properties __ID="49" type="DecentralizedAcquisitionMechanism">
+			<p0:property __ID="50" type="responses">1</p0:property>
 		</p0:properties>
-		<p0:properties __ID="39" type="TTPAcquisitionMechanism">
-			<p0:property __ID="40" type="verify">true</p0:property>
+		<p0:properties __ID="51" type="TTPAcquisitionMechanism">
+			<p0:property __ID="52" type="verify">true</p0:property>
 		</p0:properties>
 	</p0:properties>
-	<p0:properties __ID="41" type="clockservice">
-		<p0:property __ID="42" type="type">system</p0:property>
-		<p0:property __ID="43" type="delta">100</p0:property>
-		<p0:property __ID="44" type="dilation">1.0</p0:property>
+	<p0:properties __ID="53" type="clockservice">
+		<p0:property __ID="54" type="type">system</p0:property>
+		<p0:property __ID="55" type="delta">100</p0:property>
+		<p0:property __ID="56" type="dilation">1.0</p0:property>
 	</p0:properties>
-	<p0:properties __ID="45" type="library_service">
-		<p0:properties __ID="46" type="link">
-			<p0:properties __ID="47" type="a"></p0:properties>
-			<p0:properties __ID="48" type="b">
-				<p0:property __ID="49" type="lid_url">file:out</p0:property>
+	<p0:properties __ID="57" type="library_service">
+		<p0:properties __ID="58" type="link">
+			<p0:properties __ID="59" type="a"></p0:properties>
+			<p0:properties __ID="60" type="b">
+				<p0:property __ID="61" type="lid_url">file:out</p0:property>
 			</p0:properties>
 		</p0:properties>
 	</p0:properties>

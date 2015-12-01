@@ -21,14 +21,14 @@
 		<p0:property __ID="15" name="jadex.tools.security.SecurityServicePlugin" type="ISecurityService">true</p0:property>
 	</p0:properties>
 	<p0:properties __ID="16" type="controlcenter">
-		<p0:property __ID="17" type="perspective">Starter</p0:property>
+		<p0:property __ID="17" type="perspective">Chat</p0:property>
 		<p0:property __ID="18" type="consoleenabled">false</p0:property>
 		<p0:property __ID="19" type="consoleheights"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
 <p0:HashMap xmlns:p0="typeinfo:java.util" __ID="0">
 	<entries>
 		<entry __ID="1">
 			<key>
-				<p1:String xmlns:p1="typeinfo:java.lang" __ID="2">Awareness Settings.console.height</p1:String>
+				<p1:String xmlns:p1="typeinfo:java.lang" __ID="2">Component Viewer.console.height</p1:String>
 			</key>
 			<value>
 				<p1:Double xmlns:p1="typeinfo:java.lang" __ID="3" content="1.0"></p1:Double>
@@ -36,7 +36,7 @@
 		</entry>
 		<entry __ID="4">
 			<key>
-				<p1:String xmlns:p1="typeinfo:java.lang" __ID="5">Component Viewer.console.height</p1:String>
+				<p1:String xmlns:p1="typeinfo:java.lang" __ID="5">Awareness Settings.console.height</p1:String>
 			</key>
 			<value>
 				<p1:Double xmlns:p1="typeinfo:java.lang" __ID="6" content="1.0"></p1:Double>
@@ -86,15 +86,17 @@
 		<p0:properties __ID="24" type="panelproperties">
 			<p0:property __ID="25" type="autorefresh">false</p0:property>
 			<p0:property __ID="26" type="sound">true</p0:property>
+			<p0:property __ID="27" type="listpan">0.5</p0:property>
+			<p0:property __ID="28" type="horsplit">0.2997448979591837</p0:property>
 		</p0:properties>
 	</p0:properties>
-	<p0:properties __ID="27" type="window">
-		<p0:property __ID="28" type="width">819</p0:property>
-		<p0:property __ID="29" type="height">650</p0:property>
-		<p0:property __ID="30" type="x">0</p0:property>
-		<p0:property __ID="31" type="y">0</p0:property>
-		<p0:property __ID="32" type="extendedState">0</p0:property>
-		<p0:property __ID="33" type="jccexit">ask</p0:property>
-		<p0:property __ID="34" type="saveonexit">true</p0:property>
+	<p0:properties __ID="29" type="window">
+		<p0:property __ID="30" type="width">819</p0:property>
+		<p0:property __ID="31" type="height">650</p0:property>
+		<p0:property __ID="32" type="x">0</p0:property>
+		<p0:property __ID="33" type="y">0</p0:property>
+		<p0:property __ID="34" type="extendedState">0</p0:property>
+		<p0:property __ID="35" type="jccexit">ask</p0:property>
+		<p0:property __ID="36" type="saveonexit">true</p0:property>
 	</p0:properties>
 </p0:properties>

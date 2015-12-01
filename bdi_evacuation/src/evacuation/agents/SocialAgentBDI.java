@@ -66,8 +66,10 @@ public class SocialAgentBDI extends WalkerBDI{
                     SpaceObject cure = (SpaceObject) space.createSpaceObject(TypesObjects.CURE_AGENT, properties, null);
                     cures.add(cure);
                 }
-                else //go to the hurt
-                    nextPosition = worldMethods.findPathToObject(hurtAgent, currentPosition);
+                else { //go to the hurt
+                    Position wantedPosition = worldMethods.findPathToObject(hurtAgent, currentPosition);
+                    nextPosition = wantedPosition;
+                }
             }
         }
     }

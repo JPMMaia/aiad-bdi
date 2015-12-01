@@ -79,7 +79,7 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
             else{
                 res = evaluateRiskAndCondition();
                 if(condition > 50 && inPanic) {
-                    if (worldMethods.someoneInMyCell(currentPosition)) {
+                    if (worldMethods.getNumAgentInCell(currentPosition) >= 1) {
                         System.out.println("someone in my cell");
                         agent.dispatchTopLevelGoal(new PushOthersGoal());
                     }

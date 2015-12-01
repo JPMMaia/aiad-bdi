@@ -21,7 +21,7 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 	//TIMERS FOR THE INCIDENT
 	private static final long initialWaitingTime = 1000;
 	private static long startTime = 0; //get from the jadex clock
-	private static long incidentProgressTimer = 7000; //interval between the generation of new incident objects
+	private static long incidentProgressTimer = 2000; //interval between the generation of new incident objects
 
 	//OTHER VARIABLES FOR CALCULATIONS OF NEW INCIDENTS
 	private int desiredNumIncidentPositions; //for the calculations
@@ -49,7 +49,7 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 		desiredNumIncidentPositions = 1;
 		incidentPositions = new HashSet<>();
 
-		incidentType = 0;//r.nextInt(3); //0 - fire ; 1 - water; 2 - terrorist
+		incidentType = 2;//r.nextInt(3); //0 - fire ; 1 - water; 2 - terrorist
 	}
 
     @Override

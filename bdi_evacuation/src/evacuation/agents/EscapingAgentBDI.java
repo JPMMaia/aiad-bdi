@@ -25,8 +25,7 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
             //System.out.println("Find exit");
 
             Position wantedPosition = findExit();
-            if(worldMethods.noCollisionsInPosition(wantedPosition))
-                nextPosition = wantedPosition;
+            nextPosition = wantedPosition;
         }
     }
 

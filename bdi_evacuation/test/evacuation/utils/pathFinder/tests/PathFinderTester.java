@@ -1,4 +1,4 @@
-package evacuation.utils.terrain.tests;
+package evacuation.utils.pathFinder.tests;
 
 import evacuation.utils.pathFinder.PathFinder;
 import evacuation.utils.Position;

@@ -32,6 +32,16 @@ public class Terrain implements ITerrain
 		return mSquares[y][x];
 	}
 
+	public List<Room> getRooms()
+	{
+		return mRooms;
+	}
+
+	public List<Door> getDoors()
+	{
+		return mDoors;
+	}
+
 	public static Terrain createFromFile(String filename, int width, int height)
 	{
 		TerrainBuilder builder = new TerrainBuilder();

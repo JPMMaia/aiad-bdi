@@ -87,7 +87,23 @@ public class ExploredTerrain implements ITerrain
 	}
 	public Door findNearestUnexploredDoor(int x, int y)
 	{
-		// TODO
+		Square square = mTerrain.getSquare(x, y);
+
+		if(square.isPartOfRoom())
+		{
+			return findNearestDoor(x, y, mUnexploredDoors);
+		}
+
+		else if(square.isDoor())
+		{
+			Door door = square.getDoor();
+			if(mUnexploredDoors.contains(door))
+				return door;
+
+			return findNearestDoor(x, y, mUnexploredDoors);
+		}
+
+
 		return null;
 	}
 	private Door findNearestDoor(int x, int y, List<Door> doors)

@@ -8,19 +8,28 @@ import java.util.List;
 public class GraphNode
 {
 	private Position mPosition;
-	private Position mGoal;
 	private List<GraphEdge> mEdges;
 
-	public GraphNode(Position position, Position goal)
+	public GraphNode(Position position)
 	{
 		mPosition = position;
-		mGoal = goal;
 		mEdges = new ArrayList<>();
 	}
 
 	public void addEdge(GraphEdge edge)
 	{
 		mEdges.add(edge);
+	}
+	public void removeEdge(Position destination)
+	{
+		for (GraphEdge edge : mEdges)
+		{
+			if(destination.equals(edge.getDestination().getPosition()))
+			{
+				mEdges.remove(edge);
+				break;
+			}
+		}
 	}
 
 	public List<GraphEdge> getEdges()
@@ -30,5 +39,15 @@ public class GraphNode
 	public Position getPosition()
 	{
 		return mPosition;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(!(obj instanceof GraphNode))
+			return false;
+
+		GraphNode node = (GraphNode)obj;
+		return mPosition.equals(node.getPosition());
 	}
 }

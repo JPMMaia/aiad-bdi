@@ -8,35 +8,43 @@ import java.util.List;
 public class Graph
 {
 	private List<GraphNode> mNodes;
-	private List<GraphEdge> mEdges;
-	private Position mGoal;
 
-	public Graph(Position goal)
+	public Graph()
 	{
-		mGoal = goal;
 		mNodes = new ArrayList<>();
-		mEdges = new ArrayList<>();
 	}
 
-	public void addNode(GraphNode node)
-	{
-		mNodes.add(node);
-	}
 	public boolean addNode(Position nodePosition)
 	{
 		if(containsNode(nodePosition))
 			return false;
 
-		mNodes.add(new GraphNode(nodePosition, mGoal));
+		mNodes.add(new GraphNode(nodePosition));
 
 		return true;
+	}
+	public boolean removeNode(Position nodePosition)
+	{
+		for (GraphNode node : mNodes)
+		{
+			if(nodePosition.equals(node.getPosition()))
+			{
+				// Remove node:
+				mNodes.remove(node);
+
+				// Remove edges:
+				for (GraphEdge edge : node.getEdges())
+					removeEdge(edge);
+
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public boolean addEdge(Position sourcePosition, Position destinationPosition)
 	{
-		if(containsEdge(sourcePosition, destinationPosition))
-			return false;
-
 		GraphNode sourceNode = getNode(sourcePosition);
 		if(sourceNode == null)
 			return false;
@@ -47,9 +55,12 @@ public class Graph
 
 		GraphEdge graphEdge = new GraphEdge(sourceNode, destinationNode);
 		sourceNode.addEdge(graphEdge);
-		mEdges.add(graphEdge);
 
 		return true;
+	}
+	public void removeEdge(GraphEdge edge)
+	{
+		edge.getDestination().removeEdge(edge.getSource().getPosition());
 	}
 
 	public GraphNode getNode(Position position)
@@ -68,16 +79,6 @@ public class Graph
 		for (GraphNode node : mNodes)
 		{
 			if(position.equals(node.getPosition()))
-				return true;
-		}
-
-		return false;
-	}
-	public boolean containsEdge(Position sourcePosition, Position destinationPosition)
-	{
-		for (GraphEdge edge : mEdges)
-		{
-			if(sourcePosition.equals(edge.getSource().getPosition()) && destinationPosition.equals(edge.getDestination().getPosition()))
 				return true;
 		}
 

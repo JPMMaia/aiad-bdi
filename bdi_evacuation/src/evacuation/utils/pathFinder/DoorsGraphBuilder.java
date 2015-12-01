@@ -2,7 +2,6 @@ package evacuation.utils.pathFinder;
 
 import evacuation.utils.Position;
 import evacuation.utils.terrain.Door;
-import evacuation.utils.terrain.ITerrain;
 import evacuation.utils.terrain.Room;
 import evacuation.utils.terrain.Square;
 
@@ -10,30 +9,37 @@ import java.util.List;
 
 public class DoorsGraphBuilder
 {
-	private Graph mGraph;
-
-	public Graph getResult()
+	public static void build(Graph graph, List<Room> rooms, List<Door> doors)
 	{
-		return mGraph;
+		addDoors(graph, doors);
+		addEdges(graph, rooms);
 	}
 
-	public boolean build(ITerrain terrain, List<Room> rooms, List<Door> doors, Position startPosition, Position goal)
+	public static void addNode(Graph graph, Square square)
 	{
-		mGraph = new Graph(goal);
+		// If square has door, then it was already added:
+		if(square.isDoor())
+			return;
 
-		addDoors(doors);
-		addEdges(rooms);
-		addStartNode(startPosition, terrain);
+		if(!square.isPartOfRoom())
+			return;
 
-		return true;
+		Position nodePosition = square.getPosition();
+		graph.addNode(nodePosition);
+		for (Door door : square.getRoom().getDoors())
+		{
+			Position doorPosition = door.getPosition();
+			graph.addEdge(nodePosition, doorPosition);
+			graph.addEdge(doorPosition, nodePosition);
+		}
 	}
 
-	private void addDoors(List<Door> doors)
+	private static void addDoors(Graph graph, List<Door> doors)
 	{
 		for (Door door : doors)
-			mGraph.addNode(door.getPosition());
+			graph.addNode(door.getPosition());
 	}
-	private void addEdges(List<Room> rooms)
+	private static void addEdges(Graph graph, List<Room> rooms)
 	{
 		for (Room room : rooms)
 		{
@@ -46,28 +52,10 @@ public class DoorsGraphBuilder
 						continue;
 
 					// Add edge, only if the nodes exist:
-					mGraph.addEdge(roomDoors.get(i).getPosition(), roomDoors.get(j).getPosition());
+					graph.addEdge(roomDoors.get(i).getPosition(), roomDoors.get(j).getPosition());
 				}
 			}
 		}
 	}
-	private void addStartNode(Position startPosition, ITerrain terrain)
-	{
-		Square square = terrain.getSquare(startPosition.x, startPosition.y);
 
-		// If square has door, then it was already added:
-		if(square.isDoor())
-			return;
-
-		if(!square.isPartOfRoom())
-			return;
-
-		mGraph.addNode(startPosition);
-		for (Door door : square.getRoom().getDoors())
-		{
-			Position doorPosition = door.getPosition();
-			mGraph.addEdge(startPosition, doorPosition);
-			mGraph.addEdge(doorPosition, startPosition);
-		}
-	}
 }

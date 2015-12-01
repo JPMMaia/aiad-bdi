@@ -143,12 +143,6 @@ public class ExploredTerrain implements ITerrain
 		return door2;
 	}
 
-	@Override
-	public Square getSquare(int x, int y)
-	{
-		return mTerrain.getSquare(x, y);
-	}
-
 	public boolean isExplored(int x, int y)
 	{
 		return isExplored(mTerrain.getSquare(x, y));
@@ -185,5 +179,31 @@ public class ExploredTerrain implements ITerrain
 			return mExploredDoors.contains(square.getDoor());
 
 		return true;
+	}
+
+	@Override
+	public Square getSquare(int x, int y)
+	{
+		return mTerrain.getSquare(x, y);
+	}
+	public List<Door> getExploredDoors()
+	{
+		return mExploredDoors;
+	}
+
+	public List<Door> getUnexploredDoors()
+	{
+		return mUnexploredDoors;
+	}
+
+	public List<Room> getExploredRooms()
+	{
+		return mExploredRooms;
+	}
+
+	public static ExploredTerrain createFromFile(String filename, int width, int height)
+	{
+		Terrain terrain = Terrain.createFromFile(filename, width, height);
+		return new ExploredTerrain(terrain);
 	}
 }

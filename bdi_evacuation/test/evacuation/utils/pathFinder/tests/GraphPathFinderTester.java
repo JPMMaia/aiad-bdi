@@ -1,35 +1,33 @@
 package evacuation.utils.pathFinder.tests;
 
 import evacuation.utils.Position;
-import evacuation.utils.pathFinder.Graph;
-import evacuation.utils.pathFinder.GraphNode;
+import evacuation.utils.pathFinder.GraphPathFinder;
+import evacuation.utils.terrain.Door;
+import evacuation.utils.terrain.ExploredTerrain;
+import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GraphPathFinderTester
 {
 	@Test
 	public void findShortestPathTest()
 	{
-		Position goal = new Position(8, 3);
+		ExploredTerrain terrain = ExploredTerrain.createFromFile("test_resources/TerrainMap3.txt", 20, 20);
 
-		/*List<GraphNode> nodes = new ArrayList<>();
-		nodes.add(new GraphNode(new Position(1, 1), goal));
-		nodes.add(new GraphNode(new Position(8, 3), goal));
-		nodes.add(new GraphNode(new Position(13, 2), goal));
-		nodes.add(new GraphNode(new Position(13, 5), goal));
-		nodes.add(new GraphNode(new Position(6, 8), goal));
-		nodes.add(new GraphNode(new Position(16, 10), goal));
-		nodes.add(new GraphNode(new Position(15, 14), goal));
-		nodes.add(new GraphNode(new Position(6, 17), goal));*/
+		GraphPathFinder pathFinder = new GraphPathFinder(terrain);
 
+		Door solution1 = pathFinder.run(new Position(1, 1));
+		Assert.assertNotNull(solution1);
+		Assert.assertEquals(new Position(8, 3), solution1.getPosition());
 
+		terrain.exploreSquare(8, 3);
+		Door solution2 = pathFinder.run(new Position(1, 1));
+		Assert.assertNotNull(solution2);
+		Assert.assertEquals(new Position(13, 2), solution2.getPosition());
 
-
-		//Graph graph = new Graph();
-		//for (GraphNode node : nodes)
-			//graph.addNode(node);
+		terrain.exploreSquare(13, 2);
+		Door solution3 = pathFinder.run(new Position(1, 4));
+		Assert.assertNotNull(solution3);
+		Assert.assertEquals(new Position(13, 5), solution3.getPosition());
 	}
 }

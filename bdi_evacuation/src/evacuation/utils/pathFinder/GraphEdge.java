@@ -25,4 +25,14 @@ public class GraphEdge
 	{
 		return mWeight;
 	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(!(obj instanceof GraphEdge))
+			return false;
+
+		GraphEdge edge = (GraphEdge)obj;
+		return mSource.equals(edge.getSource()) && mDestination.equals(edge.getDestination());
+	}
 }

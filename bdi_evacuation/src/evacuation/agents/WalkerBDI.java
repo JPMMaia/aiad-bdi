@@ -80,12 +80,9 @@ public class WalkerBDI {
     @Plan(trigger=@Trigger(factchangeds="nextPosition"))
     public class GoPlan {
         @PlanBody
-        protected synchronized void GoPlanBody() {
+        protected void GoPlanBody() {
 
             if(worldMethods.noCollisionsInPosition(nextPosition)){
-
-                System.out.println("Entrei - " + nextPosition.x + " " + nextPosition.y);
-
                 if(!nextPosition.equals(currentPosition)) {
 
                     if (worldMethods.getNumAgentInCell(currentPosition) == 2) {
@@ -105,9 +102,6 @@ public class WalkerBDI {
                 } catch (InterruptedException e) {
                     System.out.println("unable to sleep");
                 }
-            }
-            else{
-                System.out.println("NAO entrei - " + nextPosition.x + " " + nextPosition.y);
             }
         }
     }

@@ -59,7 +59,7 @@ public class WorldMethods {
 
     //COLLISIONS QUERIES
 
-    public synchronized boolean noCollisionsInPosition(Position p) {
+    public boolean noCollisionsInPosition(Position p) {
         Vector2Double wantedPosition = new Vector2Double(p.x,p.y);
         IVector1 distance = new Vector1Double(0);
 
@@ -224,28 +224,3 @@ public class WorldMethods {
         }
     }
 }
-
-
-
-
-
-
- /*
-    public boolean someoneInMyCell(Position p) {
-
-        Vector2Double wantedPosition = new Vector2Double(p.x,p.y);
-        IVector1 distance = new Vector1Double(0);
-
-        Set activeSet = space.getNearObjects(wantedPosition,distance,TypesObjects.WANDERER);
-        Set herdingSet = space.getNearObjects(wantedPosition,distance,TypesObjects.HERDING);
-        Set conservativeSet = space.getNearObjects(wantedPosition,distance,TypesObjects.CONSERVATIVE);
-
-        if(activeSet.size() > 0)
-            return true;
-        else if(herdingSet.size() > 0) //there are two agents in the position
-            return true;
-        else if(conservativeSet.size() > 0) //there are two agents in the position
-            return true;
-
-        return false;
-    }*/

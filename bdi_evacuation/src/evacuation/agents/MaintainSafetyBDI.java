@@ -73,19 +73,24 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
 
         int res = 0;
         boolean helping = false;
+        boolean pushing = false;
 
         res = evaluateRiskConditionVelocity();
 
         if(agent.getGoals().isEmpty()) {
+
+            agent.dispatchTopLevelGoal(new ReceivePushOthersGoal());
+
             if (!worldMethods.isIncident()) {
                 agent.dispatchTopLevelGoal(new WanderGoal());
                 res = riskPerception;
             }
             else{
                 if(condition > 50 && inPanic && patience_mode && !patient) {
-                    if (worldMethods.getNumAgentInCellMap(currentPosition) >= 1) {
+                    if (worldMethods.getNumAgentInCellMap(currentPosition) == 2) {
                         System.out.println("someone in my cell");
                         agent.dispatchTopLevelGoal(new PushOthersGoal());
+                        pushing = true;
                     }
                     else
                         agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
@@ -104,6 +109,11 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
                 if(!helping){
                     deleteCures();
                 }
+
+                if(!pushing){
+                    deletePush();
+                }
+
             }
         }
 

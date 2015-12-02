@@ -83,6 +83,12 @@
 					<env:property name="space" class="Space2D"/>
 				</env:objecttype>
 
+				<env:objecttype name="push_agent">
+					<env:property name="position" class="IVector2"/>
+					<env:property name="speed" class="Double"/>
+					<env:property name="space" class="Space2D"/>
+				</env:objecttype>
+
 				<!-- Herding -->
 				<env:objecttype name="herding">
 					<env:property name="position" class="IVector2"/>
@@ -159,7 +165,7 @@
 					</env:property>
 				</env:perceptgenerator>
 				
-				<!-- Percept processors consume percepts and push them into the agents. -->
+				<!-- Percept processors consume percepts and pushSet them into the agents. -->
 				<env:perceptprocessor componenttype="Collector" class="DefaultBDIVisionProcessor" >
 					<env:property name="percepttypes">
 						new Object[]
@@ -238,6 +244,11 @@
 					<!-- Wanderer avatar -->
 					<env:drawable objecttype="cure_agent" height="1.0" width="1.0">
 						<env:texturedrectangle layer="6" imagepath="images/cure_agent.png"/>
+					</env:drawable>
+
+					<!-- Wanderer avatar -->
+					<env:drawable objecttype="push_agent" height="1.0" width="1.0">
+						<env:texturedrectangle layer="6" imagepath="images/push_agent.png"/>
 					</env:drawable>
 
                     <!-- Wanderer avatar -->

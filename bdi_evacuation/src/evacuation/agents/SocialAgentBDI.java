@@ -25,6 +25,9 @@ public class SocialAgentBDI extends WalkerBDI{
     // CURE ATTRIBUTES
     protected HashSet<SpaceObject> cures;
 
+    //PUSH ATTRIBUTES
+    protected HashSet<SpaceObject> pushSet;
+
     //PERSONALITY
 
     PersonState personState = new PersonState();
@@ -44,6 +47,13 @@ public class SocialAgentBDI extends WalkerBDI{
 
         @GoalParameter
         protected String goal = "PushOthersGoal";
+    }
+
+    @Goal
+    public class ReceivePushOthersGoal {
+
+        @GoalParameter
+        protected String goal = "ReceivePushOthersGoal";
     }
 
     @Plan(trigger=@Trigger(goals=HelpOthersGoal.class))
@@ -86,9 +96,8 @@ public class SocialAgentBDI extends WalkerBDI{
         @PlanBody
         protected void PushOthersPlanBody() {
             //if there is someone in the same cell as me
-            //create a push object
-
-            //-> find a place where the being pushed is used
+            //create a pushSet object
+            worldMethods.makeObjectInCell(currentPosition,TypesObjects.PUSH_AGENT);
         }
     }
 
@@ -96,6 +105,7 @@ public class SocialAgentBDI extends WalkerBDI{
     public void body(){
         super.body();
         cures = new HashSet<>();
+        pushSet = new HashSet<>();
     }
 
     //cures method
@@ -103,6 +113,12 @@ public class SocialAgentBDI extends WalkerBDI{
     void deleteCures(){
         for(SpaceObject cure : cures){
             space.destroyAndVerifySpaceObject(cure.getId());
+        }
+    }
+
+    void deletePush(){
+        for(SpaceObject p : pushSet){
+            space.destroyAndVerifySpaceObject(p.getId());
         }
     }
 }

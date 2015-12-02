@@ -45,7 +45,7 @@ public class MaintainHealthBDI extends SocialAgentBDI{
         protected void MaintainSafetyPlanBody() {
 
             //if there is a cure object in the world
-            ISpaceObject cureObject = worldMethods.getCureObject(currentPosition);
+            ISpaceObject cureObject = worldMethods.getObject(currentPosition, TypesObjects.CURE_AGENT);
 
             //grab the object
             if(cureObject != null){
@@ -127,6 +127,21 @@ public class MaintainHealthBDI extends SocialAgentBDI{
         }
 
         condition = Math.max(condition - valueForCondition, 0);
+    }
+
+    @Plan(trigger=@Trigger(goals=ReceivePushOthersGoal.class))
+    public class ReceivePushOthersPlan {
+        //pushOthersPlan - other condition gets worse and if = 0 they die
+        @PlanBody
+        protected void ReceivePushOthersPlanBody() {
+            //if there is someone in the same cell as me
+            //create a pushSet object
+            if(worldMethods.getPush(currentPosition)){
+                condition -= 10;
+                if(condition < 0)
+                    condition = 0;
+            }
+        }
     }
 
     @AgentBody

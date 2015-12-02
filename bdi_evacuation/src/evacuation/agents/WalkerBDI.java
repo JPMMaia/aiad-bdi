@@ -40,11 +40,6 @@ public class WalkerBDI {
     @Belief(dynamic=true)
     protected Double speed = 1.0;
 
-    @Belief(dynamic=true)
-    protected int millis = getWaitTime();
-
-    //Other
-
     @Belief
     protected boolean indoor = true;
 

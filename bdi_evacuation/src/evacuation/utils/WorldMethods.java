@@ -180,17 +180,17 @@ public class WorldMethods {
 
     //GET CURE OBJECT IN THE SAME POSITION
 
-    public ISpaceObject getCureObject(Position currentPosition) {
+    public ISpaceObject getObject(Position currentPosition, String type) {
 
         Vector2Double wantedPosition = new Vector2Double(currentPosition.x,currentPosition.y);
         IVector1 distance = new Vector1Double(0);
 
-        Set cureSet = space.getNearObjects(wantedPosition,distance,TypesObjects.CURE_AGENT);
+        Set set = space.getNearObjects(wantedPosition,distance,type);
 
-        if(cureSet == null || cureSet.isEmpty())
+        if(set == null || set.isEmpty())
             return null;
 
-        for (Iterator<ISpaceObject> it = cureSet.iterator(); it.hasNext(); ) {
+        for (Iterator<ISpaceObject> it = set.iterator(); it.hasNext(); ) {
             ISpaceObject obj;
             obj = it.next();
             return obj;
@@ -202,7 +202,7 @@ public class WorldMethods {
     // NEW OBJECTS METHODS
 
 
-    private SpaceObject makeTwoObjectsSameCell(Position targetPosition, String type){
+    public SpaceObject makeObjectInCell(Position targetPosition, String type){
         SpaceObject res;
 
         Map<String, Object> properties = new HashMap<>();
@@ -241,11 +241,18 @@ public class WorldMethods {
         //if there is another guy in the new cell, create a someone in my cell
         String key = newPosition.x + "." + newPosition.y;
         if(getNumAgentInCellMap(newPosition) == 1){
-            makeTwoObjectsSameCell(newPosition, TypesObjects.SAME_CELL);
+            makeObjectInCell(newPosition, TypesObjects.SAME_CELL);
         }
     }
 
+    public boolean getPush(Position currentPosition) {
+        SpaceObject push = (SpaceObject) getObject(currentPosition, TypesObjects.PUSH_AGENT);
 
+        if(push != null) {
+            space.destroyAndVerifySpaceObject(push.getId());
+            return true;
+        }
 
-
+        return false;
+    }
 }

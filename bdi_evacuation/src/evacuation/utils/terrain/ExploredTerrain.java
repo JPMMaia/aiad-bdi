@@ -1,6 +1,7 @@
 package evacuation.utils.terrain;
 
 import evacuation.utils.Position;
+import evacuation.utils.pathFinder.GraphPathFinder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ public class ExploredTerrain implements ITerrain
 	private List<Door> mExploredDoors;
 	private List<Door> mUnexploredDoors;
 	private List<Room> mExploredRooms;
+	private GraphPathFinder mUnexploredDoorFinder;
 
 	public ExploredTerrain(Terrain terrain)
 	{
@@ -18,6 +20,7 @@ public class ExploredTerrain implements ITerrain
 		mExploredDoors = new ArrayList<>();
 		mUnexploredDoors = new ArrayList<>();
 		mExploredRooms = new ArrayList<>();
+		mUnexploredDoorFinder = new GraphPathFinder(this);
 	}
 
 	public void exploreSquare(int x, int y)
@@ -89,22 +92,10 @@ public class ExploredTerrain implements ITerrain
 	{
 		Square square = mTerrain.getSquare(x, y);
 
-		if(square.isPartOfRoom())
-		{
-			return findNearestDoor(x, y, mUnexploredDoors);
-		}
+		if(square.isDoor() && !isExplored(square))
+			return square.getDoor();
 
-		else if(square.isDoor())
-		{
-			Door door = square.getDoor();
-			if(mUnexploredDoors.contains(door))
-				return door;
-
-			return findNearestDoor(x, y, mUnexploredDoors);
-		}
-
-
-		return null;
+		return mUnexploredDoorFinder.run(new Position(x, y));
 	}
 	private Door findNearestDoor(int x, int y, List<Door> doors)
 	{
@@ -164,7 +155,7 @@ public class ExploredTerrain implements ITerrain
 		return square.isObstacle();
 	}
 
-	private boolean isExplored(Square square)
+	public boolean isExplored(Square square)
 	{
 		if(mExploredRooms.isEmpty())
 			return false;
@@ -190,15 +181,17 @@ public class ExploredTerrain implements ITerrain
 	{
 		return mExploredDoors;
 	}
-
 	public List<Door> getUnexploredDoors()
 	{
 		return mUnexploredDoors;
 	}
-
 	public List<Room> getExploredRooms()
 	{
 		return mExploredRooms;
+	}
+	public Terrain getTerrain()
+	{
+		return mTerrain;
 	}
 
 	public static ExploredTerrain createFromFile(String filename, int width, int height)

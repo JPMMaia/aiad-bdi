@@ -3,15 +3,16 @@ package evacuation.utils.terrain.tests;
 import evacuation.utils.terrain.ExploredTerrain;
 import evacuation.utils.terrain.Terrain;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ExploredTerrainTester
 {
-	private static ExploredTerrain sExploredTerrain;
+	private ExploredTerrain sExploredTerrain;
 
-	@BeforeClass
-	public static void initialize()
+	@Before
+	public void initialize()
 	{
 		Terrain terrain = Terrain.createFromFile("test_resources/TerrainMap3.txt", 20, 20);
 		sExploredTerrain = new ExploredTerrain(terrain);
@@ -92,6 +93,9 @@ public class ExploredTerrainTester
 
 		sExploredTerrain.exploreSquare(16, 10);
 		Assert.assertSame(sExploredTerrain.getSquare(15, 14).getDoor(), sExploredTerrain.findNearestUnexploredDoor(16, 10));
+
+		sExploredTerrain.exploreSquare(15, 14);
+		Assert.assertSame(sExploredTerrain.getSquare(6, 17).getDoor(), sExploredTerrain.findNearestUnexploredDoor(15, 14));
 
 		sExploredTerrain.exploreSquare(6, 17);
 		Assert.assertSame(null, sExploredTerrain.findNearestUnexploredDoor(7, 17));

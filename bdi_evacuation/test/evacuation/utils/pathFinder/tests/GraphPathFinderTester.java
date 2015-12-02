@@ -13,9 +13,9 @@ public class GraphPathFinderTester
 	public void findShortestPathTest()
 	{
 		ExploredTerrain terrain = ExploredTerrain.createFromFile("test_resources/TerrainMap3.txt", 20, 20);
-
 		GraphPathFinder pathFinder = new GraphPathFinder(terrain);
 
+		terrain.exploreSquare(1, 1);
 		Door solution1 = pathFinder.run(new Position(1, 1));
 		Assert.assertNotNull(solution1);
 		Assert.assertEquals(new Position(8, 3), solution1.getPosition());

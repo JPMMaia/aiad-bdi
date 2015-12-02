@@ -84,7 +84,6 @@ public class WalkerBDI {
 
             if(worldMethods.noCollisionsInPosition(nextPosition)){
                 if(!nextPosition.equals(currentPosition)) {
-
                     worldMethods.resolveTwoAgentsInSameCell(currentPosition, nextPosition);
                     myself.setProperty("position", new Vector2Int(nextPosition.x, nextPosition.y));
                     currentPosition = nextPosition;
@@ -99,8 +98,6 @@ public class WalkerBDI {
             }
         }
     }
-
-    // FUNCTIONS *************************************
 
     @AgentBody
     public void body(){

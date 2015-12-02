@@ -268,7 +268,7 @@
 
 					<!-- Door avatar -->
 					<env:drawable objecttype="exit_door" height="1.0" width="1.0">
-						<env:texturedrectangle layer="1" imagepath="images/terrain_4.png"/>
+						<env:texturedrectangle layer="1" imagepath="images/exit_door.png"/>
 					</env:drawable>
 
                     <!-- Incident avatar -->

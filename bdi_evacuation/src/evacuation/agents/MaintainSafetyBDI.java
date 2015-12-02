@@ -86,7 +86,7 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
                 res = riskPerception;
             }
             else{
-                if(condition > 50 && inPanic && patience_mode && !patient) {
+                if(!isHurt && inPanic && patience_mode && !patient) {
                     if (worldMethods.getNumAgentInCellMap(currentPosition) == 2) {
                         System.out.println("someone in my cell");
                         agent.dispatchTopLevelGoal(new PushOthersGoal());
@@ -96,13 +96,13 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
                         agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
 
                 }
-                else if(condition > 50 && worldMethods.someoneNeedsHelp(currentPosition, DISTANCE_TO_HELP)){
+                else if(!isHurt && worldMethods.someoneNeedsHelp(currentPosition, DISTANCE_TO_HELP)){
                     agent.dispatchTopLevelGoal(new HelpOthersGoal());
                     helping = true;
                 }
-                else if(condition > 50)
+                else if(!isHurt)
                     agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
-                else{ //condition <= 50
+                else{ //isHurt
                     agent.dispatchTopLevelGoal(new MaintainHealthGoal());
                 }
 

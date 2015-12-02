@@ -23,7 +23,7 @@ public class SocialAgentBDI extends WalkerBDI{
     protected static final int DISTANCE_TO_HELP = 10;
 
     // CURE ATTRIBUTES
-    protected HashSet<SpaceObject> cures;
+    protected HashSet<SpaceObject> curesSet;
 
     //PUSH ATTRIBUTES
     protected HashSet<SpaceObject> pushSet;
@@ -34,6 +34,7 @@ public class SocialAgentBDI extends WalkerBDI{
 
     @Belief
     boolean patient = personState.getPatience();
+
 
     @Goal
     public class HelpOthersGoal { //altruisticamente ajudando os outros. //triggered by others call warning (env)
@@ -51,7 +52,6 @@ public class SocialAgentBDI extends WalkerBDI{
 
     @Goal
     public class ReceivePushOthersGoal {
-
         @GoalParameter
         protected String goal = "ReceivePushOthersGoal";
     }
@@ -75,12 +75,10 @@ public class SocialAgentBDI extends WalkerBDI{
                 IVector1 distanceIV = worldMethods.getDistanceBetweenTwoPositions(currentPosition, targetPosition);
                 double distance = distanceIV.getAsDouble();
 
-                if (distance <= 1) {//if it is near than cure
+                if (distance <= 1) {//if it is near -> cure
                     //System.out.println("cure"); //create cure object
-                    Map<String, Object> properties = new HashMap<>();
-                    properties.put("position", new Vector2Int(targetPosition.x, targetPosition.y));
-                    SpaceObject cure = (SpaceObject) space.createSpaceObject(TypesObjects.CURE_AGENT, properties, null);
-                    cures.add(cure);
+                    SpaceObject cure = worldMethods.makeObjectInCell(targetPosition, TypesObjects.CURE_AGENT);
+                    curesSet.add(cure);
                 }
                 else { //go to the hurt
                     Position wantedPosition = worldMethods.findPathToObject(hurtAgent, currentPosition);
@@ -104,14 +102,14 @@ public class SocialAgentBDI extends WalkerBDI{
     @AgentBody
     public void body(){
         super.body();
-        cures = new HashSet<>();
+        curesSet = new HashSet<>();
         pushSet = new HashSet<>();
     }
 
-    //cures method
+    //OTHER METHODS
 
     void deleteCures(){
-        for(SpaceObject cure : cures){
+        for(SpaceObject cure : curesSet){
             space.destroyAndVerifySpaceObject(cure.getId());
         }
     }

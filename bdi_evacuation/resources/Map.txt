@@ -13,8 +13,8 @@ X     H            E
 X                  X
 X   H H H HXH H H  X
 X          X       X
-X                  X
-X  A               X
+X          X       X
+X  A       X       X
 X        H         X
 X  A   A           X
 XXXXXXXXXXXXXXXXXXXX

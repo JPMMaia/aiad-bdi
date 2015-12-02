@@ -118,7 +118,7 @@
 	</p0:properties>
 	<p0:properties __ID="34" type="awa">
 		<p0:property __ID="35" type="fast">false</p0:property>
-		<p0:property __ID="36" type="autocreate">true</p0:property>
+		<p0:property __ID="36" type="autocreate">false</p0:property>
 		<p0:property __ID="37" type="autodelete">false</p0:property>
 	</p0:properties>
 	<p0:properties __ID="38" type="simulationservice">

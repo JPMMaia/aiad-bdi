@@ -40,10 +40,10 @@ public class MaintainHealthBDI extends SocialAgentBDI{
     // PLANS**********************************
 
     @Plan(trigger=@Trigger(goals=MaintainHealthGoal.class))
-    public class MaintainSafetyPlan {
+    public class MaintainHealthPlan {
 
         @PlanBody
-        protected void MaintainSafetyPlanBody() {
+        protected void MaintainHealthPlanBody() {
 
             //if there is a cure object in the world
             ISpaceObject cureObject = worldMethods.getObject(currentPosition, TypesObjects.CURE_AGENT);

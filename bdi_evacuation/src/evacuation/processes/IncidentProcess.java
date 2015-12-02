@@ -49,7 +49,7 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 		desiredNumIncidentPositions = 1;
 		incidentPositions = new HashSet<>();
 
-		incidentType = 0;//r.nextInt(3); //0 - fire ; 1 - water; 2 - terrorist
+		incidentType = 2;//r.nextInt(3); //0 - fire ; 1 - water; 2 - terrorist
 	}
 
     @Override

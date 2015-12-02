@@ -1,6 +1,7 @@
 package evacuation.agents;
 
 import evacuation.utils.Move;
+import evacuation.utils.Position;
 import evacuation.utils.TypesObjects;
 import jadex.bdiv3.annotation.*;
 import jadex.extension.envsupport.environment.ISpaceObject;
@@ -105,7 +106,6 @@ public class MaintainHealthBDI extends SocialAgentBDI{
 
     //FUNCTIONS FOR THE CONDITION CALCULATIONS************************
 
-
     public void evaluateCondition() {
 
         ISpaceObject[] incidentsArray = worldMethods.getIncidentObjects();
@@ -116,14 +116,17 @@ public class MaintainHealthBDI extends SocialAgentBDI{
 
         for (ISpaceObject incident : incidentsArray){
 
-            double distance = Move.distanceBetween(currentPosition, incident.getProperty("position"));
+            Object incidentPosition = incident.getProperty("position");
+            if(!worldMethods.isWallBetween(currentPosition, Position.convertToPosition(incidentPosition))){
+                double distance = Move.distanceBetween(currentPosition, incidentPosition);
 
-            if(distance == 0)
-                valueForCondition += 10;
-            else if(distance <= Math.sqrt(2))
-                valueForCondition += 5;
-            else if(distance <= Math.sqrt(8))
-                valueForCondition += 2;
+                if(distance == 0)
+                    valueForCondition += 10;
+                else if(distance <= Math.sqrt(2))
+                    valueForCondition += 5;
+                else if(distance <= Math.sqrt(8))
+                    valueForCondition += 2;
+            }
         }
 
         condition = Math.max(condition - valueForCondition, 0);

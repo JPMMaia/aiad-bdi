@@ -92,7 +92,7 @@ public class WalkerBDI {
             }
 
             try {
-                System.out.println("wait - " + getWaitTime());
+                //System.out.println("wait - " + getWaitTime());
                 Thread.sleep(getWaitTime());
             } catch (InterruptedException e) {
                 System.out.println("unable to sleep");

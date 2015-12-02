@@ -11,7 +11,6 @@ public class WorldMethods {
 
     static Map numAgentsByCell = Collections.synchronizedMap(new HashMap<String,Integer>());
 
-
     public synchronized void putAgentInNewCellMap(Position currentPosition) {
         String key = currentPosition.x + "." + currentPosition.y;
         Integer value = 1;
@@ -57,6 +56,7 @@ public class WorldMethods {
         if(value > 2)
             System.out.println("value - " + value);
     }
+
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     protected Grid2D space;
@@ -178,7 +178,7 @@ public class WorldMethods {
         return !agentsSet.isEmpty();
     }
 
-    //GET CURE OBJECT IN THE SAME POSITION
+    //GET OBJECT IN THE SAME POSITION
 
     public ISpaceObject getObject(Position currentPosition, String type) {
 
@@ -200,7 +200,6 @@ public class WorldMethods {
     }
 
     // NEW OBJECTS METHODS
-
 
     public SpaceObject makeObjectInCell(Position targetPosition, String type){
         SpaceObject res;
@@ -253,6 +252,20 @@ public class WorldMethods {
             return true;
         }
 
+        return false;
+    }
+
+    //WALL OBJECTS BETWEEN
+
+    public boolean isWallBetween(Position pos1, Position pos2){
+
+        ArrayList<Position> positionsToCheck = BresenhamLineAlgorithm.line(pos1.x,pos1.y,pos2.x,pos2.y);
+
+        for(Position p : positionsToCheck){
+            if(getObject(p, TypesObjects.TERRAIN) != null) {
+                return true;
+            }
+        }
         return false;
     }
 }

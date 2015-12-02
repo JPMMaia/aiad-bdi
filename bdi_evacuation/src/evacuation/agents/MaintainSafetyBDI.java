@@ -117,9 +117,6 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
             }
         }
 
-        //System.out.println("condition - " + condition);
-        //System.out.println("riskPerception - " + riskPerception);
-
         return res;
     }
 
@@ -160,7 +157,10 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
                 valueForRiskPerception = 90;
         }
 
+        int init = valueForRiskPerception;
         valueForRiskPerception = personState.getRiskPerception(valueForRiskPerception);
+
+        //System.out.println("****************************dif -> " + (valueForRiskPerception - init));
 
         if(speed_mode == true)
             evaluateVelocity(valueForRiskPerception);
@@ -169,8 +169,9 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
     }
 
     private void evaluateVelocity(int valueForRiskPerception) {
-        //[0.25-2]
-        speed = condition/100.0 + valueForRiskPerception*2/100.0;
+        //[0.5-2]
+        speed = condition/100.0 + valueForRiskPerception*4/100.0;
+        //System.out.println("velocidade - " + speed);
     }
 
     @AgentBody

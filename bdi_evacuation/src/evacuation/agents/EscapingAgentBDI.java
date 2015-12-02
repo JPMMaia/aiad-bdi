@@ -2,14 +2,10 @@ package evacuation.agents;
 
 import evacuation.utils.Position;
 import evacuation.utils.TypesObjects;
-import evacuation.utils.TypesProperties;
 import jadex.bdiv3.annotation.*;
 import jadex.extension.envsupport.environment.ISpaceObject;
-import jadex.extension.envsupport.math.*;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
-
-import java.util.HashSet;
 
 @Agent
 public class EscapingAgentBDI extends MaintainSafetyBDI{
@@ -39,7 +35,7 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
 
         //find one door in same division
         ISpaceObject[] doors = space.getSpaceObjectsByType(TypesObjects.DOOR);
-        ISpaceObject door = worldMethods.pickClosestObject(doors, null, currentPosition);
+        ISpaceObject door = worldMethods.pickClosestObject(doors, currentPosition);
 
         //get path for the door -> improve the search - TODO Maiah
         return worldMethods.findPathToObject(door, currentPosition);

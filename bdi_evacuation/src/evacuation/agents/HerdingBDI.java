@@ -17,10 +17,6 @@ public class HerdingBDI extends EscapingAgentBDI {
 
     protected static final int DISTANCE_TO_HERDING = 4;
 
-    //BELIEFS*****************************
-
-    protected HashSet<Object> targets;
-
     //PLANS*******************************
 
     @Override
@@ -32,13 +28,7 @@ public class HerdingBDI extends EscapingAgentBDI {
         //find agents in a certain perimeter
 
         Position newPosition = followOthersToExit();
-        if (samePosition(newPosition))
-            newPosition = findNewPositionWhenIncident();
         return newPosition;
-    }
-
-    private boolean samePosition(Position position) {
-        return (position.x == currentPosition.x && position.y == currentPosition.y);
     }
 
     //FUNCTIONS FOR THE PATH CALCULATIONS
@@ -57,18 +47,13 @@ public class HerdingBDI extends EscapingAgentBDI {
         if(!agentsSet.isEmpty()){
             ISpaceObject[] agentsArray = convertSetToArray(agentsSet);
 
-            //remove self - not necessary because we are only looking for active or conservative agents and not other herdings
-            //agentsArray = removeSelf(agentsArray);
-
-            ISpaceObject agent = worldMethods.pickClosestObject(agentsArray, targets, currentPosition);
+            ISpaceObject agent = worldMethods.pickClosestObject(agentsArray, currentPosition);
 
             //follow the target
             position = worldMethods.findPathToObject(agent, currentPosition);
-            if (samePosition(position))
-                targets.add(agent.getId());
         }
         else {
-            position = currentPosition;
+            position = findNewPositionWhenIncident();
         }
 
         return position;
@@ -80,7 +65,6 @@ public class HerdingBDI extends EscapingAgentBDI {
 
     @AgentBody
     public void body(){
-        targets = new HashSet<>();
         super.body();
     }
 }

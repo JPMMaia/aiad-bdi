@@ -128,7 +128,7 @@ public class WorldMethods {
         return currentPosition;
     }
 
-    public ISpaceObject pickClosestObject(ISpaceObject[] objects, HashSet<Object> targets, Position currentPosition) {
+    public ISpaceObject pickClosestObject(ISpaceObject[] objects, Position currentPosition) {
 
         if(objects.length > 0){
             //System.out.println("objects lenght - " + objects.length);
@@ -141,10 +141,6 @@ public class WorldMethods {
 
             for(int i = 1; i < objects.length; i++){
                 IVector1 newDistance = space.getDistance(currentPositionV2D, (IVector2) objects[i].getProperty(TypesProperties.POSITION));
-
-                if(targets != null)
-                    if(targets.contains(objects[i]))
-                        continue;
 
                 if(distance.greater(newDistance)){
                     pos = i;

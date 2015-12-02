@@ -8,13 +8,10 @@ import jadex.bdiv3.annotation.*;
 import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.SpaceObject;
 import jadex.extension.envsupport.math.IVector1;
-import jadex.extension.envsupport.math.Vector2Int;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 @Agent
 public class SocialAgentBDI extends WalkerBDI{
@@ -67,7 +64,7 @@ public class SocialAgentBDI extends WalkerBDI{
             ISpaceObject hurtAgent;
 
             if(hurtAgents != null && hurtAgents.length > 0) {
-                hurtAgent = worldMethods.pickClosestObject(hurtAgents, null, currentPosition);
+                hurtAgent = worldMethods.pickClosestObject(hurtAgents, currentPosition);
 
                 //go to an adjacent cell
                 //-calculate distance from hurtAgent

@@ -15,6 +15,9 @@ import java.util.Map;
 @Agent
 public class MaintainHealthBDI extends SocialAgentBDI{
 
+    //CONSTANTS***************************
+    protected static final int HEALTH_INCREMENT = 20;
+
     @Belief
     public int condition = 100; //range [0-100]
 
@@ -52,11 +55,13 @@ public class MaintainHealthBDI extends SocialAgentBDI{
             if(cureObject != null){
                 //increase helth
 
-                condition += 20;
+                condition += HEALTH_INCREMENT;
 
                 //delete object
-                if(!space.destroyAndVerifySpaceObject(cureObject.getId()))
+                if(!space.destroyAndVerifySpaceObject(cureObject.getId())) {
                     System.out.println("The cure object do not exist anymore.");
+                    condition -= HEALTH_INCREMENT;
+                }
             }
         }
     }
@@ -66,9 +71,8 @@ public class MaintainHealthBDI extends SocialAgentBDI{
         @PlanBody
         protected void DeadPlanBody() {
             if(isDead){
-                Map<String, Object> properties = new HashMap<>();
-                properties.put("position", new Vector2Int(currentPosition.x, currentPosition.y));
-                space.createSpaceObject(TypesObjects.DEAD_AGENT, properties, null);
+                worldMethods.makeObjectInCell(currentPosition, TypesObjects.DEAD_AGENT);
+
                 if(hurtObject != null)
                     space.destroySpaceObject(hurtObject.getId());
 
@@ -85,9 +89,7 @@ public class MaintainHealthBDI extends SocialAgentBDI{
         protected void HurtedPlanBody() {
             if(isHurt){
                 if(hurtObject == null) {
-                    Map<String, Object> properties = new HashMap<>();
-                    properties.put("position", new Vector2Int(currentPosition.x, currentPosition.y));
-                    hurtObject = space.createSpaceObject(TypesObjects.HURT_AGENT, properties, null);
+                    hurtObject = worldMethods.makeObjectInCell(currentPosition,TypesObjects.HURT_AGENT);
                 }
             }
         }

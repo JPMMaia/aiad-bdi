@@ -49,7 +49,7 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 		desiredNumIncidentPositions = 1;
 		incidentPositions = new HashSet<>();
 
-		incidentType = 2;//r.nextInt(3); //0 - fire ; 1 - water; 2 - terrorist
+		incidentType = 1;//r.nextInt(3); //0 - fire ; 1 - water; 2 - terrorist
 	}
 
     @Override
@@ -62,8 +62,13 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 
 		long currentTime = iClockService.getTime() - startTime;
 
+		long incidentTimer = incidentProgressTimer;
+
+		if(incidentType == 1)
+			incidentTimer = incidentTimer * 2 * desiredNumIncidentPositions;
+
     	if(currentTime > initialWaitingTime){
-			if(currentTime > (incidentProgressTimer * desiredNumIncidentPositions)) {
+			if(currentTime > (incidentTimer * desiredNumIncidentPositions)) {
 				createIncident();
 				desiredNumIncidentPositions++;
 			}

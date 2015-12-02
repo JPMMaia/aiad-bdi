@@ -65,14 +65,14 @@ public class TerrainBuilder
 				if(avatar == ' ')
 					createRoom(map, x, y);
 
-				else if(avatar == 'D')
+				else if(avatar == 'D' || avatar == 'E')
 					doorsLocation.add(new Position(x, y));
 			}
 		}
 
 		// Create doors:
 		for (Position position : doorsLocation)
-			createDoor(position.x, position.y);
+			createDoor(position.x, position.y, map[position.y][position.x] == 'E');
 	}
 
 	private void createRoom(char[][] map, int x, int y)
@@ -102,7 +102,7 @@ public class TerrainBuilder
 		floodFill(map, x, y + 1, room);
 	}
 
-	private boolean createDoor(int x, int y)
+	private boolean createDoor(int x, int y, boolean isExit)
 	{
 		Square square = getSquare(x, y);
 
@@ -129,11 +129,26 @@ public class TerrainBuilder
 			adjacent2 = south;
 		}
 
+		// If exit door:
+		else if(isExit && (!north.isWall() || !south.isWall() || !east.isWall() || !west.isWall()))
+		{
+			if(!north.isWall())
+				adjacent1 = north;
+			else if(!south.isWall())
+				adjacent1 = south;
+			else if(!east.isWall())
+				adjacent1 = east;
+			else
+				adjacent1 = west;
+
+			adjacent2 = NullSquare.getInstance();
+		}
+
 		// If invalid door:
 		else
 			return false;
 
-		Door door = new Door(square, adjacent1.getRoom(), adjacent2.getRoom());
+		Door door = new Door(square, adjacent1.getRoom(), adjacent2.getRoom(), isExit);
 		adjacent1.getRoom().add(door);
 		adjacent2.getRoom().add(door);
 		square.setDoor(door);

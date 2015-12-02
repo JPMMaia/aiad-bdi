@@ -7,12 +7,14 @@ public class Door
 	private Square mSquare;
 	private Room mRoom1;
 	private Room mRoom2;
+	private boolean mExit;
 
-	public Door(Square square, Room room1, Room room2)
+	public Door(Square square, Room room1, Room room2, boolean exit)
 	{
-		this.mSquare = square;
-		this.mRoom1 = room1;
-		this.mRoom2 = room2;
+		mSquare = square;
+		mRoom1 = room1;
+		mRoom2 = room2;
+		mExit = exit;
 	}
 
 	public Position getPosition()
@@ -20,6 +22,10 @@ public class Door
 		return mSquare.getPosition();
 	}
 
+	public boolean isExit()
+	{
+		return mExit;
+	}
 	public boolean isPartOf(Room room)
 	{
 		return room == mRoom1 || room == mRoom2;

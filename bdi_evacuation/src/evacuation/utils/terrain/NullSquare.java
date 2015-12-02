@@ -5,15 +5,16 @@ import evacuation.utils.Position;
 public class NullSquare extends Square
 {
 	private static NullSquare sInstance = new NullSquare();
-
-	public NullSquare()
-	{
-		super(new Position(0, 0));
-	}
-
 	public static NullSquare getInstance()
 	{
 		return sInstance;
+	}
+
+	private NullSquare()
+	{
+		super(new Position(0, 0));
+		super.setDoor(NullDoor.getInstance());
+		super.setRoom(NullRoom.getInstance());
 	}
 
 	@Override
@@ -43,13 +44,13 @@ public class NullSquare extends Square
 	@Override
 	public Door getDoor()
 	{
-		return null;
+		return super.getDoor();
 	}
 
 	@Override
 	public Room getRoom()
 	{
-		return null;
+		return super.getRoom();
 	}
 
 	@Override

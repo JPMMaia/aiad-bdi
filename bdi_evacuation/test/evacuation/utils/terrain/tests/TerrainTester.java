@@ -2,6 +2,7 @@ package evacuation.utils.terrain.tests;
 
 import evacuation.utils.terrain.Door;
 import evacuation.utils.terrain.Room;
+import evacuation.utils.terrain.Square;
 import evacuation.utils.terrain.Terrain;
 import org.junit.Assert;
 import org.junit.Test;
@@ -44,5 +45,10 @@ public class TerrainTester
 		Assert.assertTrue(door.isPartOf(terrain.getSquare(9, 3).getRoom()));
 		Assert.assertTrue(!door.isPartOf(terrain.getSquare(17, 1).getRoom()));
 		Assert.assertTrue(door.isPartOf(terrain.getSquare(1, 7).getRoom()));
+
+		// Check exit door:
+		Square exitDoorSquare = terrain.getSquare(0, 17);
+		Assert.assertTrue(exitDoorSquare.isDoor());
+		Assert.assertTrue(exitDoorSquare.getDoor().isExit());
 	}
 }

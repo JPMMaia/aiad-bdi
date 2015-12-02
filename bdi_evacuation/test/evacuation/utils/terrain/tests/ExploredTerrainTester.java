@@ -1,6 +1,7 @@
 package evacuation.utils.terrain.tests;
 
 import evacuation.utils.terrain.ExploredTerrain;
+import evacuation.utils.terrain.NullSquare;
 import evacuation.utils.terrain.Terrain;
 import org.junit.Assert;
 import org.junit.Before;
@@ -98,6 +99,6 @@ public class ExploredTerrainTester
 		Assert.assertSame(sExploredTerrain.getSquare(6, 17).getDoor(), sExploredTerrain.findNearestUnexploredDoor(15, 14));
 
 		sExploredTerrain.exploreSquare(6, 17);
-		Assert.assertSame(null, sExploredTerrain.findNearestUnexploredDoor(7, 17));
+		Assert.assertSame(sExploredTerrain.getSquare(0, 17).getDoor(), sExploredTerrain.findNearestUnexploredDoor(7, 17));
 	}
 }

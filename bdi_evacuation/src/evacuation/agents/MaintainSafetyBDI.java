@@ -3,6 +3,7 @@ package evacuation.agents;
 import evacuation.utils.Move;
 import jadex.bdiv3.annotation.*;
 import jadex.extension.envsupport.environment.ISpaceObject;
+import jadex.extension.envsupport.environment.SpaceObject;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 
@@ -86,6 +87,8 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
                 res = riskPerception;
             }
             else{
+                agentNeedsHelp = (SpaceObject) worldMethods.someoneNeedsHelp(currentPosition, DISTANCE_TO_HELP);
+
                 if(!isHurt && inPanic && patience_mode && !patient) {
                     if (worldMethods.getNumAgentInCellMap(currentPosition) == 2) {
                         System.out.println("someone in my cell");
@@ -96,7 +99,7 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
                         agent.dispatchTopLevelGoal(new MaintainSafetyGoal());
 
                 }
-                else if(!isHurt && worldMethods.someoneNeedsHelp(currentPosition, DISTANCE_TO_HELP)){
+                else if(!isHurt && agentNeedsHelp != null){
                     agent.dispatchTopLevelGoal(new HelpOthersGoal());
                     helping = true;
                 }

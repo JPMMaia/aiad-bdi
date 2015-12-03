@@ -159,19 +159,23 @@ public class WorldMethods {
         return space.getDistance(p1v2d, p2v2d);
     }
 
-    public IVector1 getDistanceBetweenTwoIVector2(IVector2 p1, IVector2 p2){
-        return space.getDistance(p1, p2);
-    }
-
     //SOCIAL AGENT QUERIES
 
-    public boolean someoneNeedsHelp(Position actualPosition, int distance) {
+    public ISpaceObject someoneNeedsHelp(Position actualPosition, int distance) {
         String[] types = {TypesObjects.HURT_AGENT};
         Vector2Double wantedPosition = new Vector2Double(actualPosition.x, actualPosition.y);
 
         Set agentsSet = space.getNearGridObjects(wantedPosition, distance, types);
 
-        return !agentsSet.isEmpty();
+        for (Iterator<ISpaceObject> it = agentsSet.iterator(); it.hasNext(); ) {
+            ISpaceObject obj;
+            obj = it.next();
+            Position objPosition = Position.convertToPosition(obj.getProperty(TypesProperties.POSITION));
+            if(!isWallBetween(actualPosition,objPosition))
+                return obj;
+        }
+
+        return null;
     }
 
     //GET OBJECT IN THE SAME POSITION

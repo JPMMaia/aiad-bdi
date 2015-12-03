@@ -17,10 +17,11 @@ import java.util.HashSet;
 public class SocialAgentBDI extends WalkerBDI{
 
     //CONSTANTS***************************
-    protected static final int DISTANCE_TO_HELP = 4;
+    protected static final int DISTANCE_TO_HELP = 20;
 
     // CURE ATTRIBUTES
     protected HashSet<SpaceObject> curesSet;
+    SpaceObject agentNeedsHelp;
 
     //PUSH ATTRIBUTES
     protected HashSet<SpaceObject> pushSet;
@@ -64,16 +65,11 @@ public class SocialAgentBDI extends WalkerBDI{
                 return;
             }
 
-            //find the nearest other
-            ISpaceObject[] hurtAgents = space.getSpaceObjectsByType(TypesObjects.HURT_AGENT);
-            ISpaceObject hurtAgent;
-
-            if(hurtAgents != null && hurtAgents.length > 0) {
-                hurtAgent = worldMethods.pickClosestObject(hurtAgents, currentPosition);
+            if(agentNeedsHelp != null) {
 
                 //go to an adjacent cell
                 //-calculate distance from hurtAgent
-                Position targetPosition = Position.convertToPosition(hurtAgent.getProperty(TypesProperties.POSITION));
+                Position targetPosition = Position.convertToPosition(agentNeedsHelp.getProperty(TypesProperties.POSITION));
                 IVector1 distanceIV = worldMethods.getDistanceBetweenTwoPositions(currentPosition, targetPosition);
                 double distance = distanceIV.getAsDouble();
 
@@ -83,7 +79,7 @@ public class SocialAgentBDI extends WalkerBDI{
                     curesSet.add(cure);
                 }
                 else { //go to the hurt
-                    Position wantedPosition = worldMethods.findPathToObject(hurtAgent, currentPosition);
+                    Position wantedPosition = worldMethods.findPathToObject(agentNeedsHelp, currentPosition);
                     nextPosition = wantedPosition;
                 }
             }

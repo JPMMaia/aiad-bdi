@@ -240,15 +240,25 @@ public class WorldMethods {
         }
     }
 
-    public boolean getPush(Position currentPosition) {
-        SpaceObject push = (SpaceObject) getObject(currentPosition, TypesObjects.PUSH_AGENT);
+    public SpaceObject getPush(Position currentPosition, HashSet<SpaceObject> pushSet) {
 
-        if(push != null) {
-            space.destroyAndVerifySpaceObject(push.getId());
-            return true;
+        Vector2Double wantedPosition = new Vector2Double(currentPosition.x,currentPosition.y);
+        IVector1 distance = new Vector1Double(0);
+
+        Set set = space.getNearObjects(wantedPosition,distance,TypesObjects.PUSH_AGENT);
+
+        if(set == null || set.isEmpty())
+            return null;
+
+        for (Iterator<ISpaceObject> it = set.iterator(); it.hasNext(); ) {
+            ISpaceObject obj;
+            obj = it.next();
+
+            if(!pushSet.contains(obj))
+                return (SpaceObject) obj;
         }
 
-        return false;
+        return null;
     }
 
     //WALL OBJECTS BETWEEN
@@ -263,5 +273,10 @@ public class WorldMethods {
             }
         }
         return false;
+    }
+
+    public Position getDoorPosition(SpaceObject door) {
+        Position destinyPosition = Position.convertToPosition(door.getProperty(TypesProperties.POSITION));
+        return destinyPosition;
     }
 }

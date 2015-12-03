@@ -3,6 +3,7 @@ package evacuation.utils;
 public class TypesObjects {
 
 
+    public static String ESCAPED_AGENT = "escaped_agent";
     public static String DOOR = "exit_door";
     public static String INCIDENT = "incident";
     public static String TERRAIN = "terrain";

@@ -65,6 +65,13 @@
 				</env:objecttype>
 
 				<!-- Wanderer -->
+				<env:objecttype name="escaped_agent">
+					<env:property name="position" class="IVector2"/>
+					<env:property name="speed" class="Double"/>
+					<env:property name="space" class="Space2D"/>
+				</env:objecttype>
+
+				<!-- Wanderer -->
 				<env:objecttype name="hurt_agent">
 					<env:property name="position" class="IVector2"/>
 					<env:property name="speed" class="Double"/>
@@ -229,7 +236,7 @@
 
 					<!-- Wanderer avatar -->
 					<env:drawable objecttype="dead_agent" height="1.0" width="1.0">
-						<env:texturedrectangle layer="6" imagepath="images/dead_agent.png"/>
+						<env:texturedrectangle layer="2" imagepath="images/dead_agent.png"/>
 					</env:drawable>
 
 					<!-- Wanderer avatar -->
@@ -253,17 +260,17 @@
 
                     <!-- Wanderer avatar -->
                     <env:drawable objecttype="wanderer" height="1.0" width="1.0">
-                        <env:texturedrectangle layer="2" imagepath="images/wanderer.png"/>
+                        <env:texturedrectangle layer="4" imagepath="images/wanderer.png"/>
                     </env:drawable>
 
 					<!-- Herding avatar -->
 					<env:drawable objecttype="herding" height="1.0" width="1.0">
-						<env:texturedrectangle layer="2" imagepath="images/wanderer2.png"/>
+						<env:texturedrectangle layer="4" imagepath="images/wanderer2.png"/>
 					</env:drawable>
 
 					<!-- Conservative avatar -->
 					<env:drawable objecttype="conservative" height="1.0" width="1.0">
-						<env:texturedrectangle layer="2" imagepath="images/wanderer3.png"/>
+						<env:texturedrectangle layer="4" imagepath="images/wanderer3.png"/>
 					</env:drawable>
 
 					<!-- Door avatar -->
@@ -285,7 +292,7 @@
                         </env:texturedrectangle>
 
 						<!-- Terrorism -->
-						<env:texturedrectangle layer="2" imagepath="images/terrorist.png">
+						<env:texturedrectangle layer="5" imagepath="images/terrorist.png">
 							<env:drawcondition>$object.type.equals(2)</env:drawcondition>
 						</env:texturedrectangle>
 

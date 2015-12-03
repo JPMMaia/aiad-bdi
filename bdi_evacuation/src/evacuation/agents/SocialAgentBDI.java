@@ -17,7 +17,7 @@ import java.util.HashSet;
 public class SocialAgentBDI extends WalkerBDI{
 
     //CONSTANTS***************************
-    protected static final int DISTANCE_TO_HELP = 10;
+    protected static final int DISTANCE_TO_HELP = 4;
 
     // CURE ATTRIBUTES
     protected HashSet<SpaceObject> curesSet;
@@ -59,6 +59,11 @@ public class SocialAgentBDI extends WalkerBDI{
         @PlanBody
         protected void HelpOthersPlanBody() {
 
+            if(agentIsHurt()) {
+                System.out.println("cant cure is hurt");
+                return;
+            }
+
             //find the nearest other
             ISpaceObject[] hurtAgents = space.getSpaceObjectsByType(TypesObjects.HURT_AGENT);
             ISpaceObject hurtAgent;
@@ -92,7 +97,8 @@ public class SocialAgentBDI extends WalkerBDI{
         protected void PushOthersPlanBody() {
             //if there is someone in the same cell as me
             //create a pushSet object
-            worldMethods.makeObjectInCell(currentPosition,TypesObjects.PUSH_AGENT);
+            SpaceObject pushObj = worldMethods.makeObjectInCell(currentPosition,TypesObjects.PUSH_AGENT);
+            pushSet.add(pushObj);
         }
     }
 
@@ -104,6 +110,9 @@ public class SocialAgentBDI extends WalkerBDI{
     }
 
     //OTHER METHODS
+    boolean agentIsHurt(){
+        return false;
+    }
 
     void deleteCures(){
         for(SpaceObject cure : curesSet){

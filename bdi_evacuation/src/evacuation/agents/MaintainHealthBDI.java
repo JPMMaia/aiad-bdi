@@ -5,6 +5,7 @@ import evacuation.utils.Position;
 import evacuation.utils.TypesObjects;
 import jadex.bdiv3.annotation.*;
 import jadex.extension.envsupport.environment.ISpaceObject;
+import jadex.extension.envsupport.environment.SpaceObject;
 import jadex.extension.envsupport.math.Vector2Int;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
@@ -71,13 +72,16 @@ public class MaintainHealthBDI extends SocialAgentBDI{
         @PlanBody
         protected void DeadPlanBody() {
             if(isDead){
+
                 worldMethods.makeObjectInCell(currentPosition, TypesObjects.DEAD_AGENT);
 
                 if(hurtObject != null)
                     space.destroySpaceObject(hurtObject.getId());
 
                 deleteCures();
+                deletePush();
                 worldMethods.resolveTwoAgentsInSameCell(currentPosition, null);
+                space.destroyAndVerifySpaceObject(myself.getId());
                 agent.killAgent();
             }
         }
@@ -139,12 +143,15 @@ public class MaintainHealthBDI extends SocialAgentBDI{
         //pushOthersPlan - other condition gets worse and if = 0 they die
         @PlanBody
         protected void ReceivePushOthersPlanBody() {
-            //if there is someone in the same cell as me
-            //create a pushSet object
-            if(worldMethods.getPush(currentPosition)){
-                condition -= 10;
-                if(condition < 0)
-                    condition = 0;
+            //if there is a push in the same position as me
+            //the push can not be mine
+            SpaceObject pushObj = worldMethods.getPush(currentPosition, pushSet);
+            if(pushObj != null){
+                if(space.destroyAndVerifySpaceObject(pushObj.getId())){
+                    condition -= 10;
+                    if(condition < 0)
+                        condition = 0;
+                }
             }
         }
     }
@@ -152,5 +159,10 @@ public class MaintainHealthBDI extends SocialAgentBDI{
     @AgentBody
     public void body(){
         super.body();
+    }
+
+    @Override
+    boolean agentIsHurt(){
+        return isHurt;
     }
 }

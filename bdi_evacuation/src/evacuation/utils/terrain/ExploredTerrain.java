@@ -12,6 +12,7 @@ public class ExploredTerrain implements ITerrain
 	private List<Door> mExploredDoors;
 	private List<Door> mUnexploredDoors;
 	private List<Room> mExploredRooms;
+	private List<Door> mExitDoors;
 	private GraphPathFinder mUnexploredDoorFinder;
 
 	public ExploredTerrain(Terrain terrain)
@@ -20,6 +21,7 @@ public class ExploredTerrain implements ITerrain
 		mExploredDoors = new ArrayList<>();
 		mUnexploredDoors = new ArrayList<>();
 		mExploredRooms = new ArrayList<>();
+		mExitDoors = new ArrayList<>();
 		mUnexploredDoorFinder = new GraphPathFinder(this);
 	}
 
@@ -53,6 +55,8 @@ public class ExploredTerrain implements ITerrain
 				else
 				{
 					mUnexploredDoors.add(door);
+					if(door.isExit())
+						mExitDoors.add(door);
 				}
 			}
 		}
@@ -96,6 +100,45 @@ public class ExploredTerrain implements ITerrain
 			return square.getDoor();
 
 		return mUnexploredDoorFinder.run(new Position(x, y));
+	}
+	public Door findNearestExitDoor(int x, int y)
+	{
+		Square currentSquare = getSquare(x, y);
+
+		List<Room> rooms = new ArrayList<>();
+		if(currentSquare.isDoor())
+		{
+			Door door = currentSquare.getDoor();
+			rooms.add(door.getRoom1());
+			rooms.add(door.getRoom2());
+		}
+		else if(currentSquare.isPartOfRoom())
+		{
+			rooms.add(currentSquare.getRoom());
+		}
+		else
+			return NullDoor.getInstance();
+
+		Door nearestDoor = NullDoor.getInstance();
+		for (Room currentRoom : rooms)
+		{
+			List<Door> availableDoors = currentRoom.getDoors();
+			int nearestDoorDistance = Integer.MAX_VALUE;
+			for (Door availableDoor : availableDoors)
+			{
+				if(availableDoor.isExit())
+				{
+					int distance = availableDoor.getPosition().distance(x, y);
+					if(distance < nearestDoorDistance)
+					{
+						nearestDoorDistance = distance;
+						nearestDoor = availableDoor;
+					}
+				}
+			}
+		}
+
+		return nearestDoor;
 	}
 	private Door findNearestDoor(int x, int y, List<Door> doors)
 	{
@@ -184,10 +227,6 @@ public class ExploredTerrain implements ITerrain
 	public List<Door> getUnexploredDoors()
 	{
 		return mUnexploredDoors;
-	}
-	public List<Room> getExploredRooms()
-	{
-		return mExploredRooms;
 	}
 	public Terrain getTerrain()
 	{

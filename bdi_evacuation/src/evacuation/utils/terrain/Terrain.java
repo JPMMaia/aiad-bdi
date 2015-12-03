@@ -29,6 +29,9 @@ public class Terrain implements ITerrain
 
 	public Square getSquare(int x, int y)
 	{
+		if(x < 0 || y < 0 || x >= mWidth || y >= mHeight)
+			return NullSquare.getInstance();
+
 		return mSquares[y][x];
 	}
 

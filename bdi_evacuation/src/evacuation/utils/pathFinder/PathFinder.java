@@ -107,6 +107,9 @@ public class PathFinder
 			solution.add(finalNode.getPosition());
 		}
 
+		// Reverse list:
+		Collections.reverse(solution);
+
 		return solution;
 	}
 

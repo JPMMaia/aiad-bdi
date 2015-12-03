@@ -21,10 +21,7 @@ public class ExplorerTester
 	private void moveExplorer(Explorer explorer, int steps)
 	{
 		for(int i = 0; i < steps; i++)
-		{
-			Position nextPosition = explorer.getNextPosition();
-			explorer.move(nextPosition.x, nextPosition.y);
-		}
+			explorer.move();
 	}
 
 	@Test
@@ -47,13 +44,7 @@ public class ExplorerTester
 		moveExplorer(explorer, 8);
 		Assert.assertEquals(new Position(16, 10), explorer.getPosition());
 
-		moveExplorer(explorer, 5);
-		Assert.assertEquals(new Position(15, 14), explorer.getPosition());
-
-		moveExplorer(explorer, 12);
-		Assert.assertEquals(new Position(6, 17), explorer.getPosition());
-
-		moveExplorer(explorer, 6);
-		Assert.assertEquals(new Position(0, 17), explorer.getPosition());
+		moveExplorer(explorer, 17);
+		Assert.assertEquals(new Position(0, 11), explorer.getPosition());
 	}
 }

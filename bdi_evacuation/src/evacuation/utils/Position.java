@@ -13,10 +13,10 @@ import jadex.extension.envsupport.math.Vector2Int;public class Position {
 	@Override
 	public boolean equals(Object other)
 	{
-		if(!other.getClass().equals(Position.class))
+		if(!(other instanceof Position))
 			return false;
 
-		Position position = (Position) other;
+		Position position = (Position)other;
 		return (this.x == position.x) && (this.y == position.y);
 	}
 	public int distance(Position position)

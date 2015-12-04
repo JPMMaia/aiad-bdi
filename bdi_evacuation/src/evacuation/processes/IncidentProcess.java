@@ -6,8 +6,12 @@ import evacuation.utils.TypesObjects;
 import jadex.bridge.service.types.clock.IClockService;
 import jadex.commons.SimplePropertyObject;
 import jadex.extension.envsupport.environment.IEnvironmentSpace;
+import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.ISpaceProcess;
 import jadex.extension.envsupport.environment.space2d.Space2D;
+import jadex.extension.envsupport.math.IVector1;
+import jadex.extension.envsupport.math.Vector1Double;
+import jadex.extension.envsupport.math.Vector2Double;
 import jadex.extension.envsupport.math.Vector2Int;
 
 import java.util.*;
@@ -15,9 +19,9 @@ import java.util.*;
 public class IncidentProcess extends SimplePropertyObject implements ISpaceProcess {
 
 	//TIMERS FOR THE INCIDENT
-	private static final long initialWaitingTime = 2000;
+	private static final long initialWaitingTime = 4000;
 	private static long startTime = 0; //get from the jadex clock
-	private static long incidentProgressTimer = 3000; //interval between the generation of new incident objects
+	private static long incidentProgressTimer = 2000; //interval between the generation of new incident objects
 
 	//OTHER VARIABLES FOR CALCULATIONS OF NEW INCIDENTS
 	private int desiredNumIncidentPositions; //for the calculations
@@ -30,6 +34,7 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 	int incidentType;
 
 	Move move;
+	Random r;
 
     @Override
     public void start(IClockService arg0, IEnvironmentSpace arg1) {
@@ -38,13 +43,13 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
         space = (Space2D)arg1;
 
 		move = new Move(space.getAreaSize().getXAsInteger(),space.getAreaSize().getYAsInteger());
-
+		r = move.r;
 		startTime = arg0.getTime();
 		lastPosition = move.getRandomPosition();
 		desiredNumIncidentPositions = 1;
 		incidentPositions = new HashSet<>();
 
-		incidentType = 0; //r.nextInt(2); //0 - fire ; 1 - water;
+		incidentType = 0;//r.nextInt(3); //0 - fire ; 1 - water; 2 - terrorist
 	}
 
     @Override
@@ -57,27 +62,104 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 
 		long currentTime = iClockService.getTime() - startTime;
 
+		long incidentTimer = incidentProgressTimer;
+
+		if(incidentType == 1)
+			incidentTimer = incidentTimer * 2 * desiredNumIncidentPositions;
+
     	if(currentTime > initialWaitingTime){
-			if(currentTime > (incidentProgressTimer * desiredNumIncidentPositions)) {
+			if(currentTime > (incidentTimer * desiredNumIncidentPositions)) {
 				createIncident();
 				desiredNumIncidentPositions++;
 			}
     	}
+
+		ISpaceObject[] set = space.getSpaceObjectsByType(TypesObjects.ESCAPED_AGENT);
+		System.out.println("Agents escaped: " + set.length);
     }
 
 	private void createIncident() {
-		Position newPosition = move.getNewPosition(lastPosition);
-		if(savedIncidentPosition(newPosition)){
+
+		if(incidentType == 0) {
+			createFire();
+		}
+		else if(incidentType == 1){
+			createWater();
+		}
+		else if (incidentType == 2){
+			createTerrorist();
+		}
+	}
+
+	private boolean createIncidentObject(Position newPosition){
+		if (savedIncidentPosition(newPosition)) {
 			Map<String, Object> properties = new HashMap<>();
 			properties.put("position", new Vector2Int(newPosition.x, newPosition.y));
 			properties.put("type", incidentType); //fire type
 			space.createSpaceObject(TypesObjects.INCIDENT, properties, null);
 			lastPosition = newPosition;
+			return true;
 		}
+		return false;
+	}
+
+	private void createFire() {
+		Position newPosition = move.getNewPosition(lastPosition);
+		createIncidentObject(newPosition);
+	}
+
+	ArrayList<Position> openObjects = new ArrayList<>();
+
+	private void createWater() {
+
+		Position newPosition;
+
+		if(openObjects.isEmpty()){
+			newPosition = move.getRandomPosition();
+			while(!noWallsInPosition(newPosition)){
+				newPosition = move.getRandomPosition();
+			}
+			createIncidentObject(newPosition);
+			openObjects.add(newPosition);
+		}
+		else{
+			ArrayList<Position> newOpenObjects = new ArrayList<>();
+
+			for (Position element : openObjects) {
+				for(Position direction : move.directions){
+					Position wantedPosition = new Position(element.x + direction.x, element.y + direction.y);
+					if(move.isBetweenLimits(wantedPosition) && noWallsInPosition(wantedPosition) && !openObjects.contains(wantedPosition)) {
+						if(createIncidentObject(wantedPosition)) {
+							newOpenObjects.add(wantedPosition);
+						}
+					}
+				}
+			}
+
+			openObjects = newOpenObjects;
+		}
+	}
+
+	private void createTerrorist() {
+		Position newPosition = move.getRandomPosition();
+		while(!noWallsInPosition(newPosition)){
+			newPosition = move.getRandomPosition();
+		}
+		createIncidentObject(newPosition);
 	}
 
 	private boolean savedIncidentPosition(Position position) {
 		return incidentPositions.add(position.x + "." + position.y); // returns false if the object already exists
 	}
 
+	public boolean noWallsInPosition(Position p) {
+		Vector2Double wantedPosition = new Vector2Double(p.x,p.y);
+		IVector1 distance = new Vector1Double(0);
+		Set terrainSet = space.getNearObjects(wantedPosition,distance,TypesObjects.TERRAIN);
+
+		if(!terrainSet.isEmpty()) //there is a wall or an obstacle
+			return false;
+
+		return true;
+	}
 }

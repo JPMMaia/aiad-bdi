@@ -2,34 +2,24 @@ package evacuation.agents;
 
 import evacuation.utils.Move;
 import evacuation.utils.Position;
-import evacuation.utils.TypesObjects;
+import evacuation.utils.WorldMethods;
 import jadex.bdiv3.BDIAgent;
 import jadex.bdiv3.annotation.*;
 import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.space2d.Grid2D;
-import jadex.extension.envsupport.math.IVector1;
-import jadex.extension.envsupport.math.Vector1Double;
-import jadex.extension.envsupport.math.Vector2Double;
 import jadex.extension.envsupport.math.Vector2Int;
 import jadex.micro.annotation.Agent;
-
-import java.util.Set;
+import jadex.micro.annotation.AgentBody;
 
 @Agent
 public class WalkerBDI {
-
-
-    Move move;
-
-    //ATTRIBUTES********************************************
-
-    @Belief
-    protected int velocity = 50; //range [0-100]
-
+    
     @Agent
     protected BDIAgent agent;
 
     //BELIEFS **********************************************
+
+    //Space
 
     @Belief
     protected Grid2D space = (Grid2D)agent.getParentAccess().getExtension("2dspace").get();
@@ -37,17 +27,34 @@ public class WalkerBDI {
     @Belief
     protected ISpaceObject myself = space.getAvatar(agent.getComponentDescription(), agent.getModel().getFullName());
 
-    @Belief(updaterate=100)
-    protected boolean isIncident = (space.getSpaceObjectsByType(TypesObjects.INCIDENT).length != 0);
+    //Position
 
     @Belief(dynamic=true)
     Position nextPosition;
 
-    @Belief
-    protected boolean samePosition = false;
+    @Belief(dynamic=true)
+    Position currentPosition;
+
+    //Speed
+
+    @Belief(dynamic=true)
+    protected Double speed = 1.0;
 
     @Belief
     protected boolean indoor = true;
+
+    @Belief
+    protected boolean emptyPathToTheExit = true; //A*
+
+    //ATTRIBUTES********************************************
+
+    WorldMethods worldMethods = new WorldMethods(space);
+    Move move = new Move( space.getAreaSize().getXAsInteger(), space.getAreaSize().getYAsInteger());
+
+    public int getWaitTime() {
+        int waitTime = (int)(1000.0/speed);
+        return waitTime;
+    }
 
     //GOALS*************************************************
 
@@ -64,16 +71,9 @@ public class WalkerBDI {
     public class WanderPlan {
         @PlanBody
         protected void WanderPlanBody() {
-
-            //System.out.println("WanderPlanBody");
-
             Position oldPosition = move.getPosition(myself);
             Position wantedPosition = move.getNewPosition(oldPosition);
-            if(noCollisions(wantedPosition))
-                nextPosition = wantedPosition;
-
-            if(!isIncident)
-                agent.dispatchTopLevelGoal(new WanderGoal());
+            nextPosition = wantedPosition;
         }
     }
 
@@ -81,34 +81,28 @@ public class WalkerBDI {
     public class GoPlan {
         @PlanBody
         protected void GoPlanBody() {
-            //System.out.println("Position - (" + nextPosition.x + ", " + nextPosition.y + ")");
-            myself.setProperty("position", new Vector2Int(nextPosition.x, nextPosition.y));
+
+            if(worldMethods.noCollisionsInPosition(nextPosition)){
+                if(!nextPosition.equals(currentPosition)) {
+                    worldMethods.resolveTwoAgentsInSameCell(currentPosition, nextPosition);
+                    myself.setProperty("position", new Vector2Int(nextPosition.x, nextPosition.y));
+                    currentPosition = nextPosition;
+                }
+            }
 
             try {
-                Thread.sleep(500);
+                //System.out.println("wait - " + getWaitTime());
+                Thread.sleep(getWaitTime());
             } catch (InterruptedException e) {
                 System.out.println("unable to sleep");
             }
         }
     }
 
-    // FUNCTIONS *************************************
-
-    protected boolean noCollisions(Position p) {
-        Vector2Double wantedPosition = new Vector2Double(p.x,p.y);
-        IVector1 distance = new Vector1Double(0);
-
-        Set terrainSet = space.getNearObjects(wantedPosition,distance,TypesObjects.TERRAIN);
-        Set incidentSet = space.getNearObjects(wantedPosition,distance,TypesObjects.INCIDENT);
-        Set agentSet = space.getNearObjects(wantedPosition,distance,TypesObjects.WANDERER);
-
-        if(!terrainSet.isEmpty()) //there is a wall or an obstacle
-            return false;
-        else if(!incidentSet.isEmpty()) //there are incidents in the way
-            return false;
-        else if(agentSet.size() > 1) //there are two agents in the position
-            return false;
-
-        return true;
+    @AgentBody
+    public void body(){
+        currentPosition = move.getPosition(myself);
+        worldMethods.putAgentInNewCellMap(currentPosition);
+        speed = 1.0; //cells by second 1 -> 1000 millis ; 2 -> 500 ; 4 -> 250 millis
     }
 }

@@ -1,6 +1,7 @@
 package evacuation.utils;
 
-public class Position {
+import jadex.extension.envsupport.math.Vector2Double;
+import jadex.extension.envsupport.math.Vector2Int;public class Position {
 	public int x;
 	public int y;
 	
@@ -9,7 +10,7 @@ public class Position {
 		this.x = x;
 		this.y = y;
 	}
-
+	@Override
 	public boolean equals(Object other)
 	{
 		if(!other.getClass().equals(Position.class))
@@ -18,7 +19,6 @@ public class Position {
 		Position position = (Position) other;
 		return (this.x == position.x) && (this.y == position.y);
 	}
-
 	public int distance(Position position)
 	{
 		int dx = position.x - x;
@@ -38,5 +38,23 @@ public class Position {
 	public String toString()
 	{
 		return "Position [" + this.x + ", " + this.y + "]";
+	}
+
+	public static Position convertToPosition(Object objPosition) {
+
+		try {
+			Vector2Double lastPosDouble = (Vector2Double) objPosition;
+			return new Position(lastPosDouble.getXAsInteger(), lastPosDouble.getYAsInteger());
+		} catch (Exception e){
+			//System.out.println("Unable to cast to double");
+		}
+		try {
+			Vector2Int lastPosInt = (Vector2Int) objPosition;
+			return new Position(lastPosInt.getXAsInteger(), lastPosInt.getYAsInteger());
+		} catch (Exception e){
+			//System.out.println("Unable to cast to int");
+		}
+
+		return new Position();
 	}
 }

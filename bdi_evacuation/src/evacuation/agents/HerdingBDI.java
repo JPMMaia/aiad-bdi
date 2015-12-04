@@ -15,11 +15,7 @@ public class HerdingBDI extends EscapingAgentBDI {
 
     //CONSTANTS***************************
 
-    protected static final int DISTANCE_TO_HERDING = 10;
-
-    //BELIEFS*****************************
-
-    protected HashSet<Object> targets;
+    protected static final int DISTANCE_TO_HERDING = 4;
 
     //PLANS*******************************
 
@@ -31,59 +27,36 @@ public class HerdingBDI extends EscapingAgentBDI {
 
         //find agents in a certain perimeter
 
-        Position position = followOthersToExit();
-        if (samePosition)
-            position = findNewPositionWhenIncident();
-        samePosition = false;
-        return position;
+        Position newPosition = followOthersToExit();
+        return newPosition;
     }
-
 
     //FUNCTIONS FOR THE PATH CALCULATIONS
 
     protected Position followOthersToExit() {
 
         int distance = DISTANCE_TO_HERDING;
-        String[] types = {TypesObjects.WANDERER};
-        Vector2Double wantedPosition = new Vector2Double(nextPosition.x, nextPosition.y);
+        String[] types = {TypesObjects.WANDERER, TypesObjects.CONSERVATIVE};
+        Vector2Double wantedPosition = new Vector2Double(currentPosition.x, currentPosition.y);
 
         //choose a target
         Set agentsSet = space.getNearGridObjects(wantedPosition, distance, types);
 
         Position position;
 
-        if(!agentsSet.isEmpty()){ //the self and others
+        if(!agentsSet.isEmpty()){
             ISpaceObject[] agentsArray = convertSetToArray(agentsSet);
 
-            //remove self - not necessary because we are only looking for active agents and not other herdings
-            //agentsArray = removeSelf(agentsArray);
-
-            ISpaceObject agent = pickClosestObject(agentsArray, targets);
+            ISpaceObject agent = worldMethods.pickClosestObject(agentsArray, currentPosition);
 
             //follow the target
-            position = findPathToObject(agent);
-            if (samePosition)
-                targets.add(agent.getId());
+            position = worldMethods.findPathToObject(agent, currentPosition);
         }
         else {
-            position = nextPosition;
-            samePosition = true;
+            position = findNewPositionWhenIncident();
         }
 
         return position;
-    }
-
-    private ISpaceObject[] removeSelf(ISpaceObject[] agentsArray) {
-
-        ISpaceObject[] res = new ISpaceObject[agentsArray.length-1];
-
-        for(int i = 0; i < agentsArray.length && i < res.length; i++){
-            Object targetId = agentsArray[i].getId();
-            Object ownId = myself.getId();
-            if(!targetId.equals(ownId))
-                res[i] = agentsArray[i];
-        }
-        return res;
     }
 
     private ISpaceObject[] convertSetToArray(Set agentsSet) {
@@ -92,7 +65,6 @@ public class HerdingBDI extends EscapingAgentBDI {
 
     @AgentBody
     public void body(){
-        targets = new HashSet<>();
         super.body();
     }
 }

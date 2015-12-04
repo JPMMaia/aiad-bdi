@@ -2,10 +2,8 @@ package evacuation.agents;
 
 import evacuation.utils.Position;
 import jadex.micro.annotation.Agent;
+import jadex.micro.annotation.AgentBody;
 
-/**
- * Created by Paula on 15/11/2015.
- */
 @Agent
 public class ConservativeBDI extends EscapingAgentBDI {
 
@@ -13,6 +11,11 @@ public class ConservativeBDI extends EscapingAgentBDI {
     protected Position findExit() {
 
         //2 - conservative - look for a known empty path - greedy
-        return nextPosition;
+        return currentPosition;
+    }
+
+    @AgentBody
+    public void body(){
+        super.body();
     }
 }

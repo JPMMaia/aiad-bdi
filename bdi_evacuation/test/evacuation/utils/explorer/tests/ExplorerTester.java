@@ -77,6 +77,6 @@ public class ExplorerTester
 		Position obstacle = new Position(16, 3);
 		explorer.setGoal(obstacle);
 		moveExplorer(explorer, 4);
-		Assert.assertEquals(new Position(16, 4), explorer.getPosition());
+		Assert.assertEquals(new Position(18, 5), explorer.getPosition());
 	}
 }

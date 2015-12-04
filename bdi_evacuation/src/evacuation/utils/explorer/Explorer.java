@@ -1,5 +1,6 @@
 package evacuation.utils.explorer;
 
+import evacuation.utils.NullPosition;
 import evacuation.utils.Position;
 import evacuation.utils.pathFinder.PathFinder;
 import evacuation.utils.terrain.*;
@@ -11,6 +12,7 @@ public class Explorer
 	private ExploredTerrain mExploredTerrain;
 	private Position mPosition;
 	private ExplorerGoal mGoal;
+	private Position mGoalPosition;
 	private List<Position> mCurrentPath;
 
 	public Explorer(Terrain terrain, Position position)
@@ -33,39 +35,38 @@ public class Explorer
 
 		// Try to move to the next position:
 		Position position = mCurrentPath.get(0);
-		if(!move(position.x, position.y))
-			return false;
+		move(position.x, position.y);
 
 		// Remove position as we have already moved:
 		mCurrentPath.remove(0);
 
 		return true;
 	}
-	private boolean move(int x, int y)
+	private void move(int x, int y)
 	{
-		if(mExploredTerrain.isObstacle(x, y))
-			return false;
-
 		mExploredTerrain.exploreSquare(x, y);
 		mPosition = new Position(x, y);
-
-		return true;
 	}
 
 	private Position calculateNextPosition()
 	{
 		if(mGoal == ExplorerGoal.FindExit)
+			mGoalPosition = findExit();
+
+		Position destination;
+		if(mExploredTerrain.isObstacle(mGoalPosition.x, mGoalPosition.y) && !mExploredTerrain.getSquare(mGoalPosition.x, mGoalPosition.y).isWall())
+			destination = mExploredTerrain.findNearestUnexploredDoor(mGoalPosition.x, mGoalPosition.y).getPosition();
+		else
+			destination = mGoalPosition;
+
+		mCurrentPath = PathFinder.run(mExploredTerrain, mPosition, destination);
+		if(mCurrentPath.size() > 1)
 		{
-			Position exit = findExit();
-			mCurrentPath = PathFinder.run(mExploredTerrain, mPosition, exit);
-			if(mCurrentPath.size() > 1)
-			{
-				mCurrentPath.remove(0);
-				return mCurrentPath.get(0);
-			}
+			mCurrentPath.remove(0);
+			return mCurrentPath.get(0);
 		}
 
-		return new Position(-1, -1);
+		return NullPosition.getInstance();
 	}
 	private Position findExit()
 	{
@@ -87,7 +88,7 @@ public class Explorer
 	}
 	public void setGoal(Position goalPosition)
 	{
-		mPosition = goalPosition;
+		mGoalPosition = goalPosition;
 		mGoal = ExplorerGoal.FindPosition;
 	}
 }

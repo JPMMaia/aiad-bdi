@@ -26,6 +26,13 @@ public class Position {
 
 		return Math.round((float) Math.sqrt(dx * dx + dy * dy));
 	}
+	public int distance(int x, int y)
+	{
+		int dx = x - this.x;
+		int dy = y - this.y;
+
+		return Math.round((float) Math.sqrt(dx * dx + dy * dy));
+	}
 
 	@Override
 	public String toString()

@@ -1,17 +1,17 @@
 package evacuation.utils.pathFinder;
 
 import evacuation.utils.Position;
-import evacuation.utils.terrain.Terrain;
+import evacuation.utils.terrain.ITerrain;
 
 import java.util.*;
 
 public class PathFinder
 {
-	private Comparator<Node> mNodeComparator;
-	private List<Node> mOpenList;
-	private List<Node> mClosedList;
+	private Comparator<PathNode> mNodeComparator;
+	private List<PathNode> mOpenList;
+	private List<PathNode> mClosedList;
 	private Position mDestination;
-	private Terrain mTerrain;
+	private ITerrain mTerrain;
 
 	public PathFinder()
 	{
@@ -19,10 +19,10 @@ public class PathFinder
 		mClosedList = new ArrayList<>();
 	}
 
-	public void initialize(Terrain terrain, Position start, Position destination)
+	public void initialize(ITerrain terrain, Position start, Position destination)
 	{
-		mNodeComparator = new Node.NodeComparator();
-		Node startNode = new Node(null, start, destination);
+		mNodeComparator = new PathNode.NodeComparator();
+		PathNode startNode = new PathNode(null, start, destination);
 		startNode.initialize();
 		mOpenList.add(startNode);
 		mDestination = destination;
@@ -35,14 +35,14 @@ public class PathFinder
 		{
 			// Get square with lowest score:
 			Collections.sort(mOpenList, mNodeComparator);
-			Node currentNode = mOpenList.get(0);
+			PathNode currentNode = mOpenList.get(0);
 
 			// Remove node from open list and add it to the closed list:
 			mOpenList.remove(currentNode);
 			mClosedList.add(currentNode);
 
-			List<Node> walkableNodes = getWalkableNodes(currentNode);
-			for (Node walkableNode : walkableNodes)
+			List<PathNode> walkableNodes = getWalkableNodes(currentNode);
+			for (PathNode walkableNode : walkableNodes)
 			{
 				// Ignore node if it is in the closed list:
 				if(mClosedList.contains(walkableNode))
@@ -71,7 +71,7 @@ public class PathFinder
 		return new ArrayList<>();
 	}
 
-	private List<Node> getWalkableNodes(Node parent)
+	private List<PathNode> getWalkableNodes(PathNode parent)
 	{
 		Position position = parent.getPosition();
 		int xWest = position.x - 1;
@@ -79,24 +79,24 @@ public class PathFinder
 		int yNorth = position.y - 1;
 		int ySouth = position.y + 1;
 
-		List<Node> walkableNodes = new ArrayList<>();
+		List<PathNode> walkableNodes = new ArrayList<>();
 
 		if(!mTerrain.isObstacle(xWest, position.y))
-			walkableNodes.add(new Node(parent, new Position(xWest, position.y), mDestination));
+			walkableNodes.add(new PathNode(parent, new Position(xWest, position.y), mDestination));
 
 		if(!mTerrain.isObstacle(xEast, position.y))
-			walkableNodes.add(new Node(parent, new Position(xEast, position.y), mDestination));
+			walkableNodes.add(new PathNode(parent, new Position(xEast, position.y), mDestination));
 
 		if(!mTerrain.isObstacle(position.x, yNorth))
-			walkableNodes.add(new Node(parent, new Position(position.x, yNorth), mDestination));
+			walkableNodes.add(new PathNode(parent, new Position(position.x, yNorth), mDestination));
 
 		if(!mTerrain.isObstacle(position.x, ySouth))
-			walkableNodes.add(new Node(parent, new Position(position.x, ySouth), mDestination));
+			walkableNodes.add(new PathNode(parent, new Position(position.x, ySouth), mDestination));
 
 		return walkableNodes;
 	}
 
-	private List<Position> findSolution(Node finalNode)
+	private List<Position> findSolution(PathNode finalNode)
 	{
 		List<Position> solution = new ArrayList<>();
 		solution.add(finalNode.getPosition());
@@ -107,10 +107,13 @@ public class PathFinder
 			solution.add(finalNode.getPosition());
 		}
 
+		// Reverse list:
+		Collections.reverse(solution);
+
 		return solution;
 	}
 
-	public static List<Position> run(Terrain terrain, Position start, Position destination)
+	public static List<Position> run(ITerrain terrain, Position start, Position destination)
 	{
 		PathFinder finder = new PathFinder();
 		finder.initialize(terrain, start, destination);

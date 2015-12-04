@@ -1,9 +1,9 @@
-package evacuation.utils.terrain.tests;
+package evacuation.utils.pathFinder.tests;
 
-import evacuation.utils.terrain.Terrain;
 import evacuation.utils.pathFinder.PathFinder;
 import evacuation.utils.Position;
-import junit.framework.Assert;
+import evacuation.utils.terrain.Terrain;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -27,16 +27,16 @@ public class PathFinderTester
 		Assert.assertNotNull(actualPath);
 
 		List<Position> expectedPath = Arrays.asList(
-				new Position(7, 4),
-				new Position(6, 4),
-				new Position(5, 4),
-				new Position(4, 4),
-				new Position(3, 4),
-				new Position(3, 3),
-				new Position(3, 2),
-				new Position(3, 1),
+				new Position(1, 1),
 				new Position(2, 1),
-				new Position(1, 1)
+				new Position(3, 1),
+				new Position(3, 2),
+				new Position(3, 3),
+				new Position(3, 4),
+				new Position(4, 4),
+				new Position(5, 4),
+				new Position(6, 4),
+				new Position(7, 4)
 		);
 		compareList(expectedPath, actualPath);
 	}
@@ -49,14 +49,14 @@ public class PathFinderTester
 		Assert.assertNotNull(actualPath);
 
 		List<Position> expectedPath = Arrays.asList(
-				new Position(6, 5),
-				new Position(6, 6),
-				new Position(5, 6),
-				new Position(4, 6),
-				new Position(3, 6),
-				new Position(3, 5),
+				new Position(2, 4),
 				new Position(3, 4),
-				new Position(2, 4)
+				new Position(3, 5),
+				new Position(3, 6),
+				new Position(4, 6),
+				new Position(5, 6),
+				new Position(6, 6),
+				new Position(6, 5)
 		);
 		compareList(expectedPath, actualPath);
 	}

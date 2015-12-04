@@ -4,12 +4,12 @@ import evacuation.utils.Position;
 
 import java.util.Comparator;
 
-public class Node
+public class PathNode
 {
-	public static class NodeComparator implements Comparator<Node>
+	public static class NodeComparator implements Comparator<PathNode>
 	{
 		@Override
-		public int compare(Node o1, Node o2)
+		public int compare(PathNode o1, PathNode o2)
 		{
 			if(o1.mPosition.equals(o2.mPosition))
 				return 0;
@@ -24,14 +24,14 @@ public class Node
 		}
 	}
 
-	protected Node mParent;
+	protected PathNode mParent;
 	protected Position mPosition;
 	protected Position mDestination;
 	protected int mGScore;
 	protected int mHScore;
 	protected int mFScore;
 
-	public Node(Node parent, Position position, Position destination)
+	public PathNode(PathNode parent, Position position, Position destination)
 	{
 		mParent = parent;
 		mPosition = position;
@@ -48,10 +48,10 @@ public class Node
 	@Override
 	public boolean equals(Object obj)
 	{
-		if (!obj.getClass().equals(Node.class))
+		if (!obj.getClass().equals(PathNode.class))
 			return false;
 
-		Node node = (Node) obj;
+		PathNode node = (PathNode) obj;
 
 		return mPosition.equals(node.mPosition);
 	}
@@ -62,7 +62,7 @@ public class Node
 		return "Node -> FScore: " + mFScore + " | HScore: " + mHScore + " at " + mPosition.toString();
 	}
 
-	public void updateScore(Node newParent)
+	public void updateScore(PathNode newParent)
 	{
 		//  Check if the F score is lower when we use the current generated path:
 		int newGScore = calculateGScore(newParent, mPosition);
@@ -75,7 +75,7 @@ public class Node
 		}
 	}
 
-	public Node getParent()
+	public PathNode getParent()
 	{
 		return mParent;
 	}
@@ -100,7 +100,7 @@ public class Node
 		// If not moving:
 		return 0;
 	}
-	private static int calculateGScore(Node parent, Position position)
+	private static int calculateGScore(PathNode parent, Position position)
 	{
 		if (parent == null)
 			return 0;

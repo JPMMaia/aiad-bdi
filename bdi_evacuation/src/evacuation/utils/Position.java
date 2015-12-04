@@ -1,10 +1,7 @@
 package evacuation.utils;
 
-import jadex.extension.envsupport.math.IVector1;
 import jadex.extension.envsupport.math.Vector2Double;
-import jadex.extension.envsupport.math.Vector2Int;
-
-public class Position {
+import jadex.extension.envsupport.math.Vector2Int;public class Position {
 	public int x;
 	public int y;
 	
@@ -13,14 +10,34 @@ public class Position {
 		this.x = x;
 		this.y = y;
 	}
-
 	@Override
-	public boolean equals(Object obj) {
-		if(!(obj instanceof Position))
+	public boolean equals(Object other)
+	{
+		if(!other.getClass().equals(Position.class))
 			return false;
 
-		Position position = (Position) obj;
-		return position.x == this.x && position.y == this.y;
+		Position position = (Position) other;
+		return (this.x == position.x) && (this.y == position.y);
+	}
+	public int distance(Position position)
+	{
+		int dx = position.x - x;
+		int dy = position.y - y;
+
+		return Math.round((float) Math.sqrt(dx * dx + dy * dy));
+	}
+	public int distance(int x, int y)
+	{
+		int dx = x - this.x;
+		int dy = y - this.y;
+
+		return Math.round((float) Math.sqrt(dx * dx + dy * dy));
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Position [" + this.x + ", " + this.y + "]";
 	}
 
 	public static Position convertToPosition(Object objPosition) {
@@ -40,6 +57,4 @@ public class Position {
 
 		return new Position();
 	}
-
-
 }

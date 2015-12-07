@@ -77,6 +77,15 @@ public class Explorer
 		return nearestExitDoor.getPosition();
 	}
 
+	public boolean reachedExit()
+	{
+		Square square = mExploredTerrain.getSquare(mPosition.x, mPosition.y);
+		if(!square.isDoor())
+			return false;
+
+		return square.getDoor().isExit();
+	}
+
 	public Position getPosition()
 	{
 		return mPosition;

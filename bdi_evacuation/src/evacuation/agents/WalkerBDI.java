@@ -1,8 +1,11 @@
 package evacuation.agents;
 
+import evacuation.processes.WorldGenerator;
 import evacuation.utils.Move;
 import evacuation.utils.Position;
+import evacuation.utils.TypesProperties;
 import evacuation.utils.WorldMethods;
+import evacuation.utils.explorer.Explorer;
 import jadex.bdiv3.BDIAgent;
 import jadex.bdiv3.annotation.*;
 import jadex.extension.envsupport.environment.ISpaceObject;
@@ -13,7 +16,7 @@ import jadex.micro.annotation.AgentBody;
 
 @Agent
 public class WalkerBDI {
-    
+
     @Agent
     protected BDIAgent agent;
 

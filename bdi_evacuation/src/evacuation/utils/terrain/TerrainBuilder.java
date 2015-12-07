@@ -62,11 +62,11 @@ public class TerrainBuilder
 			{
 				char avatar = map[y][x];
 
-				if(avatar == ' ')
-					createRoom(map, x, y);
-
-				else if(avatar == 'D' || avatar == 'E')
+				if(avatar == 'D' || avatar == 'E')
 					doorsLocation.add(new Position(x, y));
+
+				else if(avatar != 'X')
+					createRoom(map, x, y);
 			}
 		}
 
@@ -88,7 +88,7 @@ public class TerrainBuilder
 		if(x < 0 || x >= mWidth || y < 0 || y >= mHeight)
 			return;
 
-		if(map[y][x] != ' ')
+		if(map[y][x] == 'X' || map[y][x] == 'E' || map[y][x] == 'D' || map[y][x] == 'P')
 			return;
 
 		map[y][x] = 'P';

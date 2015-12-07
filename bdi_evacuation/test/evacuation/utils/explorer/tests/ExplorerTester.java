@@ -34,18 +34,23 @@ public class ExplorerTester
 
 		moveExplorer(explorer, 9);
 		Assert.assertEquals(new Position(8, 3), explorer.getPosition());
+		Assert.assertFalse(explorer.reachedExit());
 
 		moveExplorer(explorer, 6);
 		Assert.assertEquals(new Position(13, 2), explorer.getPosition());
+		Assert.assertFalse(explorer.reachedExit());
 
 		moveExplorer(explorer, 5);
 		Assert.assertEquals(new Position(13, 5), explorer.getPosition());
+		Assert.assertFalse(explorer.reachedExit());
 
 		moveExplorer(explorer, 8);
 		Assert.assertEquals(new Position(16, 10), explorer.getPosition());
+		Assert.assertFalse(explorer.reachedExit());
 
 		moveExplorer(explorer, 17);
 		Assert.assertEquals(new Position(0, 11), explorer.getPosition());
+		Assert.assertTrue(explorer.reachedExit());
 	}
 
 	@Test

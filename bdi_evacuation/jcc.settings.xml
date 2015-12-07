@@ -32,7 +32,7 @@
 	<entries>
 		<entry __ID="1">
 			<key>
-				<p1:String xmlns:p1="typeinfo:java.lang" __ID="2">Awareness Settings.console.height</p1:String>
+				<p1:String xmlns:p1="typeinfo:java.lang" __ID="2">Component Viewer.console.height</p1:String>
 			</key>
 			<value>
 				<p1:Double xmlns:p1="typeinfo:java.lang" __ID="3" content="1.0"></p1:Double>
@@ -40,7 +40,7 @@
 		</entry>
 		<entry __ID="4">
 			<key>
-				<p1:String xmlns:p1="typeinfo:java.lang" __ID="5">Component Viewer.console.height</p1:String>
+				<p1:String xmlns:p1="typeinfo:java.lang" __ID="5">Awareness Settings.console.height</p1:String>
 			</key>
 			<value>
 				<p1:Double xmlns:p1="typeinfo:java.lang" __ID="6" content="1.0"></p1:Double>
@@ -67,7 +67,7 @@
 				<p1:String xmlns:p1="typeinfo:java.lang" __ID="14">Starter.console.height</p1:String>
 			</key>
 			<value>
-				<p1:Double xmlns:p1="typeinfo:java.lang" __ID="15" content="1.0"></p1:Double>
+				<p1:Double xmlns:p1="typeinfo:java.lang" __ID="15" content="0.9983818770226537"></p1:Double>
 			</value>
 		</entry>
 		<entry __ID="16">
@@ -91,8 +91,8 @@
 ]]></p0:property>
 	</p0:properties>
 	<p0:properties __ID="23" type="Starter">
-		<p0:property __ID="24" type="leftsplit_location">0.7013752455795678</p0:property>
-		<p0:property __ID="25" type="mainsplit_location">0.36314363143631434</p0:property>
+		<p0:property __ID="24" type="leftsplit_location">0.7003311258278145</p0:property>
+		<p0:property __ID="25" type="mainsplit_location">0.362629246676514</p0:property>
 	</p0:properties>
 	<p0:properties __ID="26" type="Chat">
 		<p0:properties __ID="27" type="panelproperties">
@@ -101,11 +101,11 @@
 		</p0:properties>
 	</p0:properties>
 	<p0:properties __ID="30" type="window">
-		<p0:property __ID="31" type="width">766</p0:property>
-		<p0:property __ID="32" type="height">649</p0:property>
-		<p0:property __ID="33" type="x">346</p0:property>
-		<p0:property __ID="34" type="y">66</p0:property>
-		<p0:property __ID="35" type="extendedState">0</p0:property>
+		<p0:property __ID="31" type="width">1382</p0:property>
+		<p0:property __ID="32" type="height">744</p0:property>
+		<p0:property __ID="33" type="x">-8</p0:property>
+		<p0:property __ID="34" type="y">-8</p0:property>
+		<p0:property __ID="35" type="extendedState">6</p0:property>
 		<p0:property __ID="36" type="jccexit">keep</p0:property>
 		<p0:property __ID="37" type="saveonexit">true</p0:property>
 	</p0:properties>

@@ -314,8 +314,8 @@ public class WorldMethods {
         if(incidents.length > 0){
             SpaceObject incident = (SpaceObject) incidents[0];
             Object objType = incident.getProperty("type");
-            IVector1 vector1Type  = (IVector1) objType;
-            intType = vector1Type.getAsInteger();
+            String stringType  = objType.toString();
+            intType = Integer.parseInt(stringType);
         }
         return str[intType];
     }

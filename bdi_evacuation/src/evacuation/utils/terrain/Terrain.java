@@ -19,6 +19,11 @@ public class Terrain implements ITerrain
 		mDoors = doors;
 	}
 
+	public void setObstacle(int x, int y, boolean value)
+	{
+		getSquare(x, y).setObstacle(value);
+	}
+
 	public boolean isObstacle(int x, int y)
 	{
 		if (x < 0 || x >= mWidth || y < 0 || y >= mHeight)

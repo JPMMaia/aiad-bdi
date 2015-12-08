@@ -98,8 +98,12 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 			properties.put("type", incidentType); //fire type
 			space.createSpaceObject(TypesObjects.INCIDENT, properties, null);
 			lastPosition = newPosition;
+
+			WorldGenerator.getTerrain().setObstacle(newPosition.x, newPosition.y, true);
+
 			return true;
 		}
+
 		return false;
 	}
 

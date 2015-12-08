@@ -102,4 +102,43 @@ public class ExplorerTester
 		moveExplorer(explorer, 2);
 		Assert.assertEquals(checkpoint2, explorer.getPosition());
 	}
+
+	@Test
+	public void testFindPathWithObstacles()
+	{
+		Explorer explorer = new Explorer(mTerrain, new Position(9, 11));
+
+		for(int i = 0; i < 6; i++)
+			for(int j = 0; j < 2; j++)
+				mTerrain.setObstacle(10 + i, 11 + j, true);
+
+		// Checkpoint 1:
+		Position checkpoint1 = new Position(16, 10);
+		explorer.setGoal(checkpoint1, true);
+
+		moveExplorer(explorer, 1);
+		Assert.assertEquals(new Position(9, 12), explorer.getPosition());
+		moveExplorer(explorer, 1);
+		Assert.assertEquals(new Position(9, 13), explorer.getPosition());
+		moveExplorer(explorer, 1);
+		Assert.assertEquals(new Position(10, 13), explorer.getPosition());
+		moveExplorer(explorer, 1);
+		Assert.assertEquals(new Position(11, 13), explorer.getPosition());
+		moveExplorer(explorer, 1);
+		Assert.assertEquals(new Position(12, 13), explorer.getPosition());
+		moveExplorer(explorer, 1);
+		Assert.assertEquals(new Position(13, 13), explorer.getPosition());
+		moveExplorer(explorer, 1);
+		Assert.assertEquals(new Position(14, 13), explorer.getPosition());
+		moveExplorer(explorer, 1);
+		Assert.assertEquals(new Position(15, 13), explorer.getPosition());
+		moveExplorer(explorer, 1);
+		Assert.assertEquals(new Position(16, 13), explorer.getPosition());
+		moveExplorer(explorer, 1);
+		Assert.assertEquals(new Position(16, 12), explorer.getPosition());
+		moveExplorer(explorer, 1);
+		Assert.assertEquals(new Position(16, 11), explorer.getPosition());
+		moveExplorer(explorer, 1);
+		Assert.assertEquals(new Position(16, 10), explorer.getPosition());
+	}
 }

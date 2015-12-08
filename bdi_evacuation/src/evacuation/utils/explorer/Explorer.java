@@ -28,14 +28,14 @@ public class Explorer
 
 	public boolean move()
 	{
-		if(mDirty || mCurrentPath == null || mCurrentPath.isEmpty())
-		{
+//		if(mDirty || mCurrentPath == null || mCurrentPath.isEmpty())
+//		{
 			calculateNextPosition();
 			if(mCurrentPath.isEmpty())
 				return false;
 
-			mDirty = false;
-		}
+//			mDirty = false;
+//		}
 
 		// Try to move to the next position:
 		Position position = mCurrentPath.get(0);

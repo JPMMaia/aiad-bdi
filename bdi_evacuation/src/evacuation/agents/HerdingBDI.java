@@ -2,6 +2,7 @@ package evacuation.agents;
 
 import evacuation.utils.Position;
 import evacuation.utils.TypesObjects;
+import evacuation.utils.TypesProperties;
 import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.math.Vector2Double;
 import jadex.micro.annotation.Agent;
@@ -15,7 +16,7 @@ public class HerdingBDI extends EscapingAgentBDI {
 
     //CONSTANTS***************************
 
-    protected static final int DISTANCE_TO_HERDING = 4;
+    protected static final int DISTANCE_TO_HERDING = 10;
 
     //PLANS*******************************
 
@@ -50,7 +51,10 @@ public class HerdingBDI extends EscapingAgentBDI {
             ISpaceObject agent = worldMethods.pickClosestObject(agentsArray, currentPosition);
 
             //follow the target
-            position = worldMethods.findPathToObject(agent, currentPosition);
+            //position = worldMethods.findPathToObject(agent, currentPosition);
+            mExplorer.setGoal(Position.convertToPosition(agent.getProperty(TypesProperties.POSITION)));
+            mExplorer.move();
+            position = mExplorer.getPosition();
         }
         else {
             position = findNewPositionWhenIncident();

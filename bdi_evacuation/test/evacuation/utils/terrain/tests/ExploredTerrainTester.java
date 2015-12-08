@@ -1,6 +1,5 @@
 package evacuation.utils.terrain.tests;
 
-import evacuation.utils.terrain.Door;
 import evacuation.utils.terrain.ExploredTerrain;
 import evacuation.utils.terrain.Terrain;
 import org.junit.Assert;

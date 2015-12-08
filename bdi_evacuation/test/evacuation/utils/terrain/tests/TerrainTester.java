@@ -50,5 +50,9 @@ public class TerrainTester
 		Square exitDoorSquare = terrain.getSquare(0, 17);
 		Assert.assertTrue(exitDoorSquare.isDoor());
 		Assert.assertTrue(exitDoorSquare.getDoor().isExit());
+
+		// Check if an agent square is considered to be part of a room:
+		Square agentSquare = terrain.getSquare(7, 11);
+		Assert.assertTrue(agentSquare.isPartOfRoom());
 	}
 }

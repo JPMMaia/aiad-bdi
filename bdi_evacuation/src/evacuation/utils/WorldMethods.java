@@ -57,6 +57,8 @@ public class WorldMethods {
             System.out.println("value - " + value);
     }
 
+    public int countHurt = 0;
+
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     protected Grid2D space;
@@ -208,6 +210,9 @@ public class WorldMethods {
         properties.put("position", new Vector2Int(targetPosition.x, targetPosition.y));
         res = (SpaceObject) space.createSpaceObject(type, properties, null);
 
+        if(type.equals(TypesObjects.HURT_AGENT))
+            countHurt++;
+
         return res;
     }
 
@@ -282,5 +287,36 @@ public class WorldMethods {
     public Position getDoorPosition(SpaceObject door) {
         Position destinyPosition = Position.convertToPosition(door.getProperty(TypesProperties.POSITION));
         return destinyPosition;
+    }
+
+    public boolean agentsAlive() {
+        ISpaceObject[] herdingSet = space.getSpaceObjectsByType(TypesObjects.HERDING);
+        ISpaceObject[] activeSet = space.getSpaceObjectsByType(TypesObjects.WANDERER);
+        ISpaceObject[] conservativeSet = space.getSpaceObjectsByType(TypesObjects.CONSERVATIVE);
+        ISpaceObject[] sameCellSet = space.getSpaceObjectsByType(TypesObjects.SAME_CELL);
+        ISpaceObject[] hurtSet = space.getSpaceObjectsByType(TypesObjects.HURT_AGENT);
+
+        int sumAlive = herdingSet.length + activeSet.length + conservativeSet.length + sameCellSet.length + hurtSet.length;
+
+        if(sumAlive > 0)
+            return true;
+        return false;
+    }
+
+    public int countHurt() {
+        return countHurt;
+    }
+
+    public String getIncidentType() {
+        String[] str = new String[] {"fire", "water", "terrorism"};
+        int intType = 0;
+        ISpaceObject[] incidents = getIncidentObjects();
+        if(incidents.length > 0){
+            SpaceObject incident = (SpaceObject) incidents[0];
+            Object objType = incident.getProperty("type");
+            IVector1 vector1Type  = (IVector1) objType;
+            intType = vector1Type.getAsInteger();
+        }
+        return str[intType];
     }
 }

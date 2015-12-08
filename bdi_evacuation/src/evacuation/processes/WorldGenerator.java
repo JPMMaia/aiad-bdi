@@ -2,6 +2,7 @@ package evacuation.processes;
 
 import evacuation.factories.AbstractAgentFactory;
 import evacuation.factories.AgentType;
+import evacuation.utils.terrain.Terrain;
 import evacuation.utils.terrain.TerrainReader;
 import evacuation.utils.TypesObjects;
 import jadex.bridge.service.types.clock.IClockService;
@@ -17,6 +18,19 @@ import java.util.Map;
 
 public class WorldGenerator extends SimplePropertyObject implements ISpaceProcess
 {
+	private static final String TERRAIN_FILENAME = "resources/Map2.txt";
+	private static final int TERRAIN_WIDTH = 40;
+	private static final int TERRAIN_HEIGHT = 20;
+
+	private static Terrain sTerrain;
+	public static Terrain getTerrain()
+	{
+		if(sTerrain == null)
+			sTerrain = Terrain.createFromFile(TERRAIN_FILENAME, TERRAIN_WIDTH, TERRAIN_HEIGHT);
+
+		return sTerrain;
+	}
+
     @Override
     public void start(IClockService arg0, IEnvironmentSpace arg1)
 	{
@@ -26,6 +40,8 @@ public class WorldGenerator extends SimplePropertyObject implements ISpaceProces
 		IVector2 areaSize = space.getAreaSize();
 		int spaceWidth = areaSize.getXAsInteger();
 		int spaceHeight = areaSize.getYAsInteger();
+		if(spaceWidth != TERRAIN_WIDTH && spaceHeight != TERRAIN_HEIGHT)
+			throw new RuntimeException("Dimensions of space aren't equal to the dimensions of the terrain map read from file!");
 
 		// Create a map from a file:
 		char[][] map = new char[spaceHeight][spaceWidth];
@@ -45,7 +61,7 @@ public class WorldGenerator extends SimplePropertyObject implements ISpaceProces
 
 	private boolean readMap(char[][] map, int width, int height)
 	{
-		return TerrainReader.readMap("resources/Map.txt", map, width, height);
+		return TerrainReader.readMap(TERRAIN_FILENAME, map, width, height);
 	}
 
 	private void drawMap(Space2D space, char[][] map)
@@ -63,6 +79,7 @@ public class WorldGenerator extends SimplePropertyObject implements ISpaceProces
 						drawTerrainSquare(space, j, i, 1);
 						break;
 
+					case 'D':
 					case 'E':
 						drawExitDoor(space, j, i);
 						break;

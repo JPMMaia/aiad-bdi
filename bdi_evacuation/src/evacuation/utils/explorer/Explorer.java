@@ -1,5 +1,6 @@
 package evacuation.utils.explorer;
 
+import evacuation.utils.NullPosition;
 import evacuation.utils.Position;
 import evacuation.utils.pathFinder.PathFinder;
 import evacuation.utils.terrain.*;
@@ -11,61 +12,65 @@ public class Explorer
 	private ExploredTerrain mExploredTerrain;
 	private Position mPosition;
 	private ExplorerGoal mGoal;
+	private Position mGoalPosition;
 	private List<Position> mCurrentPath;
+	private boolean mDirty;
 
 	public Explorer(Terrain terrain, Position position)
 	{
 		mExploredTerrain = new ExploredTerrain(terrain);
 		mPosition = position;
 		mGoal = ExplorerGoal.FindExit;
+		mDirty = true;
 
 		mExploredTerrain.exploreSquare(mPosition.x, mPosition.y);
 	}
 
 	public boolean move()
 	{
-		if(mCurrentPath == null || mCurrentPath.isEmpty())
+		if(mDirty || mCurrentPath == null || mCurrentPath.isEmpty())
 		{
 			calculateNextPosition();
 			if(mCurrentPath.isEmpty())
 				return false;
+
+			mDirty = false;
 		}
 
 		// Try to move to the next position:
 		Position position = mCurrentPath.get(0);
-		if(!move(position.x, position.y))
-			return false;
+		move(position.x, position.y);
 
 		// Remove position as we have already moved:
 		mCurrentPath.remove(0);
 
 		return true;
 	}
-	private boolean move(int x, int y)
+	private void move(int x, int y)
 	{
-		if(mExploredTerrain.isObstacle(x, y))
-			return false;
-
 		mExploredTerrain.exploreSquare(x, y);
 		mPosition = new Position(x, y);
-
-		return true;
 	}
 
 	private Position calculateNextPosition()
 	{
 		if(mGoal == ExplorerGoal.FindExit)
+			mGoalPosition = findExit();
+
+		Position destination;
+		if(mExploredTerrain.isObstacle(mGoalPosition.x, mGoalPosition.y) && !mExploredTerrain.getSquare(mGoalPosition.x, mGoalPosition.y).isWall())
+			destination = mExploredTerrain.findNearestUnexploredDoor(mGoalPosition.x, mGoalPosition.y).getPosition();
+		else
+			destination = mGoalPosition;
+
+		mCurrentPath = PathFinder.run(mExploredTerrain, mPosition, destination);
+		if(mCurrentPath.size() > 1)
 		{
-			Position exit = findExit();
-			mCurrentPath = PathFinder.run(mExploredTerrain, mPosition, exit);
-			if(mCurrentPath.size() > 1)
-			{
-				mCurrentPath.remove(0);
-				return mCurrentPath.get(0);
-			}
+			mCurrentPath.remove(0);
+			return mCurrentPath.get(0);
 		}
 
-		return new Position(-1, -1);
+		return NullPosition.getInstance();
 	}
 	private Position findExit()
 	{
@@ -74,6 +79,15 @@ public class Explorer
 			return mExploredTerrain.findNearestUnexploredDoor(mPosition.x, mPosition.y).getPosition();
 
 		return nearestExitDoor.getPosition();
+	}
+
+	public boolean reachedExit()
+	{
+		Square square = mExploredTerrain.getSquare(mPosition.x, mPosition.y);
+		if(!square.isDoor())
+			return false;
+
+		return square.getDoor().isExit();
 	}
 
 	public Position getPosition()
@@ -85,9 +99,13 @@ public class Explorer
 	{
 		mGoal = goal;
 	}
-	public void setGoal(Position goalPosition)
+	public void setGoal(Position goalPosition, boolean movable)
 	{
-		mPosition = goalPosition;
 		mGoal = ExplorerGoal.FindPosition;
+
+		if(movable && !goalPosition.equals(mGoalPosition))
+			mDirty = true;
+
+		mGoalPosition = goalPosition;
 	}
 }

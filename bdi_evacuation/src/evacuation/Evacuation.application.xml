@@ -33,7 +33,7 @@
 	<!-- Space types of this application. Spaces are shared by agents of the same application. -->
 	<extensiontypes>
 		<!-- Declaration of a grid environment as space type. -->
-		<env:envspacetype name="2dspace" class="Grid2D" width="20" height="20" >
+		<env:envspacetype name="2dspace" class="Grid2D" width="40" height="20" >
 		
 			<!-- Object types -->
 			<env:objecttypes>
@@ -124,6 +124,8 @@
 
 				<!-- Create Incident  -->
 				<env:processtype name="create_incident" class="processes.IncidentProcess"/>
+
+				<env:processtype name="create_statistics" class="processes.StatisticsProcess"/>
 
 
 			</env:processtypes>
@@ -345,6 +347,9 @@
 
 						<!-- Create Incident process -->
 						<env:process type="create_incident"/>
+
+						<!-- Create StatisticsFile process -->
+						<env:process type="create_statistics"/>
 
 					</env:processes>
 

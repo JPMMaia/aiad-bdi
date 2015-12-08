@@ -2,15 +2,13 @@ package evacuation.agents;
 
 import evacuation.utils.Position;
 import evacuation.utils.TypesObjects;
+import evacuation.utils.explorer.ExplorerGoal;
 import jadex.bdiv3.annotation.*;
-import jadex.extension.envsupport.environment.ISpaceObject;
-import jadex.extension.envsupport.environment.SpaceObject;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 
 @Agent
 public class EscapingAgentBDI extends MaintainSafetyBDI{
-
 
     //PLANS******************************
 
@@ -45,7 +43,7 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
     // FUNCTIONS *************************************
 
     protected Position findNewPositionWhenIncident() {
-
+        /*
         //find one door in same division
         ISpaceObject[] doors = space.getSpaceObjectsByType(TypesObjects.DOOR);
         ISpaceObject door = worldMethods.pickClosestObject(doors, currentPosition);
@@ -58,7 +56,15 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
 
         //get path for the door -> improve the search - TODO Maiah
 
-        return worldMethods.findPathToObject(door, currentPosition);
+        return worldMethods.findPathToObject(door, currentPosition);*/
+
+        mExplorer.setGoal(ExplorerGoal.FindExit);
+        mExplorer.move();
+
+        if(mExplorer.reachedExit())
+            successfullyEscaped();
+
+        return mExplorer.getPosition();
     }
 
     //BODY***********************************************

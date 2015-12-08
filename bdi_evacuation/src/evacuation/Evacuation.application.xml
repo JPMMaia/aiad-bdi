@@ -125,6 +125,8 @@
 				<!-- Create Incident  -->
 				<env:processtype name="create_incident" class="processes.IncidentProcess"/>
 
+				<env:processtype name="create_statistics" class="processes.StatisticsProcess"/>
+
 
 			</env:processtypes>
 
@@ -345,6 +347,9 @@
 
 						<!-- Create Incident process -->
 						<env:process type="create_incident"/>
+
+						<!-- Create StatisticsFile process -->
+						<env:process type="create_statistics"/>
 
 					</env:processes>
 

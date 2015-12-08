@@ -51,6 +51,8 @@ public class WalkerBDI {
 
     //ATTRIBUTES********************************************
 
+    protected Explorer mExplorer = new Explorer(WorldGenerator.getTerrain(),  Position.convertToPosition(myself.getProperty(TypesProperties.POSITION)));
+
     WorldMethods worldMethods = new WorldMethods(space);
     Move move = new Move( space.getAreaSize().getXAsInteger(), space.getAreaSize().getYAsInteger());
 

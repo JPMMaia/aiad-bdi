@@ -1,22 +1,14 @@
 package evacuation.agents;
 
-import evacuation.processes.WorldGenerator;
 import evacuation.utils.Position;
 import evacuation.utils.TypesObjects;
-import evacuation.utils.TypesProperties;
-import evacuation.utils.explorer.Explorer;
 import evacuation.utils.explorer.ExplorerGoal;
-import evacuation.utils.terrain.Terrain;
 import jadex.bdiv3.annotation.*;
-import jadex.extension.envsupport.environment.ISpaceObject;
-import jadex.extension.envsupport.environment.SpaceObject;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 
 @Agent
 public class EscapingAgentBDI extends MaintainSafetyBDI{
-
-    protected Explorer mExplorer = new Explorer(WorldGenerator.getTerrain(),  Position.convertToPosition(myself.getProperty(TypesProperties.POSITION)));
 
     //PLANS******************************
 

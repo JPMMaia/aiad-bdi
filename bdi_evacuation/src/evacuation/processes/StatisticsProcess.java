@@ -1,22 +1,12 @@
 package evacuation.processes;
 
-import evacuation.utils.Move;
-import evacuation.utils.Position;
-import evacuation.utils.TypesObjects;
-import evacuation.utils.WorldMethods;
+import evacuation.utils.*;
 import jadex.bridge.service.types.clock.IClockService;
 import jadex.commons.SimplePropertyObject;
 import jadex.extension.envsupport.environment.IEnvironmentSpace;
-import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.ISpaceProcess;
 import jadex.extension.envsupport.environment.space2d.Grid2D;
 import jadex.extension.envsupport.environment.space2d.Space2D;
-import jadex.extension.envsupport.math.IVector1;
-import jadex.extension.envsupport.math.Vector1Double;
-import jadex.extension.envsupport.math.Vector2Double;
-import jadex.extension.envsupport.math.Vector2Int;
-
-import java.util.*;
 
 public class StatisticsProcess extends SimplePropertyObject implements ISpaceProcess {
 
@@ -31,6 +21,8 @@ public class StatisticsProcess extends SimplePropertyObject implements ISpacePro
 
     @Override
     public void start(IClockService arg0, IEnvironmentSpace arg1) {
+
+        printStatisticsToCSV();
 
         //variables initialization
         space = (Space2D)arg1;
@@ -72,6 +64,25 @@ public class StatisticsProcess extends SimplePropertyObject implements ISpacePro
         }
     }
 
+    boolean verify(){
+        int finalAgents = simulationFinalState.numDead + simulationFinalState.numEscaped;
+        int initialAgents = simulationInitialState.numActive + simulationInitialState.numConservative + simulationInitialState.numHerding;
+        if(initialAgents == finalAgents)
+            return true;
+        return false;
+    }
+
+    private void printStatisticsToCSV() {
+
+        if(!StatisticsFile.fileExists()){
+            StatisticsFile.createFileWithHeader();
+        }
+        //simulationInitialState print
+        //simulationFinalState print
+    }
+
+    //Auxiliar inner classes
+
     private class SimulationInitialState {
         public int numActive;
         public int numHerding;
@@ -85,18 +96,5 @@ public class StatisticsProcess extends SimplePropertyObject implements ISpacePro
         public int numDead;
         public String incidentType;
         public long evacuationTimeSeconds;
-    }
-
-    boolean verify(){
-        int finalAgents = simulationFinalState.numDead + simulationFinalState.numEscaped;
-        int initialAgents = simulationInitialState.numActive + simulationInitialState.numConservative + simulationInitialState.numHerding;
-        if(initialAgents == finalAgents)
-            return true;
-        return false;
-    }
-
-    private void printStatisticsToCSV() {
-        //simulationInitialState
-        //simulationFinalState
     }
 }

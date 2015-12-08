@@ -60,7 +60,7 @@ public class ExplorerTester
 
 		// Checkpoint 1:
 		Position checkpoint1 = new Position(4, 1);
-		explorer.setGoal(checkpoint1);
+		explorer.setGoal(checkpoint1, false);
 		moveExplorer(explorer, 3);
 		Assert.assertEquals(checkpoint1, explorer.getPosition());
 		moveExplorer(explorer, 1);
@@ -68,20 +68,38 @@ public class ExplorerTester
 
 		// Checkpoint 2:
 		Position checkpoint2 = new Position(10, 3);
-		explorer.setGoal(checkpoint2);
+		explorer.setGoal(checkpoint2, false);
 		moveExplorer(explorer, 8);
 		Assert.assertEquals(checkpoint2, explorer.getPosition());
 
 		// Checkpoint 3:
 		Position checkpoint3 = new Position(18, 5);
-		explorer.setGoal(checkpoint3);
+		explorer.setGoal(checkpoint3, false);
 		moveExplorer(explorer, 10);
 		Assert.assertEquals(checkpoint3, explorer.getPosition());
 
 		// Obstacle:
 		Position obstacle = new Position(16, 3);
-		explorer.setGoal(obstacle);
+		explorer.setGoal(obstacle, false);
 		moveExplorer(explorer, 4);
 		Assert.assertEquals(new Position(18, 5), explorer.getPosition());
+	}
+
+	@Test
+	public void testFindMovableObject()
+	{
+		Explorer explorer = new Explorer(mTerrain, new Position(9, 11));
+
+		// Checkpoint 1:
+		Position checkpoint1 = new Position(11, 11);
+		explorer.setGoal(checkpoint1, true);
+		moveExplorer(explorer, 1);
+		Assert.assertEquals(new Position(10, 11), explorer.getPosition());
+
+		// Checkpoint 2:
+		Position checkpoint2 = new Position(8, 11);
+		explorer.setGoal(checkpoint2, true);
+		moveExplorer(explorer, 2);
+		Assert.assertEquals(checkpoint2, explorer.getPosition());
 	}
 }

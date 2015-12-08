@@ -52,7 +52,7 @@ public class HerdingBDI extends EscapingAgentBDI {
 
             //follow the target
             //position = worldMethods.findPathToObject(agent, currentPosition);
-            mExplorer.setGoal(Position.convertToPosition(agent.getProperty(TypesProperties.POSITION)));
+            mExplorer.setGoal(Position.convertToPosition(agent.getProperty(TypesProperties.POSITION)), true);
             mExplorer.move();
             position = mExplorer.getPosition();
         }

@@ -14,23 +14,27 @@ public class Explorer
 	private ExplorerGoal mGoal;
 	private Position mGoalPosition;
 	private List<Position> mCurrentPath;
+	private boolean mDirty;
 
 	public Explorer(Terrain terrain, Position position)
 	{
 		mExploredTerrain = new ExploredTerrain(terrain);
 		mPosition = position;
 		mGoal = ExplorerGoal.FindExit;
+		mDirty = true;
 
 		mExploredTerrain.exploreSquare(mPosition.x, mPosition.y);
 	}
 
 	public boolean move()
 	{
-		if(mCurrentPath == null || mCurrentPath.isEmpty())
+		if(mDirty || mCurrentPath == null || mCurrentPath.isEmpty())
 		{
 			calculateNextPosition();
 			if(mCurrentPath.isEmpty())
 				return false;
+
+			mDirty = false;
 		}
 
 		// Try to move to the next position:
@@ -95,9 +99,13 @@ public class Explorer
 	{
 		mGoal = goal;
 	}
-	public void setGoal(Position goalPosition)
+	public void setGoal(Position goalPosition, boolean movable)
 	{
-		mGoalPosition = goalPosition;
 		mGoal = ExplorerGoal.FindPosition;
+
+		if(movable && !goalPosition.equals(mGoalPosition))
+			mDirty = true;
+
+		mGoalPosition = goalPosition;
 	}
 }

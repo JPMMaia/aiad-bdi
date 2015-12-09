@@ -19,12 +19,12 @@ public class Terrain implements ITerrain
 		mDoors = doors;
 	}
 
-	public void setObstacle(int x, int y, boolean value)
+	synchronized public void setObstacle(int x, int y, boolean value)
 	{
 		getSquare(x, y).setObstacle(value);
 	}
 
-	public boolean isObstacle(int x, int y)
+	synchronized public boolean isObstacle(int x, int y)
 	{
 		if (x < 0 || x >= mWidth || y < 0 || y >= mHeight)
 			return true;
@@ -32,7 +32,7 @@ public class Terrain implements ITerrain
 		return getSquare(x, y).isObstacle();
 	}
 
-	public Square getSquare(int x, int y)
+	synchronized public Square getSquare(int x, int y)
 	{
 		if(x < 0 || y < 0 || x >= mWidth || y >= mHeight)
 			return NullSquare.getInstance();
@@ -40,12 +40,12 @@ public class Terrain implements ITerrain
 		return mSquares[y][x];
 	}
 
-	public List<Room> getRooms()
+	synchronized public List<Room> getRooms()
 	{
 		return mRooms;
 	}
 
-	public List<Door> getDoors()
+	synchronized public List<Door> getDoors()
 	{
 		return mDoors;
 	}

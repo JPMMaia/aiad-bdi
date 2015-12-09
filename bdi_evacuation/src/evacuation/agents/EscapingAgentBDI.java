@@ -35,9 +35,9 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
 
         deleteCures();
         deletePush();
-        worldMethods.resolveTwoAgentsInSameCell(currentPosition, null);
         space.destroyAndVerifySpaceObject(myself.getId());
         agent.killAgent();
+        worldMethods.resolveTwoAgentsInSameCell(currentPosition, null);
     }
 
     protected Position findExit() {

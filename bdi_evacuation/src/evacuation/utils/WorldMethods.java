@@ -1,5 +1,6 @@
 package evacuation.utils;
 
+import evacuation.processes.WorldGenerator;
 import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.SpaceObject;
 import jadex.extension.envsupport.environment.space2d.Grid2D;
@@ -20,6 +21,10 @@ public class WorldMethods {
             numAgentsByCell.remove(key);
             value++;
             numAgentsByCell.put(key, value);
+
+            // Adding obstacle:
+            if(value >= 2)
+                WorldGenerator.getTerrain().setObstacle(currentPosition.x, currentPosition.y, true);
         }
         else{
             numAgentsByCell.put(key, value);
@@ -49,6 +54,10 @@ public class WorldMethods {
             value = (Integer) numAgentsByCell.get(key);
             numAgentsByCell.remove(key);
             value--;
+
+            // Remove obstacle:
+            if(value <= 2)
+                WorldGenerator.getTerrain().setObstacle(currentPosition.x, currentPosition.y, false);
 
             if(value > 0)
                 numAgentsByCell.put(key, value);

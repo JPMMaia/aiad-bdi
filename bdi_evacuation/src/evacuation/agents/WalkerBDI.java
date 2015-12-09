@@ -51,10 +51,10 @@ public class WalkerBDI {
 
     //ATTRIBUTES********************************************
 
-    protected Explorer mExplorer = new Explorer(WorldGenerator.getTerrain(),  Position.convertToPosition(myself.getProperty(TypesProperties.POSITION)));
-
     WorldMethods worldMethods = new WorldMethods(space);
     Move move = new Move( space.getAreaSize().getXAsInteger(), space.getAreaSize().getYAsInteger());
+    protected Explorer mExplorer = new Explorer(WorldGenerator.getTerrain(),  Position.convertToPosition(myself.getProperty(TypesProperties.POSITION)));
+
 
     public int getWaitTime() {
         int waitTime = (int)(1000.0/speed);
@@ -77,8 +77,11 @@ public class WalkerBDI {
         @PlanBody
         protected void WanderPlanBody() {
             Position oldPosition = move.getPosition(myself);
-            Position wantedPosition = move.getNewPosition(oldPosition);
-            nextPosition = wantedPosition;
+            mExplorer.setGoal(move.getNewPosition(oldPosition), false);
+            mExplorer.move();
+            nextPosition = mExplorer.getPosition(); //-> fazer interface de comunicacao entre as duas partes
+            //aqui em vez da linha anterior deveria ser: nextPosition = mExplorer.getDesiredPosition()
+
         }
     }
 
@@ -92,8 +95,11 @@ public class WalkerBDI {
                     worldMethods.resolveTwoAgentsInSameCell(currentPosition, nextPosition);
                     myself.setProperty("position", new Vector2Int(nextPosition.x, nextPosition.y));
                     currentPosition = nextPosition;
+                    //mExplorer.acceptDesiredPosition()
                 }
             }
+
+            //mExplorer.refuseDesiredPosition()
 
             try {
                 //System.out.println("wait - " + getWaitTime());

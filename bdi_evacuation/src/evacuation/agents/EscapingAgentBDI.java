@@ -1,7 +1,10 @@
 package evacuation.agents;
 
+import evacuation.processes.WorldGenerator;
 import evacuation.utils.Position;
 import evacuation.utils.TypesObjects;
+import evacuation.utils.TypesProperties;
+import evacuation.utils.explorer.Explorer;
 import evacuation.utils.explorer.ExplorerGoal;
 import jadex.bdiv3.annotation.*;
 import jadex.micro.annotation.Agent;
@@ -9,6 +12,7 @@ import jadex.micro.annotation.AgentBody;
 
 @Agent
 public class EscapingAgentBDI extends MaintainSafetyBDI{
+
 
     //PLANS******************************
 

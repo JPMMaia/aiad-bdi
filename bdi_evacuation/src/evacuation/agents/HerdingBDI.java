@@ -16,7 +16,7 @@ public class HerdingBDI extends EscapingAgentBDI {
 
     //CONSTANTS***************************
 
-    protected static final int DISTANCE_TO_HERDING = 10;
+    protected static final int DISTANCE_TO_HERDING = 4;
 
     //PLANS*******************************
 

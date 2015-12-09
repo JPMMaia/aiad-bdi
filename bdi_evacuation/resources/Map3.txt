@@ -1,17 +1,17 @@
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XA      X    X     X                   X
-X       X    D    AX                A  X
-X       D    XXXXXXX      C            X
-X       X    X    AX                   X
-XXXXXXXXX    D     X                   X
-X            X     X                   X
-X            X     D                   X
-XXXXXXDXXXXXXX     X         H         X
-X            X     X                   X
+XA      X    X     XAAAAAAAAAAAAAAAAAAAX
+X       X    D    AXAAAAAAAAAAAAAAAAAAAX
+X       D    XXXXXXXAAAAAAAAAAAAAAAAAAAX
+X       X    X    AXAAAAAAAAAAAAAAAAAAAX
+XXXXXXXXX    D     XAAAAAAAAAAAAAAAAAAAX
+X            X     XAAAAAAAAAAAAAAAAAAAX
+X            X     DAAAAAAAAAAAAAAAAAAAX
+XXXXXXDXXXXXXX     XAAAAAAAAAAAAAAAAAAAX
+X            X     XAAAAAAAAAAAAAAAAAAAX
 X A          XXXDXXXXXXXXXXXXDXXXXXXXXXX
-X     H            X     X       X     X
-X                  X   H X       X     X
-X  C               X     D       X     X
+X     H            X     X AAAA  X     X
+X                  X   H X  AAA  X     X
+X  C               X     D  AAA  X     X
 XXXXXXXXXXXXXXXDXXXX     X       X A   X
 X     X            X  A  X       D     X
 XA    X            X     X       X     X

@@ -1,5 +1,6 @@
 package evacuation.agents;
 
+import evacuation.processes.WorldGenerator;
 import evacuation.utils.Move;
 import evacuation.utils.Position;
 import evacuation.utils.TypesObjects;
@@ -78,6 +79,7 @@ public class MaintainHealthBDI extends SocialAgentBDI{
                 if(hurtObject != null)
                     space.destroySpaceObject(hurtObject.getId());
 
+                WorldGenerator.getTerrain().setObstacle(currentPosition.x, currentPosition.y, false);
                 deleteCures();
                 deletePush();
                 worldMethods.resolveTwoAgentsInSameCell(currentPosition, null);
@@ -94,6 +96,7 @@ public class MaintainHealthBDI extends SocialAgentBDI{
             if(isHurt){
                 if(hurtObject == null) {
                     hurtObject = worldMethods.makeObjectInCell(currentPosition,TypesObjects.HURT_AGENT);
+                    WorldGenerator.getTerrain().setObstacle(currentPosition.x, currentPosition.y, true);
                 }
             }
         }
@@ -105,6 +108,7 @@ public class MaintainHealthBDI extends SocialAgentBDI{
         protected void RecoveredPlanBody() {
             if(condition > 50 && hurtObject != null){
                 space.destroySpaceObject(hurtObject.getId());
+                WorldGenerator.getTerrain().setObstacle(currentPosition.x, currentPosition.y, false);
                 hurtObject = null;
             }
         }

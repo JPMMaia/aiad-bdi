@@ -99,6 +99,7 @@ public class Explorer
 	{
 		mGoal = goal;
 	}
+
 	public void setGoal(Position goalPosition, boolean movable)
 	{
 		mGoal = ExplorerGoal.FindPosition;

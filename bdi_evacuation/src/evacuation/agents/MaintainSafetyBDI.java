@@ -9,11 +9,10 @@ import jadex.micro.annotation.AgentBody;
 
 @Agent
 public class MaintainSafetyBDI extends MaintainHealthBDI{
-
     boolean speed_mode = true;
     boolean patience_mode = true;
 
-    @Belief(updaterate=500)
+    @Belief(updaterate=100)
     protected int riskPerception = evaluateAgentSituation();
 
     @Belief(dynamic=true)
@@ -73,6 +72,7 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
     private int evaluateAgentSituation() {
 
         int res = 0;
+
         boolean helping = false;
         boolean pushing = false;
 

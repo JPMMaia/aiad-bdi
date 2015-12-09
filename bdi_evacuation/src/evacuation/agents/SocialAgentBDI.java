@@ -80,7 +80,9 @@ public class SocialAgentBDI extends WalkerBDI{
                 }
                 else { //go to the hurt
                     Position wantedPosition = worldMethods.findPathToObject(agentNeedsHelp, currentPosition);
-                    nextPosition = wantedPosition;
+                    mExplorer.setGoal(wantedPosition, true);
+                    mExplorer.move();
+                    nextPosition = mExplorer.getPosition();
                 }
             }
         }

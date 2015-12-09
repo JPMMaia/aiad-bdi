@@ -42,9 +42,6 @@ public class StatisticsToFile {
             System.out.println("The file did not exist.");
             return false;
         }
-
-
-
         try {
             reader.close();
         } catch (IOException e) {

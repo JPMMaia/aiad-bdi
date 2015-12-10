@@ -34,10 +34,12 @@ public class Move {
     }
 
     public Position getNewPosition(Position lastPosition) {
-        Position direction = directions.get(r.nextInt(4));
-        Position newPosition = new Position(lastPosition.x + direction.x, lastPosition.y + direction.y);
-        if(isBetweenLimits(newPosition)){
-            return newPosition;
+        if(lastPosition != null) {
+            Position direction = directions.get(r.nextInt(4));
+            Position newPosition = new Position(lastPosition.x + direction.x, lastPosition.y + direction.y);
+            if (isBetweenLimits(newPosition)) {
+                return newPosition;
+            }
         }
         return lastPosition;
     }
@@ -47,7 +49,7 @@ public class Move {
     }
 
     public boolean isBetweenLimits(Position newPosition) {
-        return (newPosition.x < spaceHeight && newPosition.x >= 0 && newPosition.y < spaceWidth && newPosition.y >= 0);
+        return (newPosition.x < spaceWidth && newPosition.x >= 0 && newPosition.y < spaceHeight && newPosition.y >= 0);
     }
 
     public Position getPosition(ISpaceObject myself) {

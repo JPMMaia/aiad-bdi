@@ -30,13 +30,16 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
 
     private void successfullyEscaped() {
         worldMethods.makeObjectInCell(currentPosition, TypesObjects.ESCAPED_AGENT);
+
         if(hurtObject != null)
-            space.destroySpaceObject(hurtObject.getId());
+            space.destroyAndVerifySpaceObject(hurtObject.getId());
 
         deleteCures();
         deletePush();
         space.destroyAndVerifySpaceObject(myself.getId());
+        System.out.println("quase matei o agente");
         agent.killAgent();
+        System.out.println("matei o agente");
         worldMethods.resolveTwoAgentsInSameCell(currentPosition, null);
     }
 
@@ -51,8 +54,9 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
         mExplorer.setGoal(ExplorerGoal.FindExit);
         mExplorer.move();
 
-        if(mExplorer.reachedExit())
+        if(mExplorer.reachedExit()){
             successfullyEscaped();
+        }
 
         return mExplorer.getPosition();
     }

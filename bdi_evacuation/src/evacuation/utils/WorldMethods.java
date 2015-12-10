@@ -82,15 +82,15 @@ public class WorldMethods {
         Vector2Double wantedPosition = new Vector2Double(p.x,p.y);
         IVector1 distance = new Vector1Double(0);
 
-        Set terrainSet = space.getNearObjects(wantedPosition,distance,TypesObjects.TERRAIN);
-        Set incidentSet = space.getNearObjects(wantedPosition,distance,TypesObjects.INCIDENT);
+        //Set terrainSet = space.getNearObjects(wantedPosition,distance,TypesObjects.TERRAIN);
+        //Set incidentSet = space.getNearObjects(wantedPosition,distance,TypesObjects.INCIDENT);
         Set hurtSet = space.getNearObjects(wantedPosition,distance,TypesObjects.HURT_AGENT);
 
-        if(!terrainSet.isEmpty()) //there is a wall or an obstacle
-            return false;
-        else if(!incidentSet.isEmpty()) //there are incidents in the way
-            return false;
-        else if(!hurtSet.isEmpty()) //there are two agents in the position
+        //if(!terrainSet.isEmpty()) //there is a wall or an obstacle
+        //    return false;
+        //else if(!incidentSet.isEmpty()) //there are incidents in the way
+        //    return false;
+        if(!hurtSet.isEmpty()) //there are two agents in the position
             return false;
         else if(getNumAgentInCellMap(p) >= 2)
             return false;
@@ -108,8 +108,13 @@ public class WorldMethods {
         return space.getSpaceObjectsByType(TypesObjects.INCIDENT);
     }
 
+    public ISpaceObject[] getTerrainObjects() {
+        return space.getSpaceObjectsByType(TypesObjects.TERRAIN);
+    }
+
     // FIND PATH QUERIES
 
+    /*
     public Position findPathToObject(ISpaceObject object, Position currentPosition) {
         if(object != null){
             //space.getShortestDirection()
@@ -137,7 +142,7 @@ public class WorldMethods {
 
         //samePosition = true;
         return currentPosition;
-    }
+    }*/
 
     public ISpaceObject pickClosestObject(ISpaceObject[] objects, Position currentPosition) {
 
@@ -194,9 +199,9 @@ public class WorldMethods {
     public ISpaceObject getObject(Position currentPosition, String type) {
 
         Vector2Double wantedPosition = new Vector2Double(currentPosition.x,currentPosition.y);
-        IVector1 distance = new Vector1Double(0);
+        //IVector1 distance = new Vector1Double(0);
 
-        Set set = space.getNearObjects(wantedPosition,distance,type);
+        ArrayList<ISpaceObject> set = (ArrayList<ISpaceObject>) space.getSpaceObjectsByGridPosition(wantedPosition,type);
 
         if(set == null || set.isEmpty())
             return null;
@@ -286,9 +291,9 @@ public class WorldMethods {
         ArrayList<Position> positionsToCheck = BresenhamLineAlgorithm.line(pos1.x,pos1.y,pos2.x,pos2.y);
 
         for(Position p : positionsToCheck){
-            if(getObject(p, TypesObjects.TERRAIN) != null) {
+            SpaceObject t = (SpaceObject) getObject(p, TypesObjects.TERRAIN);
+            if(t != null && getTerrainType(t).equals("wall"))
                 return true;
-            }
         }
         return false;
     }
@@ -302,10 +307,9 @@ public class WorldMethods {
         ISpaceObject[] herdingSet = space.getSpaceObjectsByType(TypesObjects.HERDING);
         ISpaceObject[] activeSet = space.getSpaceObjectsByType(TypesObjects.WANDERER);
         ISpaceObject[] conservativeSet = space.getSpaceObjectsByType(TypesObjects.CONSERVATIVE);
-        ISpaceObject[] sameCellSet = space.getSpaceObjectsByType(TypesObjects.SAME_CELL);
-        ISpaceObject[] hurtSet = space.getSpaceObjectsByType(TypesObjects.HURT_AGENT);
 
-        int sumAlive = herdingSet.length + activeSet.length + conservativeSet.length + sameCellSet.length + hurtSet.length;
+        int sumAlive = herdingSet.length + activeSet.length + conservativeSet.length;
+
 
         if(sumAlive > 0)
             return true;
@@ -326,6 +330,17 @@ public class WorldMethods {
             String stringType  = objType.toString();
             intType = Integer.parseInt(stringType);
         }
+        return str[intType];
+    }
+
+    public String getTerrainType(SpaceObject terrain) {
+
+        String[] str = new String[] {"grownd", "wall"};
+
+        Object objType = terrain.getProperty("type");
+        String stringType  = objType.toString();
+        int intType = Integer.parseInt(stringType);
+
         return str[intType];
     }
 }

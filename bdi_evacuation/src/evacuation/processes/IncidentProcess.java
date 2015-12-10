@@ -49,7 +49,7 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 		desiredNumIncidentPositions = 1;
 		incidentPositions = new HashSet<>();
 
-		incidentType = 2;//r.nextInt(3); //0 - fire ; 1 - water; 2 - terrorist
+		incidentType = 0;//r.nextInt(3); //0 - fire ; 1 - water; 2 - terrorist
 	}
 
     @Override
@@ -90,6 +90,7 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 
 	private boolean createIncidentObject(Position newPosition){
 		if (savedIncidentPosition(newPosition)) {
+
 			Map<String, Object> properties = new HashMap<>();
 			properties.put("position", new Vector2Int(newPosition.x, newPosition.y));
 			properties.put("type", incidentType); //fire type

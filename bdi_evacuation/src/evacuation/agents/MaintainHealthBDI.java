@@ -77,7 +77,7 @@ public class MaintainHealthBDI extends SocialAgentBDI{
                 worldMethods.makeObjectInCell(currentPosition, TypesObjects.DEAD_AGENT);
 
                 if(hurtObject != null)
-                    space.destroySpaceObject(hurtObject.getId());
+                    space.destroyAndVerifySpaceObject(hurtObject.getId());
 
                 WorldGenerator.getTerrain().setObstacle(currentPosition.x, currentPosition.y, false);
                 deleteCures();
@@ -94,6 +94,7 @@ public class MaintainHealthBDI extends SocialAgentBDI{
         @PlanBody
         protected void HurtedPlanBody() {
             if(isHurt){
+                iAmHurt = true;
                 if(hurtObject == null) {
                     hurtObject = worldMethods.makeObjectInCell(currentPosition,TypesObjects.HURT_AGENT);
                     WorldGenerator.getTerrain().setObstacle(currentPosition.x, currentPosition.y, true);
@@ -107,9 +108,10 @@ public class MaintainHealthBDI extends SocialAgentBDI{
         @PlanBody
         protected void RecoveredPlanBody() {
             if(condition > 50 && hurtObject != null){
-                space.destroySpaceObject(hurtObject.getId());
+                space.destroyAndVerifySpaceObject(hurtObject.getId());
                 WorldGenerator.getTerrain().setObstacle(currentPosition.x, currentPosition.y, false);
                 hurtObject = null;
+                iAmHurt = false;
             }
         }
     }

@@ -36,7 +36,6 @@ public class StatisticsProcess extends SimplePropertyObject implements ISpacePro
             simulationInitialState.numConservative = space.getSpaceObjectsByType(TypesObjects.CONSERVATIVE).length;
             simulationInitialState.numHerding = space.getSpaceObjectsByType(TypesObjects.HERDING).length;
             simulationInitialState.numDoors = space.getSpaceObjectsByType(TypesObjects.DOOR).length;
-            //TODO - special door -> manual
         }
     }
 

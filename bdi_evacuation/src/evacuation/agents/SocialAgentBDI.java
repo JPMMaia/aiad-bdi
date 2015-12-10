@@ -26,6 +26,8 @@ public class SocialAgentBDI extends WalkerBDI{
     //PUSH ATTRIBUTES
     protected HashSet<SpaceObject> pushSet;
 
+    boolean iAmHurt = false;
+
     //PERSONALITY
 
     PersonState personState = new PersonState();
@@ -79,8 +81,7 @@ public class SocialAgentBDI extends WalkerBDI{
                     curesSet.add(cure);
                 }
                 else { //go to the hurt
-                    Position wantedPosition = worldMethods.findPathToObject(agentNeedsHelp, currentPosition);
-                    mExplorer.setGoal(wantedPosition, true);
+                    mExplorer.setGoal(targetPosition, true);
                     mExplorer.move();
                     nextPosition = mExplorer.getPosition();
                 }
@@ -109,7 +110,7 @@ public class SocialAgentBDI extends WalkerBDI{
 
     //OTHER METHODS
     boolean agentIsHurt(){
-        return false;
+        return iAmHurt;
     }
 
     void deleteCures(){

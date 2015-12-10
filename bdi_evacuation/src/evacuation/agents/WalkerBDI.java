@@ -14,6 +14,8 @@ import jadex.extension.envsupport.math.Vector2Int;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 
+import java.util.Collections;
+
 @Agent
 public class WalkerBDI {
 
@@ -76,12 +78,15 @@ public class WalkerBDI {
     public class WanderPlan {
         @PlanBody
         protected void WanderPlanBody() {
-            Position oldPosition = move.getPosition(myself);
-            mExplorer.setGoal(move.getNewPosition(oldPosition), false);
-            mExplorer.move();
-            nextPosition = mExplorer.getPosition(); //-> fazer interface de comunicacao entre as duas partes
-            //aqui em vez da linha anterior deveria ser: nextPosition = mExplorer.getDesiredPosition()
-
+            if(currentPosition != null) {
+                Position oldPosition = move.getPosition(myself);
+                mExplorer.setGoal(move.getNewPosition(oldPosition), false);
+                mExplorer.move();
+                nextPosition = mExplorer.getPosition();
+            }
+            else{
+                move.getPosition(myself);
+            }
         }
     }
 
@@ -95,11 +100,10 @@ public class WalkerBDI {
                     worldMethods.resolveTwoAgentsInSameCell(currentPosition, nextPosition);
                     myself.setProperty("position", new Vector2Int(nextPosition.x, nextPosition.y));
                     currentPosition = nextPosition;
-                    //mExplorer.acceptDesiredPosition()
                 }
             }
 
-            //mExplorer.refuseDesiredPosition()
+            System.out.println("position - " + currentPosition.x + " " + currentPosition.y);
 
             try {
                 //System.out.println("wait - " + getWaitTime());

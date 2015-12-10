@@ -24,7 +24,7 @@ public class MaintainHealthBDI extends SocialAgentBDI{
     public int condition = 100; //range [0-100]
 
     @Belief(dynamic=true)
-    public boolean isDead = (condition == 0);
+    public boolean isDead = (condition <= 0);
 
     @Belief(dynamic=true)
     public boolean isHurt = (condition < 50);
@@ -73,7 +73,6 @@ public class MaintainHealthBDI extends SocialAgentBDI{
         @PlanBody
         protected void DeadPlanBody() {
             if(isDead){
-
                 worldMethods.makeObjectInCell(currentPosition, TypesObjects.DEAD_AGENT);
 
                 if(hurtObject != null)

@@ -45,11 +45,14 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 		move = new Move(space.getAreaSize().getXAsInteger(),space.getAreaSize().getYAsInteger());
 		r = move.r;
 		startTime = arg0.getTime();
-		lastPosition = new Position(4,5); //move.getRandomPosition();
+		//lastPosition = new Position(4,5); //control the position
+		lastPosition = move.getRandomPosition(); // random position
+
 		desiredNumIncidentPositions = 1;
 		incidentPositions = new HashSet<>();
 
-		incidentType = 0;//r.nextInt(3); //0 - fire ; 1 - water; 2 - terrorist
+		//incidentType = 0; //get a fire incident
+		incidentType = r.nextInt(3); //0 - fire ; 1 - water; 2 - terrorist
 	}
 
     @Override

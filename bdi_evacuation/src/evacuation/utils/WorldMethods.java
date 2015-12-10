@@ -1,6 +1,7 @@
 package evacuation.utils;
 
 import evacuation.processes.WorldGenerator;
+import evacuation.utils.terrain.Square;
 import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.SpaceObject;
 import jadex.extension.envsupport.environment.space2d.Grid2D;
@@ -77,6 +78,16 @@ public class WorldMethods {
         }
     }
 
+    public boolean isPositionADoor(Position p){
+        Square square = WorldGenerator.getTerrain().getSquare(p.x, p.y);
+        if(square.isDoor())
+        {
+            return square.getDoor().isExit();
+        }
+        return false;
+    }
+
+
     public synchronized void deleteSomeoneInMyCellObject(Position currentPosition) {
 
         Vector2Double wantedPosition = new Vector2Double(currentPosition.x,currentPosition.y);
@@ -90,10 +101,12 @@ public class WorldMethods {
 
     public synchronized void checkAndMakeSomeoneInMyCell(Position newPosition) {
         //if there is another guy in the new cell, create a someone in my cell
-        String key = newPosition.x + "." + newPosition.y;
-        int numAgents = getNumAgentInCellMap(newPosition);
-        if(numAgents >= 1){
-            makeObjectInCell(newPosition, TypesObjects.SAME_CELL);
+        if(!isPositionADoor(newPosition)) {
+            String key = newPosition.x + "." + newPosition.y;
+            int numAgents = getNumAgentInCellMap(newPosition);
+            if (numAgents >= 1) {
+                makeObjectInCell(newPosition, TypesObjects.SAME_CELL);
+            }
         }
     }
 

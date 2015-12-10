@@ -133,11 +133,11 @@ public class MaintainHealthBDI extends SocialAgentBDI{
                 double distance = Move.distanceBetween(currentPosition, incidentPosition);
 
                 if(distance == 0)
-                    valueForCondition += 10;
-                else if(distance <= Math.sqrt(2))
                     valueForCondition += 5;
-                else if(distance <= Math.sqrt(8))
+                else if(distance <= Math.sqrt(2))
                     valueForCondition += 2;
+                else if(distance <= Math.sqrt(8))
+                    valueForCondition += 1;
             }
         }
 

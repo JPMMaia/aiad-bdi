@@ -36,10 +36,11 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
 
         deleteCures();
         deletePush();
+
         space.destroyAndVerifySpaceObject(myself.getId());
-        System.out.println("quase matei o agente");
+        //System.out.println("quase matei o agente");
         agent.killAgent();
-        System.out.println("matei o agente");
+        //System.out.println("matei o agente");
         worldMethods.resolveTwoAgentsInSameCell(currentPosition, null);
     }
 

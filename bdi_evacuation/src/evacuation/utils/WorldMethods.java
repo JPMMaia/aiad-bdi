@@ -47,9 +47,6 @@ public class WorldMethods {
         String key = currentPosition.x + "." + currentPosition.y;
         Integer value = 0;
 
-        if(value > 2)
-            System.out.println("value - " + value);
-
         if(numAgentsByCell.containsKey(key)) {
             value = (Integer) numAgentsByCell.get(key);
             numAgentsByCell.remove(key);
@@ -62,11 +59,43 @@ public class WorldMethods {
             if(value > 0)
                 numAgentsByCell.put(key, value);
         }
-        if(value > 2)
-            System.out.println("value - " + value);
     }
 
     public int countHurt = 0;
+
+    //TWO AGENTS SAME CELL
+
+    public synchronized void resolveTwoAgentsInSameCell(Position currentPosition, Position nextPosition) {
+        if (getNumAgentInCellMap(currentPosition) >= 2) {
+            deleteSomeoneInMyCellObject(currentPosition);
+        }
+
+        removeAgentFromOldCellMap(currentPosition);
+        if(nextPosition != null) {
+            checkAndMakeSomeoneInMyCell(nextPosition);
+            putAgentInNewCellMap(nextPosition);
+        }
+    }
+
+    public synchronized void deleteSomeoneInMyCellObject(Position currentPosition) {
+
+        Vector2Double wantedPosition = new Vector2Double(currentPosition.x,currentPosition.y);
+        IVector1 distance = new Vector1Double(0);
+
+        Set objectSet = space.getNearObjects(wantedPosition,distance,TypesObjects.SAME_CELL);
+        for(Object it : objectSet){
+            space.destroyAndVerifySpaceObject(((SpaceObject) it).getId());
+        }
+    }
+
+    public synchronized void checkAndMakeSomeoneInMyCell(Position newPosition) {
+        //if there is another guy in the new cell, create a someone in my cell
+        String key = newPosition.x + "." + newPosition.y;
+        int numAgents = getNumAgentInCellMap(newPosition);
+        if(numAgents >= 1){
+            makeObjectInCell(newPosition, TypesObjects.SAME_CELL);
+        }
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -92,7 +121,7 @@ public class WorldMethods {
         //    return false;
         if(!hurtSet.isEmpty()) //there are two agents in the position
             return false;
-        else if(getNumAgentInCellMap(p) >= 2)
+        else if(getNumAgentInCellMap(p) > 1)
             return false;
 
         return true;
@@ -228,39 +257,6 @@ public class WorldMethods {
             countHurt++;
 
         return res;
-    }
-
-    //TWO AGENTS SAME CELL
-
-    public void resolveTwoAgentsInSameCell(Position currentPosition, Position nextPosition) {
-        if (getNumAgentInCellMap(currentPosition) == 2) {
-            deleteSomeoneInMyCellObject(currentPosition);
-        }
-
-        removeAgentFromOldCellMap(currentPosition);
-        if(nextPosition != null) {
-            checkAndMakeSomeoneInMyCell(nextPosition);
-            putAgentInNewCellMap(nextPosition);
-        }
-    }
-
-    public void deleteSomeoneInMyCellObject(Position currentPosition) {
-
-        Vector2Double wantedPosition = new Vector2Double(currentPosition.x,currentPosition.y);
-        IVector1 distance = new Vector1Double(0);
-
-        Set objectSet = space.getNearObjects(wantedPosition,distance,TypesObjects.SAME_CELL);
-        for(Object it : objectSet){
-            space.destroyAndVerifySpaceObject(((SpaceObject) it).getId());
-        }
-    }
-
-    public void checkAndMakeSomeoneInMyCell(Position newPosition) {
-        //if there is another guy in the new cell, create a someone in my cell
-        String key = newPosition.x + "." + newPosition.y;
-        if(getNumAgentInCellMap(newPosition) == 1){
-            makeObjectInCell(newPosition, TypesObjects.SAME_CELL);
-        }
     }
 
     public SpaceObject getPush(Position currentPosition, HashSet<SpaceObject> pushSet) {

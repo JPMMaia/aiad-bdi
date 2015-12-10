@@ -17,7 +17,7 @@ import java.util.HashSet;
 public class SocialAgentBDI extends WalkerBDI{
 
     //CONSTANTS***************************
-    protected static final int DISTANCE_TO_HELP = 20;
+    protected static final int DISTANCE_TO_HELP = 3;
 
     // CURE ATTRIBUTES
     protected HashSet<SpaceObject> curesSet;
@@ -63,7 +63,7 @@ public class SocialAgentBDI extends WalkerBDI{
         protected void HelpOthersPlanBody() {
 
             if(agentIsHurt()) {
-                System.out.println("cant cure is hurt");
+                //System.out.println("cant cure is hurt");
                 return;
             }
 

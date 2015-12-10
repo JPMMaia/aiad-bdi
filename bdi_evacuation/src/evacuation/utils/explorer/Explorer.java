@@ -65,7 +65,7 @@ public class Explorer
 
 		return NullPosition.getInstance();
 	}
-	private Position findExit()
+	public Position findExit()
 	{
 		Door nearestExitDoor = mExploredTerrain.findNearestExitDoor(mPosition.x, mPosition.y);
 		if(nearestExitDoor == NullDoor.getInstance())
@@ -97,5 +97,9 @@ public class Explorer
 	{
 		mGoal = ExplorerGoal.FindPosition;
 		mGoalPosition = goalPosition;
+	}
+
+	public Position getRandomPosition() {
+		return mExploredTerrain.getRandomExploredPosition();
 	}
 }

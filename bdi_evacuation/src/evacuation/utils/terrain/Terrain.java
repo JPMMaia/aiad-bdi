@@ -1,6 +1,9 @@
 package evacuation.utils.terrain;
 
+import evacuation.utils.Position;
+
 import java.util.List;
+import java.util.Random;
 
 public class Terrain implements ITerrain
 {

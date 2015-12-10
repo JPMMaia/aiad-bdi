@@ -1,6 +1,8 @@
 package evacuation.agents;
 
 import evacuation.utils.Move;
+import evacuation.utils.Position;
+import evacuation.utils.explorer.Explorer;
 import jadex.bdiv3.annotation.*;
 import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.SpaceObject;
@@ -90,8 +92,8 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
                 agentNeedsHelp = (SpaceObject) worldMethods.someoneNeedsHelp(currentPosition, DISTANCE_TO_HELP);
 
                 if(!isHurt && inPanic && patience_mode && !patient) {
-                    if (worldMethods.getNumAgentInCellMap(currentPosition) == 2) {
-                        System.out.println("someone in my cell");
+                    if (worldMethods.getNumAgentInCellMap(currentPosition) >= 2) {
+                        //System.out.println("someone in my cell");
                         agent.dispatchTopLevelGoal(new PushOthersGoal());
                         pushing = true;
                     }
@@ -155,7 +157,8 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
             valueForRiskPerception = 0;
 
         //escaping possibility
-        if(!emptyPathToTheExit){
+        Position exit =  mExplorer.findExit();
+        if(worldMethods.getNumAgentInCellMap(exit) >= 2){
             if(valueForRiskPerception < 90)
                 valueForRiskPerception = 90;
         }

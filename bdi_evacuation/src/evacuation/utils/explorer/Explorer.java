@@ -5,7 +5,9 @@ import evacuation.utils.Position;
 import evacuation.utils.pathFinder.PathFinder;
 import evacuation.utils.terrain.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Explorer
 {
@@ -100,6 +102,30 @@ public class Explorer
 	}
 
 	public Position getRandomPosition() {
-		return mExploredTerrain.getRandomExploredPosition();
+		Square square = mExploredTerrain.getSquare(mPosition.x, mPosition.y);
+
+		List<Square> squares;
+		if(square.isPartOfRoom())
+		{
+			Room room = square.getRoom();
+			squares = room.getSquares();
+		}
+		else if(square.isDoor())
+		{
+			Door door = square.getDoor();
+			if(door.isExit())
+				return NullPosition.getInstance();
+
+			squares = new ArrayList<>();
+			squares.addAll(door.getRoom1().getSquares());
+			squares.addAll(door.getRoom2().getSquares());
+		}
+		else
+			return NullPosition.getInstance();
+
+		Random random = new Random();
+		int randomIndex = random.nextInt(squares.size());
+
+		return squares.get(randomIndex).getPosition();
 	}
 }

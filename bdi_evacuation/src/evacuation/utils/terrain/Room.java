@@ -36,4 +36,8 @@ public class Room
 	{
 		return mDoors;
 	}
+	public List<Square> getSquares()
+	{
+		return mSquares;
+	}
 }

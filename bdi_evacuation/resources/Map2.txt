@@ -1,20 +1,20 @@
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XA      X    X     XAAAAAAAAAAAAAAAAAAAX
-X       X    D    AXAAAAAAAAAAAAAAAAAAAX
+XA      X    X     XAAAA               X
+X       X    D    AXAAAA              AX
 X       D    XXXXXXXAAAAAAAAAAAAAAAAAAAX
-X       X    X    AXAAAAAAAAAAAAAAAAAAAX
-XXXXXXXXX    D     XAAAAAAAAAAAAAAAAAAAX
-X            X     XAAAAAAAAAAAAAAAAAAAX
-X            X     DAAAAAAAAAAAAAAAAAAAX
-XXXXXXDXXXXXXX     XAAAAAAAAAAAAAAAAAAAX
-X            X     XAAAAAAAAAAAAAAAAAAAX
+X       X    X    AXAA              AAAX
+XXXXXXXXX    D     XAA              AAAX
+X            X     XAAAA            AAAX
+X            X     DAAAA             AAX
+XXXXXXDXXXXXXX     XAAAAAA             X
+X            X     XAAAAAAAAAA         X
 X A          XXXDXXXXXXXXXXXXDXXXXXXXXXX
-X     H            X     X   A   X     X
-X                  X     X   A   X     X
-X  C               X     D       X     X
-XXXXXXXXXXXXXXXDXXXX     X   A   X     X
-X     X            X     X       D     X
-XA    X            X     X   A   X     X
+X     H            X     X AAAA  X     X
+X                  X   H X  AAA  X     X
+X     C            X     D  AAA  X     X
+XXXXXXXXXXXXXXXDXXXX     X       X A   X
+X     X            X  A  X       D     X
+XA    X            X     X       X     X
 X     D            X     X       X     X
-X     X            X     X   A   X     X
+X     X            X     X       X     X
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXEXXXXXXXXXX

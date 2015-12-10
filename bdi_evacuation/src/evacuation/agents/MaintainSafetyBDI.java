@@ -82,7 +82,7 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
 
         if(agent.getGoals().isEmpty()) {
 
-            agent.dispatchTopLevelGoal(new ReceivePushOthersGoal());
+
 
             if (!worldMethods.isIncident()) {
                 agent.dispatchTopLevelGoal(new WanderGoal());
@@ -90,8 +90,13 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
             }
             else{
                 agentNeedsHelp = (SpaceObject) worldMethods.someoneNeedsHelp(currentPosition, DISTANCE_TO_HELP);
+                boolean someoneHasPushed = worldMethods.someoneHasPushed(currentPosition);
 
-                if(!isHurt && inPanic && patience_mode && !patient) {
+                if(someoneHasPushed){
+                    //System.out.println("someone has pushed.");
+                    agent.dispatchTopLevelGoal(new ReceivePushOthersGoal());
+                }
+                else if(!isHurt && inPanic && patience_mode && !patient) {
                     if (worldMethods.getNumAgentInCellMap(currentPosition) >= 2) {
                         //System.out.println("someone in my cell");
                         agent.dispatchTopLevelGoal(new PushOthersGoal());

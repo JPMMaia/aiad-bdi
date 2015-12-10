@@ -238,7 +238,7 @@ public class WorldMethods {
 
     //GET OBJECT IN THE SAME POSITION
 
-    public ISpaceObject getObject(Position currentPosition, String type) {
+    public ISpaceObject getAnObject(Position currentPosition, String type) {
 
         Vector2Double wantedPosition = new Vector2Double(currentPosition.x,currentPosition.y);
         //IVector1 distance = new Vector1Double(0);
@@ -272,7 +272,7 @@ public class WorldMethods {
         return res;
     }
 
-    public SpaceObject getPush(Position currentPosition, HashSet<SpaceObject> pushSet) {
+    public SpaceObject getAPush(Position currentPosition, HashSet<SpaceObject> pushSet) {
 
         Vector2Double wantedPosition = new Vector2Double(currentPosition.x,currentPosition.y);
         IVector1 distance = new Vector1Double(0);
@@ -300,7 +300,7 @@ public class WorldMethods {
         ArrayList<Position> positionsToCheck = BresenhamLineAlgorithm.line(pos1.x,pos1.y,pos2.x,pos2.y);
 
         for(Position p : positionsToCheck){
-            SpaceObject t = (SpaceObject) getObject(p, TypesObjects.TERRAIN);
+            SpaceObject t = (SpaceObject) getAnObject(p, TypesObjects.TERRAIN);
             if(t != null && getTerrainType(t).equals("wall"))
                 return true;
         }
@@ -351,5 +351,20 @@ public class WorldMethods {
         int intType = Integer.parseInt(stringType);
 
         return str[intType];
+    }
+
+    public boolean isCureObjectInPosition(Position targetPosition) {
+        SpaceObject t = (SpaceObject) getAnObject(targetPosition, TypesObjects.CURE_AGENT);
+        if(t == null)
+            return false;
+
+        return true;
+    }
+
+    public boolean someoneHasPushed(Position currentPosition) {
+        SpaceObject pushObj = getAPush(currentPosition, new HashSet<SpaceObject>());
+        if (pushObj != null)
+            return true;
+        return false;
     }
 }

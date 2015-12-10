@@ -7,18 +7,15 @@ import evacuation.utils.TypesObjects;
 import jadex.bdiv3.annotation.*;
 import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.SpaceObject;
-import jadex.extension.envsupport.math.Vector2Int;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Agent
 public class MaintainHealthBDI extends SocialAgentBDI{
 
     //CONSTANTS***************************
     protected static final int HEALTH_INCREMENT = 20;
+    protected static final int HEALTH_PUSH_DECREMENT = 2;
 
     @Belief
     public int condition = 100; //range [0-100]
@@ -51,7 +48,7 @@ public class MaintainHealthBDI extends SocialAgentBDI{
         protected void MaintainHealthPlanBody() {
 
             //if there is a cure object in the world
-            ISpaceObject cureObject = worldMethods.getObject(currentPosition, TypesObjects.CURE_AGENT);
+            ISpaceObject cureObject = worldMethods.getAnObject(currentPosition, TypesObjects.CURE_AGENT);
 
             //grab the object
             if(cureObject != null){
@@ -73,19 +70,23 @@ public class MaintainHealthBDI extends SocialAgentBDI{
         @PlanBody
         protected void DeadPlanBody() {
             if(isDead){
-                worldMethods.makeObjectInCell(currentPosition, TypesObjects.DEAD_AGENT);
-
-                if(hurtObject != null)
-                    space.destroyAndVerifySpaceObject(hurtObject.getId());
-
-                WorldGenerator.getTerrain().setObstacle(currentPosition.x, currentPosition.y, false);
-                deleteCures();
-                deletePush();
-                worldMethods.resolveTwoAgentsInSameCell(currentPosition, null);
-                space.destroyAndVerifySpaceObject(myself.getId());
-                agent.killAgent();
+                processAgentDeath();
             }
         }
+    }
+
+    private void processAgentDeath() {
+        worldMethods.makeObjectInCell(currentPosition, TypesObjects.DEAD_AGENT);
+
+        if(hurtObject != null)
+            space.destroyAndVerifySpaceObject(hurtObject.getId());
+
+        WorldGenerator.getTerrain().setObstacle(currentPosition.x, currentPosition.y, false);
+        deleteCures();
+        deletePush();
+        worldMethods.resolveTwoAgentsInSameCell(currentPosition, null);
+        space.destroyAndVerifySpaceObject(myself.getId());
+        agent.killAgent();
     }
 
     @Plan(trigger=@Trigger(factchangeds="isHurt"))
@@ -150,14 +151,17 @@ public class MaintainHealthBDI extends SocialAgentBDI{
         protected void ReceivePushOthersPlanBody() {
             //if there is a push in the same position as me
             //the push can not be mine
-            SpaceObject pushObj = worldMethods.getPush(currentPosition, pushSet);
-            if(pushObj != null){
-                if(space.destroyAndVerifySpaceObject(pushObj.getId())){
-                    condition -= 10;
-                    if(condition < 0)
+            SpaceObject pushObj = worldMethods.getAPush(currentPosition, pushSet);
+            if (pushObj != null) {
+                if (space.destroyAndVerifySpaceObject(pushObj.getId())) {
+                    condition -= HEALTH_PUSH_DECREMENT;
+                    if (condition < 0) {
                         condition = 0;
+                        processAgentDeath();
+                    }
                 }
             }
+
         }
     }
 

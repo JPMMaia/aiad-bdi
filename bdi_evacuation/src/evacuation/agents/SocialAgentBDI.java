@@ -77,8 +77,10 @@ public class SocialAgentBDI extends WalkerBDI{
 
                 if (distance <= 1) {//if it is near -> cure
                     //System.out.println("cure"); //create cure object
-                    SpaceObject cure = worldMethods.makeObjectInCell(targetPosition, TypesObjects.CURE_AGENT);
-                    curesSet.add(cure);
+                    if(!worldMethods.isCureObjectInPosition(targetPosition)) {
+                        SpaceObject cure = worldMethods.makeObjectInCell(targetPosition, TypesObjects.CURE_AGENT);
+                        curesSet.add(cure);
+                    }
                 }
                 else { //go to the hurt
                     mExplorer.setGoal(targetPosition, true);

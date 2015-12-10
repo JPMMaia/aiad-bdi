@@ -28,9 +28,9 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
         }
     }
 
-    private void successfullyEscaped() {
+    private void successfullyEscaped(Position exit) {
         worldMethods.makeObjectInCell(currentPosition, TypesObjects.ESCAPED_AGENT);
-
+        System.out.println("position - " + exit.x + " " + exit.y);
         if(hurtObject != null)
             space.destroyAndVerifySpaceObject(hurtObject.getId());
 
@@ -41,6 +41,7 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
         //System.out.println("quase matei o agente");
         agent.killAgent();
         //System.out.println("matei o agente");
+        worldMethods.removeAgentFromOldCellMap(exit);
         worldMethods.resolveTwoAgentsInSameCell(currentPosition, null);
     }
 
@@ -56,7 +57,7 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
         mExplorer.move();
 
         if(mExplorer.reachedExit()){
-            successfullyEscaped();
+            successfullyEscaped(mExplorer.findExit());
         }
 
         return mExplorer.getPosition();

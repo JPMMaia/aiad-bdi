@@ -3,14 +3,12 @@ package evacuation.utils.statistics;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.List;
 
 public class StatisticsToFile {
 
@@ -39,17 +37,14 @@ public class StatisticsToFile {
             reader = new CSVReader(new FileReader(filename), CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER);
             allLines = (ArrayList<String[]>) reader.readAll();
         } catch (IOException e) {
-            System.out.println("The file did not exist.");
             return false;
         }
         try {
             reader.close();
         } catch (IOException e) {
-            System.out.println("Error closing file.");
             return false;
         }
 
-        System.out.println("The file exists.");
         return true;
     }
 

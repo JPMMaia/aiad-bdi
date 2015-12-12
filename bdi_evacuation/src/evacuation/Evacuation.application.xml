@@ -154,67 +154,15 @@
 		
 			<!-- The percepttypes, generators and processors. -->
 			<env:percepttypes>
-				
-				<!-- Percepttypes that the environment produces and agents can consume. -->
-				<env:percepttype name="exit_door_appeared" objecttype="exit_door"/>
-				<env:percepttype name="exit_door_disappeared" objecttype="exit_door" />
-					
-				<!-- Percept generators define which percepts should be created -->
-				<env:perceptgenerator name="visiongen" class="DefaultVisionGenerator">
-					<env:property name="maxrange">0</env:property>
-					<env:property name="range_property">"vision_range"</env:property>
-					<!-- percept types are declared with associated action types:
-						percepttype, actiontype1, actiontype2, ... -->
-					<env:property name="percepttypes">
-						new Object[]
-						{
-							new String[]{"exit_door_appeared", "appeared", "created"}, 
-							new String[]{"exit_door_disappeared", "disappeared", "destroyed"}
-						}
-					</env:property>
-				</env:perceptgenerator>
-				
-				<!-- Percept processors consume percepts and pushSet them into the agents. -->
-				<env:perceptprocessor componenttype="Collector" class="DefaultBDIVisionProcessor" >
-					<env:property name="percepttypes">
-						new Object[]
-						{
-							new String[]{"exit_door_appeared", "add", "exit_doors"}, 
-							new String[]{"exit_door_disappeared", "remove", "exit_doors"}
-						}
-					</env:property>
-				</env:perceptprocessor>
-
 			</env:percepttypes>
 			
 			<!-- Actions that can be performed in the environment. -->
 			<env:actiontypes>
-
-                <env:actiontype name="go" class="actions.GoAction" >
-					<env:property name="object_id" class="Object"/>
-					<env:property name="direction" class="String"/>
-				</env:actiontype>
-
             </env:actiontypes>
 			
 			<!-- Perspectives define the user-interface appearance. -->
 			<env:perspectives>
 				<env:perspective name="icons" class="Perspective2D" objectplacement="center">
-
-                    <!-- Collector avatar -->
-           <!--         <env:drawable objecttype="collector" width="1.0" height="1.0" rotation="rotation">
-						<env:property name="vision_size" dynamic="true">new Vector2Double($object.vision_range*2+1)</env:property>
-						<env:texturedrectangle layer="0" x="0" y="-0.1" width="0.8" height="0.8" imagepath="evacuation/images/collector.png" />
-						<env:texturedrectangle layer="3" width="0.5" height="0.5" x="0.3" y="-0.3" imagepath="evacuation/images/garbage.png">
-							<env:drawcondition>$object.exit_door!=null</env:drawcondition> 
-						</env:texturedrectangle>
-						<env:rectangle layer="-1" size="vision_size" color="#ffff007f" />
-					</env:drawable> -->
-
-                    <!-- Exit door avatar -->
-                <!--    <env:drawable objecttype="exit_door" width="0.7" height="0.7">
-						<env:texturedrectangle layer="0" imagepath="evacuation/images/garbage.png" />
-					</env:drawable> -->
 
                     <!-- Terrain avatar -->
                     <env:drawable objecttype="terrain" height="1.0" width="1.0">

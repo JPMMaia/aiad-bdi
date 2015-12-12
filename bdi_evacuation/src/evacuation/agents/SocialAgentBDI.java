@@ -5,7 +5,6 @@ import evacuation.utils.Position;
 import evacuation.utils.TypesObjects;
 import evacuation.utils.TypesProperties;
 import jadex.bdiv3.annotation.*;
-import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.SpaceObject;
 import jadex.extension.envsupport.math.IVector1;
 import jadex.micro.annotation.Agent;
@@ -63,7 +62,6 @@ public class SocialAgentBDI extends WalkerBDI{
         protected void HelpOthersPlanBody() {
 
             if(agentIsHurt()) {
-                //System.out.println("cant cure is hurt");
                 return;
             }
 
@@ -76,7 +74,6 @@ public class SocialAgentBDI extends WalkerBDI{
                 double distance = distanceIV.getAsDouble();
 
                 if (distance <= 1) {//if it is near -> cure
-                    //System.out.println("cure"); //create cure object
                     if(!worldMethods.isCureObjectInPosition(targetPosition)) {
                         SpaceObject cure = worldMethods.makeObjectInCell(targetPosition, TypesObjects.CURE_AGENT);
                         curesSet.add(cure);

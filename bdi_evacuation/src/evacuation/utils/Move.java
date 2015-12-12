@@ -1,8 +1,6 @@
 package evacuation.utils;
 
 import jadex.extension.envsupport.environment.ISpaceObject;
-import jadex.extension.envsupport.math.Vector2Double;
-import jadex.extension.envsupport.math.Vector2Int;
 
 import java.util.ArrayList;
 import java.util.Random;

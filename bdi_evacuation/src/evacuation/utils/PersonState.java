@@ -1,6 +1,5 @@
 package evacuation.utils;
 
-import java.util.List;
 import java.util.Random;
 
 public class PersonState {

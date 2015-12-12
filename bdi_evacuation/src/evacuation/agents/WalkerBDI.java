@@ -93,9 +93,7 @@ public class WalkerBDI {
         protected void GoPlanBody() {
 
             moveAndUpdate();
-            //System.out.println("position - " + currentPosition.x + " " + currentPosition.y);
             try {
-                //System.out.println("wait - " + getWaitTime());
                 Thread.sleep(getWaitTime());
             } catch (InterruptedException e) {
                 System.out.println("unable to sleep");

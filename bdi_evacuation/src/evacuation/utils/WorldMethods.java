@@ -156,36 +156,6 @@ public class WorldMethods {
 
     // FIND PATH QUERIES
 
-    /*
-    public Position findPathToObject(ISpaceObject object, Position currentPosition) {
-        if(object != null){
-            //space.getShortestDirection()
-            Position destinyPosition = Position.convertToPosition(object.getProperty(TypesProperties.POSITION));
-            Position oldPosition = new Position(currentPosition.x, currentPosition.y);
-            Position newPosition = null;
-
-            if(Math.abs(destinyPosition.x - oldPosition.x) > Math.abs(destinyPosition.y - oldPosition.y)) { //move in x
-                if(destinyPosition.x < oldPosition.x)
-                    newPosition = new Position(currentPosition.x-1, currentPosition.y);
-                else if(destinyPosition.x > oldPosition.x)
-                    newPosition = new Position(currentPosition.x+1, currentPosition.y);
-            }
-            else { //move in y
-                if(destinyPosition.y < oldPosition.y)
-                    newPosition = new Position(currentPosition.x, currentPosition.y-1);
-                else if(destinyPosition.y > oldPosition.y)
-                    newPosition = new Position(currentPosition.x, currentPosition.y+1);
-            }
-
-            if(newPosition != null && noCollisionsInPosition(newPosition)) {
-                return newPosition;
-            }
-        }
-
-        //samePosition = true;
-        return currentPosition;
-    }*/
-
     public ISpaceObject pickClosestObject(ISpaceObject[] objects, Position currentPosition) {
 
         if(objects.length > 0){
@@ -318,7 +288,6 @@ public class WorldMethods {
         ISpaceObject[] conservativeSet = space.getSpaceObjectsByType(TypesObjects.CONSERVATIVE);
 
         int sumAlive = herdingSet.length + activeSet.length + conservativeSet.length;
-
 
         if(sumAlive > 0)
             return true;

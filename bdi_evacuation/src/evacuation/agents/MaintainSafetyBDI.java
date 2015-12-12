@@ -2,7 +2,6 @@ package evacuation.agents;
 
 import evacuation.utils.Move;
 import evacuation.utils.Position;
-import evacuation.utils.explorer.Explorer;
 import jadex.bdiv3.annotation.*;
 import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.SpaceObject;
@@ -50,7 +49,6 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
 
         @PlanBody
         protected void MaintainSafetyPlanBody() {
-            //System.out.println("MaintainSafetyPlanBody");
             agent.dispatchTopLevelGoal(new IncreaseDistanceFromDangerGoal());
         }
     }
@@ -59,7 +57,6 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
     public class IncreaseDistanceFromDangerPlan {
         @PlanBody
         protected void IncreaseDistanceFromDangerPlanBody() {
-            //System.out.println("IncreaseDistanceFromDangerPlanBody");
             if(indoor){
                 agent.dispatchTopLevelGoal(new FindExitGoal());
             }
@@ -82,8 +79,6 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
 
         if(agent.getGoals().isEmpty()) {
 
-
-
             if (!worldMethods.isIncident()) {
                 agent.dispatchTopLevelGoal(new WanderGoal());
                 res = riskPerception;
@@ -93,12 +88,10 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
                 boolean someoneHasPushed = worldMethods.someoneHasPushed(currentPosition);
 
                 if(someoneHasPushed){
-                    //System.out.println("someone has pushed.");
                     agent.dispatchTopLevelGoal(new ReceivePushOthersGoal());
                 }
                 else if(!isHurt && inPanic && patience_mode && !patient) {
                     if (worldMethods.getNumAgentInCellMap(currentPosition) >= 2) {
-                        //System.out.println("someone in my cell");
                         agent.dispatchTopLevelGoal(new PushOthersGoal());
                         pushing = true;
                     }
@@ -171,8 +164,6 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
         int init = valueForRiskPerception;
         valueForRiskPerception = personState.getRiskPerception(valueForRiskPerception);
 
-        //System.out.println("****************************dif -> " + (valueForRiskPerception - init));
-
         if(speed_mode == true)
             evaluateVelocity(valueForRiskPerception);
 
@@ -182,7 +173,6 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
     private void evaluateVelocity(int valueForRiskPerception) {
         //[0.5-2]
         speed = condition/100.0 + valueForRiskPerception*4/100.0;
-        //System.out.println("velocidade - " + speed);
     }
 
     @AgentBody

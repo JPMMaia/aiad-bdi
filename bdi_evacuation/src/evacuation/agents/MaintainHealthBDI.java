@@ -58,7 +58,6 @@ public class MaintainHealthBDI extends SocialAgentBDI{
 
                 //delete object
                 if(!space.destroyAndVerifySpaceObject(cureObject.getId())) {
-                    System.out.println("The cure object do not exist anymore.");
                     condition -= HEALTH_INCREMENT;
                 }
             }
@@ -125,7 +124,6 @@ public class MaintainHealthBDI extends SocialAgentBDI{
         int valueForCondition = 0;
 
         //calculate condition from each instance
-
         for (ISpaceObject incident : incidentsArray){
 
             Object incidentPosition = incident.getProperty("position");
@@ -161,7 +159,6 @@ public class MaintainHealthBDI extends SocialAgentBDI{
                     }
                 }
             }
-
         }
     }
 

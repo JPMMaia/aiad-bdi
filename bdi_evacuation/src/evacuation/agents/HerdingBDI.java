@@ -2,14 +2,11 @@ package evacuation.agents;
 
 import evacuation.utils.Position;
 import evacuation.utils.TypesObjects;
-import evacuation.utils.TypesProperties;
 import jadex.extension.envsupport.environment.ISpaceObject;
-import jadex.extension.envsupport.environment.SpaceObject;
 import jadex.extension.envsupport.math.Vector2Double;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Agent
@@ -44,7 +41,6 @@ public class HerdingBDI extends EscapingAgentBDI {
         //choose a target
 
         Set agentsSet = space.getNearGridObjects(wantedPosition, distance, types);
-        //System.out.println("agents to follow - " +  agentsSet.size());
 
         Position position;
 
@@ -56,21 +52,17 @@ public class HerdingBDI extends EscapingAgentBDI {
             try {
                 ISpaceObject checkStillAlive = space.getSpaceObject(agent.getId());
             }catch(Exception e){
-                //System.out.println("Jadex: desculpem mas afinal ja tinha sido eliminado");
                 position = findNewPositionWhenIncident();
                 return position;
             }
 
             if(!worldMethods.isWallBetween(currentPosition,Position.convertSpaceObjectToPosition(agent))) {
-                //System.out.println("Sem parede no meio");
                 //follow the target
                 mExplorer.setGoal(Position.convertSpaceObjectToPosition(agent), true);
                 mExplorer.move();
                 position = mExplorer.getPosition();
                 return position;
             }
-
-            //System.out.println("Com parede no meio");
         }
         else
             position = findNewPositionWhenIncident();

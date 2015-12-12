@@ -1,7 +1,7 @@
 package evacuation.utils.terrain;
 
 import evacuation.utils.Position;
-import evacuation.utils.pathFinder.GraphPathFinder;
+import evacuation.utils.pathFinder.DoorFinder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ public class ExploredTerrain implements ITerrain
 	private List<Door> mUnexploredDoors;
 	private List<Room> mExploredRooms;
 	private List<Door> mExitDoors;
-	private GraphPathFinder mUnexploredDoorFinder;
+	private DoorFinder mUnexploredDoorFinder;
 
 	public ExploredTerrain(Terrain terrain)
 	{
@@ -22,7 +22,7 @@ public class ExploredTerrain implements ITerrain
 		mUnexploredDoors = new ArrayList<>();
 		mExploredRooms = new ArrayList<>();
 		mExitDoors = new ArrayList<>();
-		mUnexploredDoorFinder = new GraphPathFinder(this);
+		mUnexploredDoorFinder = new DoorFinder(this);
 	}
 
 	public void exploreSquare(int x, int y)

@@ -1,5 +1,7 @@
 package evacuation.utils;
 
+import evacuation.processes.WorldGenerator;
+import evacuation.utils.terrain.Square;
 import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.SpaceObject;
 import jadex.extension.envsupport.environment.space2d.Grid2D;
@@ -20,6 +22,10 @@ public class WorldMethods {
             numAgentsByCell.remove(key);
             value++;
             numAgentsByCell.put(key, value);
+
+            // Adding obstacle:
+            if(value >= 2)
+                WorldGenerator.getTerrain().setObstacle(currentPosition.x, currentPosition.y, true);
         }
         else{
             numAgentsByCell.put(key, value);
@@ -42,22 +48,67 @@ public class WorldMethods {
         String key = currentPosition.x + "." + currentPosition.y;
         Integer value = 0;
 
-        if(value > 2)
-            System.out.println("value - " + value);
-
         if(numAgentsByCell.containsKey(key)) {
             value = (Integer) numAgentsByCell.get(key);
             numAgentsByCell.remove(key);
             value--;
 
+            // Remove obstacle:
+            if(value <= 2)
+                WorldGenerator.getTerrain().setObstacle(currentPosition.x, currentPosition.y, false);
+
             if(value > 0)
                 numAgentsByCell.put(key, value);
         }
-        if(value > 2)
-            System.out.println("value - " + value);
     }
 
     public int countHurt = 0;
+
+    //TWO AGENTS SAME CELL
+
+    public synchronized void resolveTwoAgentsInSameCell(Position currentPosition, Position nextPosition) {
+        if (getNumAgentInCellMap(currentPosition) >= 2) {
+            deleteSomeoneInMyCellObject(currentPosition);
+        }
+
+        removeAgentFromOldCellMap(currentPosition);
+        if(nextPosition != null) {
+            checkAndMakeSomeoneInMyCell(nextPosition);
+            putAgentInNewCellMap(nextPosition);
+        }
+    }
+
+    public boolean isPositionADoor(Position p){
+        Square square = WorldGenerator.getTerrain().getSquare(p.x, p.y);
+        if(square.isDoor())
+        {
+            return square.getDoor().isExit();
+        }
+        return false;
+    }
+
+
+    public synchronized void deleteSomeoneInMyCellObject(Position currentPosition) {
+
+        Vector2Double wantedPosition = new Vector2Double(currentPosition.x,currentPosition.y);
+        IVector1 distance = new Vector1Double(0);
+
+        Set objectSet = space.getNearObjects(wantedPosition,distance,TypesObjects.SAME_CELL);
+        for(Object it : objectSet){
+            space.destroyAndVerifySpaceObject(((SpaceObject) it).getId());
+        }
+    }
+
+    public synchronized void checkAndMakeSomeoneInMyCell(Position newPosition) {
+        //if there is another guy in the new cell, create a someone in my cell
+        if(!isPositionADoor(newPosition)) {
+            String key = newPosition.x + "." + newPosition.y;
+            int numAgents = getNumAgentInCellMap(newPosition);
+            if (numAgents >= 1) {
+                makeObjectInCell(newPosition, TypesObjects.SAME_CELL);
+            }
+        }
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -73,17 +124,17 @@ public class WorldMethods {
         Vector2Double wantedPosition = new Vector2Double(p.x,p.y);
         IVector1 distance = new Vector1Double(0);
 
-        Set terrainSet = space.getNearObjects(wantedPosition,distance,TypesObjects.TERRAIN);
-        Set incidentSet = space.getNearObjects(wantedPosition,distance,TypesObjects.INCIDENT);
+        //Set terrainSet = space.getNearObjects(wantedPosition,distance,TypesObjects.TERRAIN);
+        //Set incidentSet = space.getNearObjects(wantedPosition,distance,TypesObjects.INCIDENT);
         Set hurtSet = space.getNearObjects(wantedPosition,distance,TypesObjects.HURT_AGENT);
 
-        if(!terrainSet.isEmpty()) //there is a wall or an obstacle
+        //if(!terrainSet.isEmpty()) //there is a wall or an obstacle
+        //    return false;
+        //else if(!incidentSet.isEmpty()) //there are incidents in the way
+        //    return false;
+        if(!hurtSet.isEmpty()) //there are two agents in the position
             return false;
-        else if(!incidentSet.isEmpty()) //there are incidents in the way
-            return false;
-        else if(!hurtSet.isEmpty()) //there are two agents in the position
-            return false;
-        else if(getNumAgentInCellMap(p) >= 2)
+        else if(getNumAgentInCellMap(p) > 1)
             return false;
 
         return true;
@@ -99,8 +150,13 @@ public class WorldMethods {
         return space.getSpaceObjectsByType(TypesObjects.INCIDENT);
     }
 
+    public ISpaceObject[] getTerrainObjects() {
+        return space.getSpaceObjectsByType(TypesObjects.TERRAIN);
+    }
+
     // FIND PATH QUERIES
 
+    /*
     public Position findPathToObject(ISpaceObject object, Position currentPosition) {
         if(object != null){
             //space.getShortestDirection()
@@ -128,7 +184,7 @@ public class WorldMethods {
 
         //samePosition = true;
         return currentPosition;
-    }
+    }*/
 
     public ISpaceObject pickClosestObject(ISpaceObject[] objects, Position currentPosition) {
 
@@ -182,12 +238,12 @@ public class WorldMethods {
 
     //GET OBJECT IN THE SAME POSITION
 
-    public ISpaceObject getObject(Position currentPosition, String type) {
+    public ISpaceObject getAnObject(Position currentPosition, String type) {
 
         Vector2Double wantedPosition = new Vector2Double(currentPosition.x,currentPosition.y);
-        IVector1 distance = new Vector1Double(0);
+        //IVector1 distance = new Vector1Double(0);
 
-        Set set = space.getNearObjects(wantedPosition,distance,type);
+        ArrayList<ISpaceObject> set = (ArrayList<ISpaceObject>) space.getSpaceObjectsByGridPosition(wantedPosition,type);
 
         if(set == null || set.isEmpty())
             return null;
@@ -216,40 +272,7 @@ public class WorldMethods {
         return res;
     }
 
-    //TWO AGENTS SAME CELL
-
-    public void resolveTwoAgentsInSameCell(Position currentPosition, Position nextPosition) {
-        if (getNumAgentInCellMap(currentPosition) == 2) {
-            deleteSomeoneInMyCellObject(currentPosition);
-        }
-
-        removeAgentFromOldCellMap(currentPosition);
-        if(nextPosition != null) {
-            checkAndMakeSomeoneInMyCell(nextPosition);
-            putAgentInNewCellMap(nextPosition);
-        }
-    }
-
-    public void deleteSomeoneInMyCellObject(Position currentPosition) {
-
-        Vector2Double wantedPosition = new Vector2Double(currentPosition.x,currentPosition.y);
-        IVector1 distance = new Vector1Double(0);
-
-        Set objectSet = space.getNearObjects(wantedPosition,distance,TypesObjects.SAME_CELL);
-        for(Object it : objectSet){
-            space.destroyAndVerifySpaceObject(((SpaceObject) it).getId());
-        }
-    }
-
-    public void checkAndMakeSomeoneInMyCell(Position newPosition) {
-        //if there is another guy in the new cell, create a someone in my cell
-        String key = newPosition.x + "." + newPosition.y;
-        if(getNumAgentInCellMap(newPosition) == 1){
-            makeObjectInCell(newPosition, TypesObjects.SAME_CELL);
-        }
-    }
-
-    public SpaceObject getPush(Position currentPosition, HashSet<SpaceObject> pushSet) {
+    public SpaceObject getAPush(Position currentPosition, HashSet<SpaceObject> pushSet) {
 
         Vector2Double wantedPosition = new Vector2Double(currentPosition.x,currentPosition.y);
         IVector1 distance = new Vector1Double(0);
@@ -277,9 +300,9 @@ public class WorldMethods {
         ArrayList<Position> positionsToCheck = BresenhamLineAlgorithm.line(pos1.x,pos1.y,pos2.x,pos2.y);
 
         for(Position p : positionsToCheck){
-            if(getObject(p, TypesObjects.TERRAIN) != null) {
+            SpaceObject t = (SpaceObject) getAnObject(p, TypesObjects.TERRAIN);
+            if(t != null && getTerrainType(t).equals("wall"))
                 return true;
-            }
         }
         return false;
     }
@@ -293,10 +316,9 @@ public class WorldMethods {
         ISpaceObject[] herdingSet = space.getSpaceObjectsByType(TypesObjects.HERDING);
         ISpaceObject[] activeSet = space.getSpaceObjectsByType(TypesObjects.WANDERER);
         ISpaceObject[] conservativeSet = space.getSpaceObjectsByType(TypesObjects.CONSERVATIVE);
-        ISpaceObject[] sameCellSet = space.getSpaceObjectsByType(TypesObjects.SAME_CELL);
-        ISpaceObject[] hurtSet = space.getSpaceObjectsByType(TypesObjects.HURT_AGENT);
 
-        int sumAlive = herdingSet.length + activeSet.length + conservativeSet.length + sameCellSet.length + hurtSet.length;
+        int sumAlive = herdingSet.length + activeSet.length + conservativeSet.length;
+
 
         if(sumAlive > 0)
             return true;
@@ -314,9 +336,35 @@ public class WorldMethods {
         if(incidents.length > 0){
             SpaceObject incident = (SpaceObject) incidents[0];
             Object objType = incident.getProperty("type");
-            IVector1 vector1Type  = (IVector1) objType;
-            intType = vector1Type.getAsInteger();
+            String stringType  = objType.toString();
+            intType = Integer.parseInt(stringType);
         }
         return str[intType];
+    }
+
+    public String getTerrainType(SpaceObject terrain) {
+
+        String[] str = new String[] {"grownd", "wall"};
+
+        Object objType = terrain.getProperty("type");
+        String stringType  = objType.toString();
+        int intType = Integer.parseInt(stringType);
+
+        return str[intType];
+    }
+
+    public boolean isCureObjectInPosition(Position targetPosition) {
+        SpaceObject t = (SpaceObject) getAnObject(targetPosition, TypesObjects.CURE_AGENT);
+        if(t == null)
+            return false;
+
+        return true;
+    }
+
+    public boolean someoneHasPushed(Position currentPosition) {
+        SpaceObject pushObj = getAPush(currentPosition, new HashSet<SpaceObject>());
+        if (pushObj != null)
+            return true;
+        return false;
     }
 }

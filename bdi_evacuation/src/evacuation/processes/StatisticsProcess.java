@@ -1,6 +1,9 @@
 package evacuation.processes;
 
 import evacuation.utils.*;
+import evacuation.utils.statistics.SimulationFinalState;
+import evacuation.utils.statistics.SimulationInitialState;
+import evacuation.utils.statistics.StatisticsToFile;
 import jadex.bridge.service.types.clock.IClockService;
 import jadex.commons.SimplePropertyObject;
 import jadex.extension.envsupport.environment.IEnvironmentSpace;
@@ -22,8 +25,6 @@ public class StatisticsProcess extends SimplePropertyObject implements ISpacePro
     @Override
     public void start(IClockService arg0, IEnvironmentSpace arg1) {
 
-        printStatisticsToCSV();
-
         //variables initialization
         space = (Space2D)arg1;
         startTime = arg0.getTime();
@@ -35,7 +36,6 @@ public class StatisticsProcess extends SimplePropertyObject implements ISpacePro
             simulationInitialState.numConservative = space.getSpaceObjectsByType(TypesObjects.CONSERVATIVE).length;
             simulationInitialState.numHerding = space.getSpaceObjectsByType(TypesObjects.HERDING).length;
             simulationInitialState.numDoors = space.getSpaceObjectsByType(TypesObjects.DOOR).length;
-            //TODO - special door -> manual
         }
     }
 
@@ -53,7 +53,7 @@ public class StatisticsProcess extends SimplePropertyObject implements ISpacePro
             simulationFinalState.numDead = space.getSpaceObjectsByType(TypesObjects.DEAD_AGENT).length;
             simulationFinalState.numEscaped = space.getSpaceObjectsByType(TypesObjects.ESCAPED_AGENT).length;
             simulationFinalState.numHurt = worldMethods.countHurt();
-            simulationFinalState.evacuationTimeSeconds = iClockService.getTime() - startTime - initialWaitingTime;
+            simulationFinalState.evacuationTimeSeconds = ((iClockService.getTime() - startTime - initialWaitingTime)/1000.0);
 
             if(verify()){
                 printStatisticsToCSV();
@@ -74,27 +74,10 @@ public class StatisticsProcess extends SimplePropertyObject implements ISpacePro
 
     private void printStatisticsToCSV() {
 
-        if(!StatisticsFile.fileExists()){
-            StatisticsFile.createFileWithHeader();
-        }
-        //simulationInitialState print
-        //simulationFinalState print
-    }
+        if(!StatisticsToFile.fileExists())
+            StatisticsToFile.createFileWithHeader();
 
-    //Auxiliar inner classes
-
-    private class SimulationInitialState {
-        public int numActive;
-        public int numHerding;
-        public int numConservative;
-        public int numDoors;
-    }
-
-    private class SimulationFinalState {
-        public int numHurt;
-        public int numEscaped;
-        public int numDead;
-        public String incidentType;
-        public long evacuationTimeSeconds;
+        if(StatisticsToFile.fileExists())
+            StatisticsToFile.writeInstanceLine(simulationInitialState, simulationFinalState);
     }
 }

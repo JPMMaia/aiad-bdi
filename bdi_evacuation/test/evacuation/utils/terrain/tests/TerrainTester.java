@@ -55,4 +55,20 @@ public class TerrainTester
 		Square agentSquare = terrain.getSquare(7, 11);
 		Assert.assertTrue(agentSquare.isPartOfRoom());
 	}
+
+	@Test
+	public void setObstacleTest()
+	{
+		Terrain terrain = Terrain.createFromFile("test_resources/TerrainMap3.txt", 20, 20);
+		Assert.assertNotNull(terrain);
+
+		Square square = terrain.getSquare(11, 11);
+		Assert.assertFalse(square.isObstacle());
+
+		terrain.setObstacle(11, 11, true);
+		Assert.assertTrue(square.isObstacle());
+
+		terrain.setObstacle(11, 11, false);
+		Assert.assertFalse(square.isObstacle());
+	}
 }

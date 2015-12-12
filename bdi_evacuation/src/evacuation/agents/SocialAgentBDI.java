@@ -17,7 +17,7 @@ import java.util.HashSet;
 public class SocialAgentBDI extends WalkerBDI{
 
     //CONSTANTS***************************
-    protected static final int DISTANCE_TO_HELP = 20;
+    protected static final int DISTANCE_TO_HELP = 3;
 
     // CURE ATTRIBUTES
     protected HashSet<SpaceObject> curesSet;
@@ -25,6 +25,8 @@ public class SocialAgentBDI extends WalkerBDI{
 
     //PUSH ATTRIBUTES
     protected HashSet<SpaceObject> pushSet;
+
+    boolean iAmHurt = false;
 
     //PERSONALITY
 
@@ -61,7 +63,7 @@ public class SocialAgentBDI extends WalkerBDI{
         protected void HelpOthersPlanBody() {
 
             if(agentIsHurt()) {
-                System.out.println("cant cure is hurt");
+                //System.out.println("cant cure is hurt");
                 return;
             }
 
@@ -75,12 +77,15 @@ public class SocialAgentBDI extends WalkerBDI{
 
                 if (distance <= 1) {//if it is near -> cure
                     //System.out.println("cure"); //create cure object
-                    SpaceObject cure = worldMethods.makeObjectInCell(targetPosition, TypesObjects.CURE_AGENT);
-                    curesSet.add(cure);
+                    if(!worldMethods.isCureObjectInPosition(targetPosition)) {
+                        SpaceObject cure = worldMethods.makeObjectInCell(targetPosition, TypesObjects.CURE_AGENT);
+                        curesSet.add(cure);
+                    }
                 }
                 else { //go to the hurt
-                    Position wantedPosition = worldMethods.findPathToObject(agentNeedsHelp, currentPosition);
-                    nextPosition = wantedPosition;
+                    mExplorer.setGoal(targetPosition, true);
+                    mExplorer.move();
+                    nextPosition = mExplorer.getPosition();
                 }
             }
         }
@@ -107,7 +112,7 @@ public class SocialAgentBDI extends WalkerBDI{
 
     //OTHER METHODS
     boolean agentIsHurt(){
-        return false;
+        return iAmHurt;
     }
 
     void deleteCures(){

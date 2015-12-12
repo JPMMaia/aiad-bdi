@@ -1,7 +1,10 @@
 package evacuation.agents;
 
+import evacuation.processes.WorldGenerator;
 import evacuation.utils.Position;
 import evacuation.utils.TypesObjects;
+import evacuation.utils.TypesProperties;
+import evacuation.utils.explorer.Explorer;
 import evacuation.utils.explorer.ExplorerGoal;
 import jadex.bdiv3.annotation.*;
 import jadex.micro.annotation.Agent;
@@ -9,6 +12,7 @@ import jadex.micro.annotation.AgentBody;
 
 @Agent
 public class EscapingAgentBDI extends MaintainSafetyBDI{
+
 
     //PLANS******************************
 
@@ -24,16 +28,21 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
         }
     }
 
-    private void successfullyEscaped() {
+    private void successfullyEscaped(Position exit) {
         worldMethods.makeObjectInCell(currentPosition, TypesObjects.ESCAPED_AGENT);
+        System.out.println("position - " + exit.x + " " + exit.y);
         if(hurtObject != null)
-            space.destroySpaceObject(hurtObject.getId());
+            space.destroyAndVerifySpaceObject(hurtObject.getId());
 
         deleteCures();
         deletePush();
-        worldMethods.resolveTwoAgentsInSameCell(currentPosition, null);
+
         space.destroyAndVerifySpaceObject(myself.getId());
+        //System.out.println("quase matei o agente");
         agent.killAgent();
+        //System.out.println("matei o agente");
+        worldMethods.removeAgentFromOldCellMap(exit);
+        worldMethods.resolveTwoAgentsInSameCell(currentPosition, null);
     }
 
     protected Position findExit() {
@@ -43,26 +52,13 @@ public class EscapingAgentBDI extends MaintainSafetyBDI{
     // FUNCTIONS *************************************
 
     protected Position findNewPositionWhenIncident() {
-        /*
-        //find one door in same division
-        ISpaceObject[] doors = space.getSpaceObjectsByType(TypesObjects.DOOR);
-        ISpaceObject door = worldMethods.pickClosestObject(doors, currentPosition);
-
-        Position wantedPosition = worldMethods.getDoorPosition((SpaceObject) door);
-
-        if(wantedPosition.equals(nextPosition)){
-            successfullyEscaped();
-        }
-
-        //get path for the door -> improve the search - TODO Maiah
-
-        return worldMethods.findPathToObject(door, currentPosition);*/
 
         mExplorer.setGoal(ExplorerGoal.FindExit);
         mExplorer.move();
 
-        if(mExplorer.reachedExit())
-            successfullyEscaped();
+        if(mExplorer.reachedExit()){
+            successfullyEscaped(mExplorer.findExit());
+        }
 
         return mExplorer.getPosition();
     }

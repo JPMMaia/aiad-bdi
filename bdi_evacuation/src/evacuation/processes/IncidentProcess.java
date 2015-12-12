@@ -19,9 +19,9 @@ import java.util.*;
 public class IncidentProcess extends SimplePropertyObject implements ISpaceProcess {
 
 	//TIMERS FOR THE INCIDENT
-	private static final long initialWaitingTime = 4000;
+	private static final long initialWaitingTime = 1000;
 	private static long startTime = 0; //get from the jadex clock
-	private static long incidentProgressTimer = 2000; //interval between the generation of new incident objects
+	private static long incidentProgressTimer = 4000; //interval between the generation of new incident objects
 
 	//OTHER VARIABLES FOR CALCULATIONS OF NEW INCIDENTS
 	private int desiredNumIncidentPositions; //for the calculations
@@ -45,11 +45,14 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 		move = new Move(space.getAreaSize().getXAsInteger(),space.getAreaSize().getYAsInteger());
 		r = move.r;
 		startTime = arg0.getTime();
-		lastPosition = move.getRandomPosition();
+		//lastPosition = new Position(4,5); //control the position
+		lastPosition = move.getRandomPosition(); // random position
+
 		desiredNumIncidentPositions = 1;
 		incidentPositions = new HashSet<>();
 
-		incidentType = 0;//r.nextInt(3); //0 - fire ; 1 - water; 2 - terrorist
+		//incidentType = 0; //get a fire incident
+		incidentType = r.nextInt(3); //0 - fire ; 1 - water; 2 - terrorist
 	}
 
     @Override
@@ -73,9 +76,6 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 				desiredNumIncidentPositions++;
 			}
     	}
-
-		ISpaceObject[] set = space.getSpaceObjectsByType(TypesObjects.ESCAPED_AGENT);
-		System.out.println("Agents escaped: " + set.length);
     }
 
 	private void createIncident() {
@@ -93,13 +93,18 @@ public class IncidentProcess extends SimplePropertyObject implements ISpaceProce
 
 	private boolean createIncidentObject(Position newPosition){
 		if (savedIncidentPosition(newPosition)) {
+
 			Map<String, Object> properties = new HashMap<>();
 			properties.put("position", new Vector2Int(newPosition.x, newPosition.y));
 			properties.put("type", incidentType); //fire type
 			space.createSpaceObject(TypesObjects.INCIDENT, properties, null);
 			lastPosition = newPosition;
+
+			WorldGenerator.getTerrain().setObstacle(newPosition.x, newPosition.y, true);
+
 			return true;
 		}
+
 		return false;
 	}
 

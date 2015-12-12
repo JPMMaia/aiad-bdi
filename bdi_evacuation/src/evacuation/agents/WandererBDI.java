@@ -16,6 +16,13 @@ public class WandererBDI extends EscapingAgentBDI {
     protected Position findExit() {
 
         //1 - active - look for the fastest empty path - the search strategy is able to come back
+        Position exit =  mExplorer.findExit();
+        if(worldMethods.getNumAgentInCellMap(exit) >= 2) {
+            System.out.println("find a random position");
+            mExplorer.setGoal(mExplorer.getRandomPosition(), false);
+            mExplorer.move();
+            return mExplorer.getPosition();
+        }
         return findNewPositionWhenIncident();
     }
 

@@ -7,6 +7,7 @@ public class Square
 	private Position mPosition;
 	private Door mDoor;
 	private Room mRoom;
+	private boolean mObstacle;
 
 	public Square(Position position)
 	{
@@ -17,7 +18,10 @@ public class Square
 
 	public boolean isObstacle()
 	{
-		return isWall();
+		if(!mObstacle)
+			return isWall();
+
+		return true;
 	}
 
 	public boolean isDoor()
@@ -55,5 +59,9 @@ public class Square
 	public void setRoom(Room room)
 	{
 		mRoom = room;
+	}
+	public void setObstacle(boolean value)
+	{
+		mObstacle = value;
 	}
 }

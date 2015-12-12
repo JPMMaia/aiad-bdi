@@ -1,5 +1,6 @@
 package evacuation.utils;
 
+import jadex.extension.envsupport.environment.SpaceObject;
 import jadex.extension.envsupport.math.Vector2Double;
 import jadex.extension.envsupport.math.Vector2Int;public class Position {
 	public int x;
@@ -50,6 +51,27 @@ import jadex.extension.envsupport.math.Vector2Int;public class Position {
 		}
 		try {
 			Vector2Int lastPosInt = (Vector2Int) objPosition;
+			return new Position(lastPosInt.getXAsInteger(), lastPosInt.getYAsInteger());
+		} catch (Exception e){
+			//System.out.println("Unable to cast to int");
+		}
+
+		return new Position();
+	}
+
+	public static Position convertSpaceObjectToPosition(Object objPosition) {
+
+		SpaceObject spaceObj = (SpaceObject) objPosition;
+		Object pos = spaceObj.getProperty("position");
+
+		try {
+			Vector2Double lastPosDouble = (Vector2Double) pos;
+			return new Position(lastPosDouble.getXAsInteger(), lastPosDouble.getYAsInteger());
+		} catch (Exception e){
+			//System.out.println("Unable to cast to double");
+		}
+		try {
+			Vector2Int lastPosInt = (Vector2Int) pos;
 			return new Position(lastPosInt.getXAsInteger(), lastPosInt.getYAsInteger());
 		} catch (Exception e){
 			//System.out.println("Unable to cast to int");

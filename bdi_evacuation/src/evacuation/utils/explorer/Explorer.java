@@ -5,7 +5,9 @@ import evacuation.utils.Position;
 import evacuation.utils.pathFinder.PathFinder;
 import evacuation.utils.terrain.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Explorer
 {
@@ -14,28 +16,21 @@ public class Explorer
 	private ExplorerGoal mGoal;
 	private Position mGoalPosition;
 	private List<Position> mCurrentPath;
-	private boolean mDirty;
 
 	public Explorer(Terrain terrain, Position position)
 	{
 		mExploredTerrain = new ExploredTerrain(terrain);
 		mPosition = position;
 		mGoal = ExplorerGoal.FindExit;
-		mDirty = true;
 
 		mExploredTerrain.exploreSquare(mPosition.x, mPosition.y);
 	}
 
 	public boolean move()
 	{
-		if(mDirty || mCurrentPath == null || mCurrentPath.isEmpty())
-		{
-			calculateNextPosition();
-			if(mCurrentPath.isEmpty())
-				return false;
-
-			mDirty = false;
-		}
+		calculateNextPosition();
+		if(mCurrentPath.isEmpty())
+			return false;
 
 		// Try to move to the next position:
 		Position position = mCurrentPath.get(0);
@@ -72,7 +67,7 @@ public class Explorer
 
 		return NullPosition.getInstance();
 	}
-	private Position findExit()
+	public Position findExit()
 	{
 		Door nearestExitDoor = mExploredTerrain.findNearestExitDoor(mPosition.x, mPosition.y);
 		if(nearestExitDoor == NullDoor.getInstance())
@@ -99,13 +94,38 @@ public class Explorer
 	{
 		mGoal = goal;
 	}
+
 	public void setGoal(Position goalPosition, boolean movable)
 	{
 		mGoal = ExplorerGoal.FindPosition;
-
-		if(movable && !goalPosition.equals(mGoalPosition))
-			mDirty = true;
-
 		mGoalPosition = goalPosition;
+	}
+
+	public Position getRandomPosition() {
+		Square square = mExploredTerrain.getSquare(mPosition.x, mPosition.y);
+
+		List<Square> squares;
+		if(square.isPartOfRoom())
+		{
+			Room room = square.getRoom();
+			squares = room.getSquares();
+		}
+		else if(square.isDoor())
+		{
+			Door door = square.getDoor();
+			if(door.isExit())
+				return NullPosition.getInstance();
+
+			squares = new ArrayList<>();
+			squares.addAll(door.getRoom1().getSquares());
+			squares.addAll(door.getRoom2().getSquares());
+		}
+		else
+			return NullPosition.getInstance();
+
+		Random random = new Random();
+		int randomIndex = random.nextInt(squares.size());
+
+		return squares.get(randomIndex).getPosition();
 	}
 }

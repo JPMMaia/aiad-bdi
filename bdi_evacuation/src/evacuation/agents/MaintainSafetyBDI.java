@@ -1,6 +1,8 @@
 package evacuation.agents;
 
 import evacuation.utils.Move;
+import evacuation.utils.Position;
+import evacuation.utils.explorer.Explorer;
 import jadex.bdiv3.annotation.*;
 import jadex.extension.envsupport.environment.ISpaceObject;
 import jadex.extension.envsupport.environment.SpaceObject;
@@ -9,11 +11,10 @@ import jadex.micro.annotation.AgentBody;
 
 @Agent
 public class MaintainSafetyBDI extends MaintainHealthBDI{
-
     boolean speed_mode = true;
     boolean patience_mode = true;
 
-    @Belief(updaterate=500)
+    @Belief(updaterate=100)
     protected int riskPerception = evaluateAgentSituation();
 
     @Belief(dynamic=true)
@@ -73,6 +74,7 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
     private int evaluateAgentSituation() {
 
         int res = 0;
+
         boolean helping = false;
         boolean pushing = false;
 
@@ -80,7 +82,7 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
 
         if(agent.getGoals().isEmpty()) {
 
-            agent.dispatchTopLevelGoal(new ReceivePushOthersGoal());
+
 
             if (!worldMethods.isIncident()) {
                 agent.dispatchTopLevelGoal(new WanderGoal());
@@ -88,10 +90,15 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
             }
             else{
                 agentNeedsHelp = (SpaceObject) worldMethods.someoneNeedsHelp(currentPosition, DISTANCE_TO_HELP);
+                boolean someoneHasPushed = worldMethods.someoneHasPushed(currentPosition);
 
-                if(!isHurt && inPanic && patience_mode && !patient) {
-                    if (worldMethods.getNumAgentInCellMap(currentPosition) == 2) {
-                        System.out.println("someone in my cell");
+                if(someoneHasPushed){
+                    //System.out.println("someone has pushed.");
+                    agent.dispatchTopLevelGoal(new ReceivePushOthersGoal());
+                }
+                else if(!isHurt && inPanic && patience_mode && !patient) {
+                    if (worldMethods.getNumAgentInCellMap(currentPosition) >= 2) {
+                        //System.out.println("someone in my cell");
                         agent.dispatchTopLevelGoal(new PushOthersGoal());
                         pushing = true;
                     }
@@ -155,7 +162,8 @@ public class MaintainSafetyBDI extends MaintainHealthBDI{
             valueForRiskPerception = 0;
 
         //escaping possibility
-        if(!emptyPathToTheExit){
+        Position exit =  mExplorer.findExit();
+        if(worldMethods.getNumAgentInCellMap(exit) >= 2){
             if(valueForRiskPerception < 90)
                 valueForRiskPerception = 90;
         }

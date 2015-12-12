@@ -14,6 +14,8 @@ import jadex.extension.envsupport.math.Vector2Int;
 import jadex.micro.annotation.Agent;
 import jadex.micro.annotation.AgentBody;
 
+import java.util.Collections;
+
 @Agent
 public class WalkerBDI {
 
@@ -46,15 +48,12 @@ public class WalkerBDI {
     @Belief
     protected boolean indoor = true;
 
-    @Belief
-    protected boolean emptyPathToTheExit = true; //A*
-
     //ATTRIBUTES********************************************
-
-    protected Explorer mExplorer = new Explorer(WorldGenerator.getTerrain(),  Position.convertToPosition(myself.getProperty(TypesProperties.POSITION)));
 
     WorldMethods worldMethods = new WorldMethods(space);
     Move move = new Move( space.getAreaSize().getXAsInteger(), space.getAreaSize().getYAsInteger());
+    protected Explorer mExplorer = new Explorer(WorldGenerator.getTerrain(),  Position.convertToPosition(myself.getProperty(TypesProperties.POSITION)));
+
 
     public int getWaitTime() {
         int waitTime = (int)(1000.0/speed);
@@ -76,9 +75,15 @@ public class WalkerBDI {
     public class WanderPlan {
         @PlanBody
         protected void WanderPlanBody() {
-            Position oldPosition = move.getPosition(myself);
-            Position wantedPosition = move.getNewPosition(oldPosition);
-            nextPosition = wantedPosition;
+            if(currentPosition != null) {
+                Position oldPosition = move.getPosition(myself);
+                mExplorer.setGoal(move.getNewPosition(oldPosition), false);
+                mExplorer.move();
+                nextPosition = mExplorer.getPosition();
+            }
+            else{
+                move.getPosition(myself);
+            }
         }
     }
 
@@ -87,14 +92,8 @@ public class WalkerBDI {
         @PlanBody
         protected void GoPlanBody() {
 
-            if(worldMethods.noCollisionsInPosition(nextPosition)){
-                if(!nextPosition.equals(currentPosition)) {
-                    worldMethods.resolveTwoAgentsInSameCell(currentPosition, nextPosition);
-                    myself.setProperty("position", new Vector2Int(nextPosition.x, nextPosition.y));
-                    currentPosition = nextPosition;
-                }
-            }
-
+            moveAndUpdate();
+            //System.out.println("position - " + currentPosition.x + " " + currentPosition.y);
             try {
                 //System.out.println("wait - " + getWaitTime());
                 Thread.sleep(getWaitTime());
@@ -106,8 +105,37 @@ public class WalkerBDI {
 
     @AgentBody
     public void body(){
+
         currentPosition = move.getPosition(myself);
-        worldMethods.putAgentInNewCellMap(currentPosition);
         speed = 1.0; //cells by second 1 -> 1000 millis ; 2 -> 500 ; 4 -> 250 millis
+        while(true){
+            if(configuredInitialPosition(currentPosition)){
+               break;
+            }
+
+            try {
+                Thread.sleep(getWaitTime());
+            } catch (InterruptedException e) {
+                System.out.println("unable to sleep");
+            }
+        }
+    }
+
+    private synchronized boolean configuredInitialPosition(Position currentPosition) {
+        if(worldMethods.getNumAgentInCellMap(currentPosition) < 2) {
+            worldMethods.putAgentInNewCellMap(currentPosition);
+            return true;
+        }
+        return false;
+    }
+
+    private synchronized void moveAndUpdate(){
+        if(worldMethods.noCollisionsInPosition(nextPosition)){
+            if(!nextPosition.equals(currentPosition)) {
+                worldMethods.resolveTwoAgentsInSameCell(currentPosition, nextPosition);
+                myself.setProperty("position", new Vector2Int(nextPosition.x, nextPosition.y));
+                currentPosition = nextPosition;
+            }
+        }
     }
 }

@@ -238,4 +238,9 @@ public class ExploredTerrain implements ITerrain
 		Terrain terrain = Terrain.createFromFile(filename, width, height);
 		return new ExploredTerrain(terrain);
 	}
+
+	public Position getRandomExploredPosition() {
+		//TODO
+		return new Position(37,10);
+	}
 }

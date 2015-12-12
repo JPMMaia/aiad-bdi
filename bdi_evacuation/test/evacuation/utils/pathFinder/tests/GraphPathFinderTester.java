@@ -1,7 +1,7 @@
 package evacuation.utils.pathFinder.tests;
 
 import evacuation.utils.Position;
-import evacuation.utils.pathFinder.GraphPathFinder;
+import evacuation.utils.pathFinder.DoorFinder;
 import evacuation.utils.terrain.Door;
 import evacuation.utils.terrain.ExploredTerrain;
 import org.junit.Assert;
@@ -13,7 +13,7 @@ public class GraphPathFinderTester
 	public void findShortestPathTest()
 	{
 		ExploredTerrain terrain = ExploredTerrain.createFromFile("test_resources/TerrainMap3.txt", 20, 20);
-		GraphPathFinder pathFinder = new GraphPathFinder(terrain);
+		DoorFinder pathFinder = new DoorFinder(terrain);
 
 		terrain.exploreSquare(1, 1);
 		Door solution1 = pathFinder.run(new Position(1, 1));

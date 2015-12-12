@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class GraphPathFinder
+public class DoorFinder
 {
 	private Comparator<GraphNode> mNodeComparator;
 	private ExploredTerrain mTerrain;
@@ -18,7 +18,7 @@ public class GraphPathFinder
 	private List<GraphNode> mOpenList;
 	private List<GraphNode> mClosedList;
 
-	public GraphPathFinder(ExploredTerrain terrain)
+	public DoorFinder(ExploredTerrain terrain)
 	{
 		mTerrain = terrain;
 		mGraph = new Graph();

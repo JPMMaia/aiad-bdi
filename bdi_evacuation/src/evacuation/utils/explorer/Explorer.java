@@ -2,6 +2,7 @@ package evacuation.utils.explorer;
 
 import evacuation.utils.NullPosition;
 import evacuation.utils.Position;
+import evacuation.utils.pathFinder.DoorFinder;
 import evacuation.utils.pathFinder.PathFinder;
 import evacuation.utils.terrain.*;
 

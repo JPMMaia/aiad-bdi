@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class WorldGenerator extends SimplePropertyObject implements ISpaceProcess
 {
-	private static final String TERRAIN_FILENAME = "resources/Map2.txt";
+	private static final String TERRAIN_FILENAME = "resources/MainMap.txt";
 	private static final int TERRAIN_WIDTH = 40;
 	private static final int TERRAIN_HEIGHT = 20;
 
